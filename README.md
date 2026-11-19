@@ -27,8 +27,11 @@ Página de links para a bio — whitelink.site
 
 ## Configuração na Cloudflare (resumo)
 
-1. Banco D1 chamado `whitelink-db` e rodar `schema.sql` no console.
-2. Projeto Pages ligado a este repositório, com **Build output directory** = `public`.
-3. Em Settings → Bindings: D1 com o nome de variável `DB` apontando para `whitelink-db`.
-4. Domínio personalizado `whitelink.site`.
-5. Variável `SMS_MODE`: enquanto não for `real`, o código de SMS aparece na tela (modo teste).
+O projeto roda como **Worker com arquivos estáticos** (`wrangler.jsonc`):
+- `src/worker.js` recebe todas as visitas e chama as funções certas.
+- O banco D1 `whitelink-db` e o domínio `whitelink.site` já estão ligados no `wrangler.jsonc`.
+
+1. Banco D1 `whitelink-db` criado e `schema-console.sql` colado no Console.
+2. Workers e Pages → Criar → Importar repositório do GitHub `whitelink2`.
+3. Comando de implantação: `npx wrangler deploy` (o padrão).
+4. Variável `SMS_MODE`: enquanto não for `real`, o código de SMS aparece na tela (modo teste).
