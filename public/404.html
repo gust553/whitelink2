@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Página não encontrada — WhiteLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="logo" href="/">WhiteLink</a><div class="sp"></div><nav class="nav"><a href="/ajuda">Ajuda</a><a href="/entrar">Entrar</a></nav></div></header>
+<main class="wrap" style="max-width:480px;padding-top:80px;padding-bottom:40px;text-align:center">
+<h1 style="font-size:32px">Esta página não existe</h1>
+<p class="muted" style="font-size:16px">Ninguém criou <b style="color:#F3F3F7">whitelink.site/{{nome}}</b> ainda. Confira se o endereço está certo.</p>
+<p class="muted" style="margin-top:28px">Gostou desse nome?</p>
+<a class="btn" href="/entrar?h={{nome}}#cadastro">Criar a minha página com esse nome</a>
+<p style="margin-top:20px"><a href="/" class="muted">Conheça o WhiteLink</a></p>
+<script>(function(){var n=location.pathname.replace(/^\/+|\/+$/g,"").split("/")[0]||"";if(document.body.innerHTML.indexOf("{{nome}}")>=0){var t=n.replace(/[^a-zA-Z0-9._-]/g,"");document.querySelectorAll("b,a").forEach(function(e){if(e.tagName==="B")e.textContent=e.textContent.replace("{{nome}}",t);else e.href=e.getAttribute("href").replace("{{nome}}",encodeURIComponent(t));});}})();</script>
+</main>
+<footer class="ft"><div class="wrap">
+  <b style="color:#F3F3F7;font-family:'Space Grotesk'">WhiteLink</b>
+  <a href="/termos">Termos de uso</a><a href="/privacidade">Privacidade</a><a href="/ajuda">Ajuda e suporte</a>
+  <div class="sp"></div><a href="https://wa.me/5511993931841" target="_blank" rel="noopener">WhatsApp (11) 99393-1841</a>
+</div></footer>
+</body>
+</html>

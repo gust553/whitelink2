@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrar — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+<style>
+.box{max-width:460px;margin:48px auto;display:flex;flex-direction:column;gap:14px}
+.box h1{font-size:30px}
+.tabs{display:flex;gap:4px;padding:4px;border-radius:12px;background:#14141B;border:1px solid #22222B}
+.tabs button{flex:1;height:42px;border-radius:9px;border:none;background:transparent;color:#C9C9D6;font-size:14px;cursor:pointer}
+.tabs button.on{background:#F3F3F7;color:#0E0E14;font-weight:600}
+.code{font-size:24px;letter-spacing:.4em;text-align:center}
+.link{background:none;border:none;color:#D4FF3A;cursor:pointer;font-size:14px;padding:6px 0;text-align:left}
+.pre{display:flex;align-items:center;border-radius:12px;border:1px solid #33333E;background:#0E0E14}
+.pre span{padding-left:14px;color:#A7A7B8;white-space:nowrap}.pre .in{border:none;background:transparent}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#C9C9D6}.ck input{width:18px;height:18px;margin-top:2px;accent-color:#D4FF3A}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="logo" href="/">WhiteLink</a><div class="sp"></div><nav class="nav"><a href="/ajuda">Ajuda</a></nav></div></header>
+
+<main class="wrap">
+<div class="box">
+  <div class="tabs" id="tabs"><button id="tLogin" type="button">Entrar</button><button id="tSign" type="button">Criar conta</button></div>
+
+  <!-- ENTRAR -->
+  <form id="fLogin" class="card" style="display:flex;flex-direction:column;gap:14px">
+    <h1>Que bom te ver de novo</h1>
+    <label class="f">E-mail<input class="in" id="lEmail" type="email" autocomplete="email" required></label>
+    <label class="f">Senha<input class="in" id="lPw" type="password" autocomplete="current-password" required></label>
+    <div class="err" id="lErr"></div>
+    <button class="btn" type="submit" id="lBtn">Entrar</button>
+    <button class="link" type="button" id="goReset">Esqueci minha senha</button>
+  </form>
+
+  <!-- CRIAR CONTA -->
+  <form id="fSign" class="card hide" style="display:flex;flex-direction:column;gap:14px">
+    <h1>Crie sua conta</h1>
+    <p class="muted" style="margin:0">3 dias com tudo do Diamante, grátis. Depois você continua no Prata grátis.</p>
+    <label class="f">Seu nome<input class="in" id="sName" autocomplete="name" required maxlength="60"></label>
+    <label class="f">E-mail<input class="in" id="sEmail" type="email" autocomplete="email" required></label>
+    <label class="f">Celular com DDD (vamos mandar um código por SMS)<input class="in" id="sPhone" type="tel" inputmode="numeric" placeholder="(11) 99999-9999" required></label>
+    <label class="f">@ do Instagram que vai usar na página<input class="in" id="sIg" placeholder="@seuperfil" required></label>
+    <label class="f">Endereço da sua página
+      <div class="pre"><span>whitelink.site/</span><input class="in" id="sHandle" placeholder="seunome" required autocomplete="off"></div>
+      <span id="sHMsg" class="muted" style="font-size:13px"></span></label>
+    <label class="f">Senha (mínimo 8, com letras e números)<input class="in" id="sPw" type="password" autocomplete="new-password" required></label>
+    <label class="f">Código de convite (opcional)<input class="in" id="sRef" maxlength="30"></label>
+    <label class="ck"><input type="checkbox" id="sTerms"><span>Li e aceito os <a href="/termos" target="_blank">Termos de uso</a> e a <a href="/privacidade" target="_blank">Política de privacidade</a></span></label>
+    <div class="err" id="sErr"></div>
+    <button class="btn" type="submit" id="sBtn">Receber código por SMS</button>
+  </form>
+
+  <!-- CÓDIGO -->
+  <form id="fCode" class="card hide" style="display:flex;flex-direction:column;gap:14px">
+    <h1>Digite o código</h1>
+    <p class="muted" style="margin:0" id="cTxt"></p>
+    <div class="warn hide" id="cTest"></div>
+    <input class="in code" id="cCode" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" required>
+    <div id="cPwWrap" class="hide"><label class="f">Nova senha (mínimo 8, com letras e números)<input class="in" id="cPw" type="password" autocomplete="new-password"></label></div>
+    <div class="err" id="cErr"></div>
+    <button class="btn" type="submit" id="cBtn">Confirmar</button>
+    <button class="link" type="button" id="cBack">Voltar</button>
+  </form>
+
+  <!-- RECUPERAR -->
+  <form id="fReset" class="card hide" style="display:flex;flex-direction:column;gap:14px">
+    <h1>Recuperar a senha</h1>
+    <p class="muted" style="margin:0">Mandamos um código por SMS para o celular da sua conta.</p>
+    <label class="f">E-mail da conta<input class="in" id="rEmail" type="email" autocomplete="email" required></label>
+    <div class="err" id="rErr"></div>
+    <button class="btn" type="submit" id="rBtn">Enviar código</button>
+    <button class="link" type="button" id="rBack">Voltar para o login</button>
+  </form>
+
+  <div id="done" class="card hide" style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+    <h1 id="dTitle"></h1><p class="muted" style="margin:0" id="dTxt"></p>
+    <a class="btn" id="dBtn" href="/painel">Continuar</a>
+  </div>
+</div>
+</main>
+
+<script src="/assets/app.js"></script>
+<script>
+(function () {
+  const $ = WL.$;
+  let codeId = null, flow = null;
+  const forms = ['fLogin', 'fSign', 'fCode', 'fReset', 'done'];
+  function show(id) {
+    forms.forEach((f) => $(f).classList.toggle('hide', f !== id));
+    $('tabs').classList.toggle('hide', !(id === 'fLogin' || id === 'fSign'));
+    $('tLogin').classList.toggle('on', id === 'fLogin');
+    $('tSign').classList.toggle('on', id === 'fSign');
+    document.querySelectorAll('.err').forEach((e) => (e.textContent = ''));
+  }
+  WL.phoneMask($('sPhone'));
+  $('tLogin').onclick = () => show('fLogin');
+  $('tSign').onclick = () => show('fSign');
+  $('goReset').onclick = () => show('fReset');
+  $('rBack').onclick = () => show('fLogin');
+  $('cBack').onclick = () => show(flow === 'reset' ? 'fReset' : 'fSign');
+
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('h')) $('sHandle').value = qs.get('h');
+  if (qs.get('ref')) $('sRef').value = qs.get('ref');
+  show(location.hash === '#cadastro' || qs.get('h') || qs.get('ref') ? 'fSign' : 'fLogin');
+
+  let t;
+  $('sHandle').addEventListener('input', () => {
+    clearTimeout(t);
+    const v = $('sHandle').value.trim();
+    if (!v) { $('sHMsg').textContent = ''; return; }
+    t = setTimeout(async () => {
+      const d = await WL.api('handle-check?h=' + encodeURIComponent(v));
+      $('sHMsg').textContent = d.free === true ? 'Livre!' : d.free === false ? (d.reason || 'Já está em uso.') : '';
+      $('sHMsg').className = d.free ? 'ok' : 'err';
+    }, 350);
+  });
+
+  function codeScreen(d, f, text) {
+    codeId = d.codeId; flow = f;
+    $('cTxt').textContent = text.replace('{n}', d.phoneEnd || '');
+    $('cTest').classList.toggle('hide', !d.testMode);
+    if (d.testMode) $('cTest').textContent = 'Modo de teste: o envio de SMS ainda não foi ligado. Seu código é ' + d.testCode + '.';
+    $('cPwWrap').classList.toggle('hide', f !== 'reset');
+    $('cCode').value = ''; $('cPw').value = '';
+    show('fCode'); $('cCode').focus();
+  }
+
+  $('fLogin').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    WL.busy($('lBtn'), true);
+    const d = await WL.api('auth/login', 'POST', { email: $('lEmail').value, password: $('lPw').value });
+    WL.busy($('lBtn'), false);
+    if (!d.ok) { $('lErr').textContent = d.error; return; }
+    location.href = '/painel';
+  });
+
+  $('fSign').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    WL.busy($('sBtn'), true, 'Enviando…');
+    const d = await WL.api('auth/signup-start', 'POST', {
+      name: $('sName').value, email: $('sEmail').value, phone: $('sPhone').value, instagram: $('sIg').value,
+      handle: $('sHandle').value, password: $('sPw').value, ref: $('sRef').value, terms: $('sTerms').checked
+    });
+    WL.busy($('sBtn'), false);
+    if (!d.ok) { $('sErr').textContent = d.error; return; }
+    codeScreen(d, 'signup', 'Enviamos um código de 6 dígitos por SMS para o celular final {n}. Ele vale por 15 minutos.');
+  });
+
+  $('fReset').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    WL.busy($('rBtn'), true, 'Enviando…');
+    const d = await WL.api('auth/reset-start', 'POST', { email: $('rEmail').value });
+    WL.busy($('rBtn'), false);
+    if (!d.ok) { $('rErr').textContent = d.error; return; }
+    codeScreen(d, 'reset', 'Enviamos um código por SMS para o celular final {n}. Digite o código e a nova senha.');
+  });
+
+  $('fCode').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    WL.busy($('cBtn'), true);
+    let d;
+    if (flow === 'signup') d = await WL.api('auth/signup-verify', 'POST', { codeId, code: $('cCode').value });
+    else d = await WL.api('auth/reset-finish', 'POST', { codeId, code: $('cCode').value, password: $('cPw').value });
+    WL.busy($('cBtn'), false);
+    if (!d.ok) { $('cErr').textContent = d.error; return; }
+    if (flow === 'signup') {
+      $('dTitle').textContent = d.trial ? 'Teste Diamante liberado!' : 'Conta criada!';
+      $('dTxt').textContent = d.trial ? 'Você tem 3 dias com tudo do Diamante. Depois continua no Prata grátis.' : 'Este celular, e-mail, Instagram ou aparelho já usou o teste grátis, então sua conta começa no Prata grátis.';
+      $('dBtn').textContent = 'Montar minha página'; $('dBtn').href = '/painel';
+    } else {
+      $('dTitle').textContent = 'Senha trocada!';
+      $('dTxt').textContent = 'Por segurança, saímos da sua conta em todos os aparelhos. Entre de novo com a nova senha.';
+      $('dBtn').textContent = 'Entrar'; $('dBtn').href = '/entrar';
+    }
+    show('done');
+  });
+})();
+</script>
+</body>
+</html>

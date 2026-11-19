@@ -1,0 +1,38 @@
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#0B0B10;color:#F3F3F7;font-family:Inter,system-ui,sans-serif;line-height:1.5}
+a{color:#D4FF3A}a:hover{color:#E6FF8A}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em;line-height:1.15;margin:0}
+button,input,select,textarea{font-family:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.top{border-bottom:1px solid #1C1C24;background:rgba(11,11,16,.9);position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
+.logo{font:700 20px 'Space Grotesk',sans-serif;color:#F3F3F7;text-decoration:none}
+.sp{flex:1}
+.nav a{color:#C9C9D6;text-decoration:none;font-size:14px;margin-left:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 20px;border-radius:12px;border:none;background:#D4FF3A;color:#0E0E14;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none}
+.btn:hover{background:#E6FF8A;color:#0E0E14}
+.btn.ghost{background:transparent;border:1px solid #33333E;color:#F3F3F7}
+.btn.ghost:hover{border-color:#55556A}
+.btn.sm{height:40px;padding:0 14px;font-size:14px}
+.btn[disabled]{background:#26262F;color:#8A8A9A;cursor:not-allowed}
+.card{background:#14141B;border:1px solid #22222B;border-radius:20px;padding:24px}
+.muted{color:#A7A7B8}
+.in{height:48px;width:100%;border-radius:12px;border:1px solid #33333E;background:#0E0E14;color:#F3F3F7;padding:0 14px;font-size:16px}
+.in:focus{outline:2px solid #D4FF3A;outline-offset:1px;border-color:transparent}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#C9C9D6}
+.err{color:#FF8A6B;font-size:14px;min-height:20px}
+.ok{color:#D4FF3A;font-size:14px}
+.warn{padding:12px 14px;border-radius:12px;background:#2B2210;border:1px solid #4A3A14;color:#F7DFA0;font-size:14px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px}
+.hide{display:none!important}
+footer.ft{border-top:1px solid #1C1C24;margin-top:64px}
+footer.ft .wrap{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;padding:28px 24px;font-size:14px;color:#A7A7B8}
+footer.ft a{color:#A7A7B8;text-decoration:none}
+@media (max-width:600px){
+  .wrap{padding:0 16px}
+  .nav a.opt{display:none}
+  h1{font-size:30px!important}
+  h2{font-size:24px!important}
+  .card{padding:18px}
+}

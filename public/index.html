@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WhiteLink — sua página de links, do seu jeito</title>
+<meta name="description" content="Crie uma página de links linda para a bio do Instagram, TikTok e YouTube. Teste 3 dias de Diamante grátis e depois continue no Prata grátis para sempre.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+<style>
+.hero{padding:72px 0 56px;display:flex;flex-wrap:wrap;gap:48px;align-items:center}
+.hero .tx{flex:1 1 480px;display:flex;flex-direction:column;gap:20px}
+.badge{align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:#1A2008;color:#D4FF3A;border:1px solid #3A4714}
+.hero h1{font-size:56px}
+.hero p{font-size:18px;color:#C9C9D6;margin:0;max-width:560px}
+.claim{display:flex;align-items:center;height:56px;border-radius:14px;border:1px solid #33333E;background:#0E0E14;overflow:hidden;max-width:520px}
+.claim span{padding-left:16px;color:#A7A7B8;font-size:16px;white-space:nowrap}
+.claim input{flex:1;min-width:0;height:100%;border:none;background:transparent;color:#F3F3F7;font-size:16px;padding:0 6px;outline:none}
+.claim .btn{height:44px;margin-right:6px}
+.phone{flex:0 0 300px;margin:0 auto;height:600px;border-radius:44px;border:10px solid #1C1C24;background:#0E0E14;padding:40px 18px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.phone .av{width:76px;height:76px;border-radius:50%;border:2px solid #D4FF3A;background:#17171F;display:flex;align-items:center;justify-content:center;font:700 24px 'Space Grotesk'}
+.phone .l{width:100%;padding:14px;border-radius:14px;background:#17171F;border:1px solid #26262F;text-align:center;font-size:14px;font-weight:600}
+.phone .l.m{background:#D4FF3A;color:#0E0E14;border-color:#D4FF3A}
+.sec{padding:56px 0}
+.sec h2{font-size:38px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:28px}
+.feat h3{font-size:19px;margin:0 0 8px}.feat p{margin:0;color:#C9C9D6;font-size:15px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:28px}
+.plan{display:flex;flex-direction:column;gap:12px}
+.plan h3{font-size:24px}.plan .pr{font:700 36px 'Space Grotesk'}.plan .pr small{font:400 14px Inter;color:#A7A7B8}
+.plan ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#E4E4EC}
+.plan li::before{content:'✓ ';color:var(--c)}
+.tog{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:#14141B;border:1px solid #22222B;margin-top:18px}
+.tog button{height:40px;padding:0 16px;border-radius:9px;border:none;background:transparent;color:#C9C9D6;font-size:14px;cursor:pointer}
+.tog button.on{background:#F3F3F7;color:#0E0E14;font-weight:600}
+details{border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px}
+summary{cursor:pointer;padding:18px 0;font-weight:500;font-size:16px;list-style:none}
+summary::-webkit-details-marker{display:none}
+details p{margin:0 0 18px;color:#C9C9D6}
+.final{margin-top:40px;padding:48px 24px;border-radius:24px;background:#D4FF3A;color:#0E0E14;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.final h2{color:#0E0E14}
+.final .btn{background:#0E0E14;color:#F3F3F7}
+@media (max-width:600px){.hero{padding:32px 0}.hero h1{font-size:34px!important}.sec{padding:32px 0}.phone{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/">WhiteLink</a><div class="sp"></div>
+  <nav class="nav"><a class="opt" href="#planos">Planos</a><a class="opt" href="#duvidas">Dúvidas</a><a href="/entrar">Entrar</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="tx">
+      <span class="badge">Diamante grátis por 3 dias · depois Prata grátis</span>
+      <h1>Sua página de links, linda e do seu jeito</h1>
+      <p>Coloque todos os seus links, produtos e contatos em uma página só, para a bio do Instagram, TikTok e YouTube. Veja quem clica e venda mais.</p>
+      <form class="claim" id="claim">
+        <span>whitelink.site/</span>
+        <input id="h" placeholder="seunome" autocomplete="off" aria-label="Seu endereço">
+        <button class="btn" type="submit">Criar grátis</button>
+      </form>
+      <span id="hmsg" class="muted" style="font-size:14px">Escolha seu endereço antes que alguém pegue.</span>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="av">SN</div><b>Seu Nome</b><span class="muted" style="font-size:13px">@seuperfil</span>
+      <div class="l m">Meu link principal</div><div class="l">Minha loja</div><div class="l">Fale comigo</div><div class="l">Último vídeo</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Tudo o que sua bio precisa</h2>
+    <div class="grid">
+      <div class="card feat"><h3>Editor fácil</h3><p>Adicione links e veja a página mudando na hora, no celular ou no computador.</p></div>
+      <div class="card feat"><h3>Venda pela bio</h3><p>Produtos, botão de Pix, contagem regressiva e captura de contatos (Ouro e Diamante).</p></div>
+      <div class="card feat"><h3>Estatísticas</h3><p>Saiba quantas pessoas visitaram e em quais links clicaram.</p></div>
+      <div class="card feat"><h3>77 temas</h3><p>De temas limpos a temas animados exclusivos do Diamante, ou crie o seu.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="planos">
+    <h2>Planos</h2>
+    <p class="muted" style="margin:0">Só Pix. Teste o Diamante grátis por 3 dias, sem pagar nada.</p>
+    <div class="tog"><button id="bm" class="on" type="button">Mensal</button><button id="by" type="button">Anual · ~16% off</button></div>
+    <div class="plans">
+      <div class="card plan" style="--c:#C9CDD6"><h3 style="color:#C9CDD6">Prata</h3><div class="pr">Grátis</div><span class="muted" style="font-size:13px">para sempre</span>
+        <ul><li>Até 3 links</li><li>Blocos de link e texto</li><li>2 temas</li><li>Total de visitas dos últimos 7 dias</li><li>Central de ajuda</li></ul>
+        <a class="btn ghost" href="/entrar#cadastro" style="margin-top:auto">Começar grátis</a></div>
+      <div class="card plan" style="--c:#F2C14E;border-color:#F2C14E"><h3 style="color:#F2C14E">Ouro</h3><div class="pr" data-m="R$ 19,90" data-y="R$ 199,90">R$ 19,90 <small>/mês</small></div><span class="muted pn" style="font-size:13px" data-m="ou R$ 199,90 por ano" data-y="equivale a R$ 16,66/mês">ou R$ 199,90 por ano</span>
+        <ul><li>Até 10 links</li><li>Todos os blocos</li><li>13 temas e editor de aparência</li><li>Vídeos, estatísticas de 30 dias e links agendados</li><li>Sem a marca WhiteLink e chat de suporte</li></ul>
+        <a class="btn" href="/entrar#cadastro" style="margin-top:auto">Testar grátis</a></div>
+      <div class="card plan" style="--c:#8FE3FF"><h3 style="color:#8FE3FF">Diamante</h3><div class="pr" data-m="R$ 39,90" data-y="R$ 399,90">R$ 39,90 <small>/mês</small></div><span class="muted pn" style="font-size:13px" data-m="ou R$ 399,90 por ano" data-y="equivale a R$ 33,33/mês">ou R$ 399,90 por ano</span>
+        <ul><li>Links ilimitados</li><li>77 temas (64 exclusivos) + crie o seu</li><li>Teste A/B e estatísticas de 90 dias</li><li>Domínio próprio, até 3 páginas e selo de verificado</li><li>Suporte prioritário</li></ul>
+        <a class="btn ghost" href="/entrar#cadastro" style="margin-top:auto">Testar 3 dias grátis</a></div>
+    </div>
+  </section>
+
+  <section class="sec" id="duvidas">
+    <h2>Dúvidas</h2>
+    <details><summary>Preciso conectar meu Instagram?</summary><p>Não. Você copia o seu link do WhiteLink e cola na bio. Não pedimos senha nem acesso à sua conta.</p></details>
+    <details><summary>Como funciona o teste grátis?</summary><p>Você usa tudo do Diamante por 3 dias. Cada pessoa pode fazer o teste uma vez, confirmado pelo celular. Depois, sua conta continua no Prata grátis.</p></details>
+    <details><summary>O plano Prata é grátis mesmo?</summary><p>Sim, para sempre. Ele tem o básico: até 3 links, 2 temas e o total de visitas da semana.</p></details>
+    <details><summary>Quais formas de pagamento vocês aceitam?</summary><p>Só Pix. No Pix automático o plano é liberado na hora. No Pix direto você envia o comprovante e liberamos assim que conferirmos.</p></details>
+    <details><summary>Posso cancelar quando quiser?</summary><p>Sim. Você usa até o fim do período pago e depois continua no Prata grátis.</p></details>
+  </section>
+
+  <section class="final">
+    <h2 style="font-size:36px">Sua página no ar em 2 minutos</h2>
+    <p style="margin:0;font-size:17px">3 dias com tudo do Diamante e depois o Prata grátis para sempre.</p>
+    <a class="btn" href="/entrar#cadastro">Começar meu teste grátis</a>
+  </section>
+</main>
+
+<footer class="ft"><div class="wrap">
+  <b style="color:#F3F3F7;font-family:'Space Grotesk'">WhiteLink</b>
+  <a href="/termos">Termos de uso</a><a href="/privacidade">Privacidade</a><a href="/ajuda">Ajuda e suporte</a>
+  <div class="sp"></div><a href="https://wa.me/5511993931841" target="_blank" rel="noopener">WhatsApp (11) 99393-1841</a>
+</div></footer>
+
+<script src="/assets/app.js"></script>
+<script>
+(function () {
+  const h = WL.$('h'), msg = WL.$('hmsg');
+  let t;
+  h.addEventListener('input', () => {
+    clearTimeout(t);
+    const v = h.value.trim().toLowerCase().replace(/^@/, '');
+    if (!v) { msg.textContent = 'Escolha seu endereço antes que alguém pegue.'; msg.className = 'muted'; return; }
+    t = setTimeout(async () => {
+      const d = await WL.api('handle-check?h=' + encodeURIComponent(v));
+      if (d.free === true) { msg.textContent = 'whitelink.site/' + d.handle + ' está livre!'; msg.className = 'ok'; }
+      else if (d.free === false) { msg.textContent = d.reason || 'Esse endereço já está em uso. Tente outro.'; msg.className = 'err'; }
+    }, 350);
+  });
+  WL.$('claim').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = h.value.trim().toLowerCase().replace(/^@/, '');
+    location.href = '/entrar?h=' + encodeURIComponent(v) + '#cadastro';
+  });
+  const setP = (y) => {
+    WL.$('bm').classList.toggle('on', !y); WL.$('by').classList.toggle('on', y);
+    document.querySelectorAll('.pr[data-m]').forEach((el) => { el.innerHTML = (y ? el.dataset.y : el.dataset.m) + ' <small>' + (y ? '/ano' : '/mês') + '</small>'; });
+    document.querySelectorAll('.pn').forEach((el) => { el.textContent = y ? el.dataset.y : el.dataset.m; });
+  };
+  WL.$('bm').onclick = () => setP(false);
+  WL.$('by').onclick = () => setP(true);
+})();
+</script>
+</body>
+</html>

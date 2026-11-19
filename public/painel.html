@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meu painel — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+<style>
+.lay{display:flex;flex-wrap:wrap;gap:20px;padding:24px 0 48px;align-items:flex-start}
+.main{flex:999 1 520px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.side{flex:1 1 300px;display:flex;flex-direction:column;gap:16px}
+.row{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;background:#0E0E14;border:1px solid #22222B}
+.row .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.row .t b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t span{font-size:12px;color:#A7A7B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:40px;height:40px;flex:none;border-radius:10px;border:1px solid #2A2A34;background:transparent;color:#C9C9D6;cursor:pointer;font-size:16px}
+.ib:hover{border-color:#44444F;color:#F3F3F7}
+.off{opacity:.5}
+.banner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:16px;border:1px solid #3A4714;background:#141A06}
+.addf{display:grid;grid-template-columns:1fr 1.4fr auto;gap:8px}
+.themes{display:flex;gap:8px}.themes button{flex:1;height:56px;border-radius:12px;cursor:pointer;font-weight:600}
+@media (max-width:600px){.addf{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/">WhiteLink</a><div class="sp"></div>
+  <nav class="nav"><a class="opt" href="/ajuda">Ajuda</a><a href="#" id="logout">Sair</a></nav>
+</div></header>
+
+<main class="wrap">
+  <div id="loading" class="muted" style="padding:48px 0">Carregando…</div>
+  <div id="app" class="lay hide">
+    <div class="main">
+      <div class="banner" id="banner"><span id="planTxt"></span><a class="btn sm" href="/#planos" id="planBtn">Ver planos</a></div>
+
+      <section class="card" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
+          <h2 style="font-size:22px">Meus links</h2><span class="muted" style="font-size:13px" id="limitTxt"></span>
+        </div>
+        <form class="addf" id="addF">
+          <input class="in" id="aT" placeholder="Título (ex.: Minha loja)" maxlength="80" required>
+          <input class="in" id="aU" placeholder="Endereço (ex.: minhaloja.com.br)" required>
+          <button class="btn" id="aBtn" type="submit">Adicionar</button>
+        </form>
+        <div class="err" id="aErr"></div>
+        <div id="list" style="display:flex;flex-direction:column;gap:8px"></div>
+      </section>
+
+      <section class="card" style="display:flex;flex-direction:column;gap:12px">
+        <h2 style="font-size:22px">Minha página</h2>
+        <label class="f">Nome que aparece<input class="in" id="pTitle" maxlength="60"></label>
+        <label class="f">Bio (até 160 letras)<input class="in" id="pBio" maxlength="160"></label>
+        <span class="f" style="font-size:13px;color:#C9C9D6">Tema</span>
+        <div class="themes">
+          <button type="button" data-t="noite" style="background:#0E0E14;color:#F3F3F7">Noite</button>
+          <button type="button" data-t="papel" style="background:#F4F2EC;color:#16161A">Papel</button>
+        </div>
+        <span class="muted" style="font-size:13px">Os outros 75 temas chegam na próxima atualização do sistema.</span>
+        <div style="display:flex;gap:10px;align-items:center"><button class="btn" id="pSave" type="button">Salvar</button><span id="pMsg" class="ok"></span></div>
+      </section>
+    </div>
+
+    <aside class="side">
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <span class="muted" style="font-size:13px">Seu link para a bio</span>
+        <b id="myUrl" style="font-size:17px;word-break:break-all"></b>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn sm" id="copy" type="button">Copiar link</button>
+          <a class="btn ghost sm" id="open" target="_blank" rel="noopener">Ver página</a>
+        </div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:4px">
+        <span class="muted" style="font-size:13px">Visitas nos últimos 7 dias</span>
+        <b id="views" style="font:700 34px 'Space Grotesk'"></b>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:6px;font-size:14px">
+        <span class="muted" style="font-size:13px">Conta</span>
+        <span id="who"></span><span class="muted" id="whoMail"></span>
+        <span class="muted">Seu código de convite: <b id="ref" style="color:#F3F3F7"></b></span>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script src="/assets/app.js"></script>
+<script>
+(function () {
+  const $ = WL.$;
+  let me = null, theme = 'noite';
+  const NAMES = { prata: 'Prata', ouro: 'Ouro', diamante: 'Diamante' };
+  const COL = { prata: '#C9CDD6', ouro: '#F2C14E', diamante: '#8FE3FF' };
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+  async function load() {
+    const d = await WL.api('me');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    if (!d.ok) { $('loading').textContent = d.error; return; }
+    me = d.user;
+    const u = me;
+    const days = u.until ? Math.max(0, Math.ceil((u.until - Date.now()) / 86400000)) : 0;
+    $('planTxt').innerHTML = u.trial
+      ? 'Teste <b style="color:#8FE3FF">Diamante</b>: falta' + (days === 1 ? '' : 'm') + ' ' + days + ' dia' + (days === 1 ? '' : 's') + '. Depois sua conta continua no Prata grátis.'
+      : 'Plano <b style="color:' + COL[u.plan] + '">' + NAMES[u.plan] + '</b>' + (u.plan === 'prata' ? ' grátis' : (u.until ? ' até ' + new Date(u.until).toLocaleDateString('pt-BR') : ''));
+    $('planBtn').textContent = u.plan === 'prata' || u.trial ? 'Assinar com Pix (em breve)' : 'Ver planos';
+    const url = 'whitelink.site/' + u.handle;
+    $('myUrl').textContent = url;
+    $('open').href = '/' + u.handle;
+    $('views').textContent = Number(d.views7 || 0).toLocaleString('pt-BR');
+    $('who').textContent = u.name; $('whoMail').textContent = u.email; $('ref').textContent = u.refCode;
+    $('pTitle').value = d.profile.title || ''; $('pBio').value = d.profile.bio || '';
+    setTheme(d.profile.theme || 'noite');
+    await loadLinks();
+    $('loading').classList.add('hide'); $('app').classList.remove('hide');
+  }
+
+  async function loadLinks() {
+    const d = await WL.api('links');
+    const L = d.links || [];
+    const lim = me.limit;
+    $('limitTxt').textContent = lim ? L.length + ' de ' + lim + ' links' : L.length + ' links · ilimitados';
+    $('aBtn').disabled = !!(lim && L.length >= lim);
+    $('list').innerHTML = L.length ? L.map((l, i) =>
+      '<div class="row' + (l.active ? '' : ' off') + '" data-id="' + l.id + '">' +
+      '<div class="t"><b>' + esc(l.title) + '</b><span>' + esc(l.url) + (me.plan !== 'prata' ? ' · ' + l.clicks + ' cliques' : '') + '</span></div>' +
+      '<button class="ib" data-a="up" title="Subir" aria-label="Subir"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
+      '<button class="ib" data-a="edit" title="Editar" aria-label="Editar">✎</button>' +
+      '<button class="ib" data-a="tog" title="' + (l.active ? 'Esconder' : 'Mostrar') + '" aria-label="' + (l.active ? 'Esconder' : 'Mostrar') + '">' + (l.active ? '◉' : '○') + '</button>' +
+      '<button class="ib" data-a="del" title="Apagar" aria-label="Apagar">✕</button></div>').join('')
+      : '<p class="muted" style="margin:0">Nenhum link ainda. Adicione o primeiro acima.</p>';
+    $('list').querySelectorAll('.row').forEach((row) => {
+      const id = row.dataset.id, l = L.find((x) => String(x.id) === id);
+      row.querySelectorAll('button').forEach((b) => b.onclick = async () => {
+        const a = b.dataset.a;
+        let r;
+        if (a === 'up') r = await WL.api('links/' + id, 'PUT', { move: 'up' });
+        if (a === 'tog') r = await WL.api('links/' + id, 'PUT', { active: !l.active });
+        if (a === 'del') { if (!confirm('Apagar o link "' + l.title + '"?')) return; r = await WL.api('links/' + id, 'DELETE'); }
+        if (a === 'edit') {
+          const t = prompt('Título do link', l.title); if (t === null) return;
+          const u = prompt('Endereço do link', l.url); if (u === null) return;
+          r = await WL.api('links/' + id, 'PUT', { title: t, url: u });
+        }
+        if (r && !r.ok) alert(r.error);
+        loadLinks();
+      });
+    });
+  }
+
+  function setTheme(t) {
+    theme = t;
+    document.querySelectorAll('.themes button').forEach((b) => b.style.outline = b.dataset.t === t ? '3px solid #D4FF3A' : 'none');
+  }
+  document.querySelectorAll('.themes button').forEach((b) => b.onclick = () => setTheme(b.dataset.t));
+
+  $('addF').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('aErr').textContent = '';
+    WL.busy($('aBtn'), true, '…');
+    const d = await WL.api('links', 'POST', { title: $('aT').value, url: $('aU').value });
+    WL.busy($('aBtn'), false);
+    if (!d.ok) { $('aErr').textContent = d.error; return; }
+    $('aT').value = ''; $('aU').value = '';
+    loadLinks();
+  });
+
+  $('pSave').onclick = async () => {
+    const d = await WL.api('me', 'PUT', { title: $('pTitle').value, bio: $('pBio').value, theme });
+    $('pMsg').textContent = d.ok ? 'Salvo ✓' : d.error;
+    setTimeout(() => $('pMsg').textContent = '', 2500);
+  };
+  $('copy').onclick = async () => {
+    try { await navigator.clipboard.writeText('https://whitelink.site/' + me.handle); $('copy').textContent = 'Copiado!'; }
+    catch (e) { $('copy').textContent = 'Copie: whitelink.site/' + me.handle; }
+  };
+  $('logout').onclick = async (e) => { e.preventDefault(); await WL.api('auth/logout', 'POST', {}); location.href = '/'; };
+  load();
+})();
+</script>
+</body>
+</html>
