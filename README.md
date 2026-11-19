@@ -4,6 +4,10 @@ Página de links para a bio — whitelink.site
 
 ## Como está organizado
 
+- `screens/` — as telas do protótipo (mesmo visual do canvas). Rode `node tools/build.mjs` para gerar as páginas em `public/`.
+- `public/assets/dc.js` — motor que roda essas telas no navegador.
+- `tools/dev-server.mjs` — servidor local para testes (banco em memória).
+
 - `public/` — as telas do site (página de vendas, entrar, painel, ajuda, termos, privacidade, 404)
 - `functions/` — o "cérebro" que roda na Cloudflare (cadastro, login, links, página pública)
 - `src/lib.js` — funções comuns (senhas, sessões, SMS, antifraude)

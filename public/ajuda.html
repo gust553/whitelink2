@@ -4,41 +4,81 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Central de ajuda — WhiteLink</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
-<link rel="stylesheet" href="/assets/app.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B10}
+a{color:#D4FF3A}a:hover{color:#E6FF8A}
+button,input{font-family:Inter,system-ui,sans-serif}
+
+@media (max-width: 600px){
+[style*="font-size: 60px"]{font-size:36px !important}
+[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
+[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
+[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
+[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
+[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
+[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
+[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
+[style*="font-size: 16px"]{font-size:15px !important}
+h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
+p{line-height:1.5 !important}
+[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
+[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
+[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
+[style*="padding: 56px 32px"]{padding:32px 20px !important}
+[style*="padding: 36px"]{padding:22px !important}
+[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
+[style*="padding: 48px 24px"]{padding:24px 14px !important}
+[style*="padding: 48px;"]{padding:24px 18px !important}
+[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
+[style*="padding: 22px"]{padding:16px !important}
+[style*="gap: 48px"]{gap:28px !important}
+[style*="gap: 36px"]{gap:22px !important}
+[style*="height: 56px"]{height:50px !important}
+}
+
+</style>
 </head>
 <body>
-<header class="top"><div class="wrap"><a class="logo" href="/">WhiteLink</a><div class="sp"></div><nav class="nav"><a href="/ajuda">Ajuda</a><a href="/entrar">Entrar</a></nav></div></header>
-<main class="wrap" style="max-width:820px;padding-top:40px;padding-bottom:40px">
-<h1 style="font-size:40px">Central de ajuda</h1>
-<p class="muted">Respostas rápidas para as dúvidas mais comuns.</p>
-<input class="in" id="q" placeholder="Buscar: Pix, senha, teste, tema…" style="margin:12px 0 6px">
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Como pago meu plano? <span class="muted" style="font-size:12px">· Pagamento</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Só por Pix. No Pix automático, o plano é liberado na hora. No Pix direto, você paga o valor exato do pedido, envia o comprovante e liberamos assim que conferirmos.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Paguei e o plano não foi liberado. E agora? <span class="muted" style="font-size:12px">· Pagamento</span></summary><p style="margin:0 0 16px;color:#C9C9D6">No Pix direto, confira se enviou o comprovante na tela "Depois de pagar". Se demorar, chame no WhatsApp com o código do pedido.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Posso usar Pix agendado? <span class="muted" style="font-size:12px">· Pagamento</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Não. O pedido vale por pouco tempo e o Pix agendado pode cair depois que ele vencer. Pague na hora.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Como peço reembolso? <span class="muted" style="font-size:12px">· Pagamento</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Em até 7 dias depois do primeiro pagamento, pelo WhatsApp.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Qual a diferença entre Prata, Ouro e Diamante? <span class="muted" style="font-size:12px">· Planos</span></summary><p style="margin:0 0 16px;color:#C9C9D6">O Prata é grátis com até 3 links e 2 temas. O Ouro libera 10 links, todos os blocos, 13 temas e estatísticas de 30 dias. O Diamante libera tudo, os 77 temas e o criador de tema.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">O que acontece se eu não renovar? <span class="muted" style="font-size:12px">· Planos</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Sua conta volta para o Prata grátis. A página continua no ar com os limites do Prata, e o resto fica guardado até você assinar de novo.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Como funciona o teste grátis? <span class="muted" style="font-size:12px">· Teste grátis</span></summary><p style="margin:0 0 16px;color:#C9C9D6">São 3 dias com tudo do Diamante, um por pessoa. Depois você continua no Prata grátis, sem pagar nada.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Não recebi o código por SMS. <span class="muted" style="font-size:12px">· Teste grátis</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Confira o número com DDD e espere o tempo para reenviar. Se continuar sem chegar, fale com o suporte.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Como coloco um vídeo na página? <span class="muted" style="font-size:12px">· Minha página</span></summary><p style="margin:0 0 16px;color:#C9C9D6">No editor, clique em "Vídeo" na coluna da esquerda e cole o link do YouTube, TikTok ou Reels. O bloco de vídeo é do Ouro e do Diamante.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Como troco o tema? <span class="muted" style="font-size:12px">· Minha página</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Abra Temas, escolha um e clique em "Usar este tema". Os temas com cadeado são de planos acima do seu.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Esqueci minha senha. <span class="muted" style="font-size:12px">· Conta e senha</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Na tela de entrar, clique em "Esqueci minha senha". Mandamos um código para o seu e-mail e para o celular cadastrado.</p></details>
-<details class="faq" style="border-radius:16px;background:#14141B;border:1px solid #22222B;padding:0 18px;margin-top:10px"><summary style="cursor:pointer;padding:16px 0;font-weight:500">Como troco meu e-mail ou celular? <span class="muted" style="font-size:12px">· Conta e senha</span></summary><p style="margin:0 0 16px;color:#C9C9D6">Em Minha conta. A troca só vale depois de confirmar o link no novo e-mail ou o código no novo celular.</p></details>
-<section class="card" style="margin-top:24px;display:flex;flex-direction:column;gap:12px;border-color:#3A4714">
-<h2 style="font-size:22px">Não achou a resposta?</h2>
-<p style="margin:0;color:#C9C9D6">Chame a gente no WhatsApp. Atendemos pagamentos, teste grátis e dúvidas sobre a sua página.</p>
-<a class="btn" style="align-self:flex-start" href="https://wa.me/5511993931841?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20o%20WhiteLink" target="_blank" rel="noopener">Chamar no WhatsApp (11) 99393-1841</a>
-</section>
+
+<div id="root"></div>
+<script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Temas.dc.html":"/painel/em-breve?t=Temas","CriadorTema.dc.html":"/painel/em-breve?t=Criador%20de%20tema","Agenda.dc.html":"/painel/em-breve?t=Agendamentos","Stats.dc.html":"/painel/em-breve?t=Estat%C3%ADsticas","Contatos.dc.html":"/painel/contatos","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/em-breve?t=Indique%20e%20ganhe","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/em-breve?t=Minha%20conta","EditarLink.dc.html":"/painel/editar-link","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/ajuda","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
+<script src="/assets/dc.js"></script>
 <script>
-document.getElementById('q').addEventListener('input',function(){var v=this.value.trim().toLowerCase();document.querySelectorAll('details.faq').forEach(function(d){d.style.display=!v||d.textContent.toLowerCase().indexOf(v)>=0?'':'none';});});
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { q: '', c: 0, open: 0 }; }
+  renderVals() {
+    const s = this.state;
+    const C = ['Todos', 'Pagamento', 'Planos', 'Teste grátis', 'Minha página', 'Conta e senha'];
+    const F = [
+      [1, 'Como pago meu plano?', 'Só por Pix. No Pix automático, o plano é liberado na hora. No Pix direto, você paga o valor exato do pedido, envia o comprovante e liberamos assim que conferirmos.'],
+      [1, 'Paguei e o plano não foi liberado. E agora?', 'No Pix direto, confira se enviou o comprovante na tela "Depois de pagar". Se demorar, chame no chat ou no WhatsApp que aparece nessa tela, com o código do pedido.'],
+      [1, 'Posso usar Pix agendado?', 'Não. O pedido vale por pouco tempo e o Pix agendado pode cair depois que ele vencer. Pague na hora.'],
+      [1, 'Como peço reembolso?', 'Em até 7 dias depois do primeiro pagamento, pelo chat de suporte.'],
+      [2, 'Qual a diferença entre Prata, Ouro e Diamante?', 'O Prata é grátis com até 3 links e 2 temas. O Ouro libera 10 links, todos os blocos, 13 temas e estatísticas de 30 dias. O Diamante libera tudo, os 77 temas e o criador de tema.'],
+      [2, 'O que acontece se eu não renovar?', 'Sua conta volta para o Prata grátis. A página continua no ar com os limites do Prata, e o resto fica guardado até você assinar de novo.'],
+      [3, 'Como funciona o teste grátis?', 'São 3 dias com tudo do Diamante, um por pessoa. Depois você continua no Prata grátis, sem pagar nada.'],
+      [3, 'Não recebi o código por SMS.', 'Confira o número com DDD e espere o tempo para reenviar. Se continuar sem chegar, fale com o suporte.'],
+      [4, 'Como coloco um vídeo na página?', 'No editor, clique em "Vídeo" na coluna da esquerda e cole o link do YouTube, TikTok ou Reels. O bloco de vídeo é do Ouro e do Diamante.'],
+      [4, 'Como troco o tema?', 'Abra Temas, escolha um e clique em "Usar este tema". Os temas com cadeado são de planos acima do seu.'],
+      [5, 'Esqueci minha senha.', 'Na tela de entrar, clique em "Esqueci minha senha". Mandamos um código para o seu e-mail e para o celular cadastrado.'],
+      [5, 'Como troco meu e-mail ou celular?', 'Em Minha conta. A troca só vale depois de confirmar o link no novo e-mail ou o código no novo celular.']
+    ];
+    const q = s.q.trim().toLowerCase();
+    const list = F.map((f, i) => ({ f: f, i: i })).filter((x) => (s.c === 0 || x.f[0] === s.c) && (!q || (x.f[1] + ' ' + x.f[2]).toLowerCase().indexOf(q) >= 0));
+    return {
+      q: s.q, setQ: (e) => this.setState({ q: e.target.value }),
+      cats: C.map((n, i) => ({ n: n, sel: s.c === i, pick: () => this.setState({ c: i }),
+        style: 'height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer; font-size: 13px; ' + (s.c === i ? 'border: 1px solid #D4FF3A; background: #22222B; color: #F3F3F7; font-weight: 600' : 'border: 1px solid #2A2A34; background: transparent; color: #C9C9D6') })),
+      faqs: list.map((x) => ({ q: x.f[1], a: x.f[2], open: s.open === x.i, sign: s.open === x.i ? '−' : '+', toggle: () => this.setState({ open: s.open === x.i ? -1 : x.i }) })),
+      none: list.length === 0
+    };
+  }
+}
+
+DC.mount(document.getElementById('root'), "\n<div style=\"min-height: 1400px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif\">\n  <header style=\"border-bottom: 1px solid #22222B; background: #0E0E14\">\n    <div style=\"max-width: 1000px; margin: 0 auto; padding: 14px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 12px\">\n      <a href=\"Main.dc.html\" style=\"font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #F3F3F7; text-decoration: none\">WhiteLink</a>\n      <div style=\"flex: 1\"></div>\n      <a href=\"CentralAjuda.dc.html\" style=\"font-size: 14px; color: #C9C9D6; text-decoration: none\">Ajuda</a>\n      <a href=\"Entrar.dc.html\" style=\"height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #33333E; color: #F3F3F7; font-size: 14px; display: flex; align-items: center; text-decoration: none\">Entrar</a>\n    </div>\n  </header>\n  <div style=\"max-width: 1000px; margin: 0 auto; padding: 48px 24px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px\">\n    <div style=\"display: flex; flex-direction: column; gap: 8px\">\n      <h1 style=\"margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700\">Central de ajuda</h1>\n      <p style=\"margin: 0; font-size: 16px; color: #C9C9D6; line-height: 1.55\">Respostas rápidas para as dúvidas mais comuns.</p>\n    </div>\n    <label style=\"display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6\">Buscar\n      <input value=\"{{q}}\" onInput=\"{{setQ}}\" placeholder=\"Ex.: Pix, senha, teste, tema\" style=\"height: 52px; box-sizing: border-box; border-radius: 14px; border: 1px solid #33333E; background: #0E0E14; color: #F3F3F7; padding: 0 16px; font-size: 16px\">\n    </label>\n    <div role=\"group\" aria-label=\"Assuntos\" style=\"display: flex; flex-wrap: wrap; gap: 8px\">\n      <sc-for list=\"{{cats}}\" as=\"c\" hint-placeholder-count=\"6\">\n        <button onClick=\"{{c.pick}}\" aria-pressed=\"{{c.sel}}\" style=\"{{c.style}}\">{{c.n}}</button>\n      </sc-for>\n    </div>\n    <div style=\"display: flex; flex-direction: column; gap: 10px\">\n      <sc-for list=\"{{faqs}}\" as=\"f\" hint-placeholder-count=\"6\">\n        <div style=\"border-radius: 16px; background: #14141B; border: 1px solid #22222B; overflow: hidden\">\n          <button onClick=\"{{f.toggle}}\" aria-expanded=\"{{f.open}}\" style=\"width: 100%; min-height: 56px; padding: 14px 18px; border: none; background: transparent; color: #F3F3F7; text-align: left; font-size: 16px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px\">\n            <span>{{f.q}}</span><span aria-hidden=\"true\" style=\"color: #A7A7B8; font-size: 20px\">{{f.sign}}</span>\n          </button>\n          <sc-if value=\"{{f.open}}\" hint-placeholder-val=\"{{ false }}\">\n            <p style=\"margin: 0; padding: 0 18px 16px; font-size: 15px; color: #C9C9D6; line-height: 1.6\">{{f.a}}</p>\n          </sc-if>\n        </div>\n      </sc-for>\n      <sc-if value=\"{{none}}\" hint-placeholder-val=\"{{ false }}\">\n        <span style=\"font-size: 14px; color: #A7A7B8; padding: 8px 2px\">Nada encontrado. Tente outra palavra ou fale com a gente abaixo.</span>\n      </sc-if>\n    </div>\n    <section aria-label=\"Falar com a equipe\" style=\"padding: 22px; border-radius: 18px; background: #14141B; border: 1px solid #3A4714; display: flex; flex-wrap: wrap; gap: 16px; align-items: center\">\n      <div style=\"flex: 1 1 360px; display: flex; flex-direction: column; gap: 6px\">\n        <h2 style=\"margin: 0; font-size: 20px; font-weight: 600\">Não achou a resposta?</h2>\n        <span style=\"font-size: 14px; color: #C9C9D6; line-height: 1.55\">O chat com a equipe é do Ouro e do Diamante. Para pagamento e teste grátis, o chat é liberado para todos, inclusive no Prata. Se o chat não responder, chame no WhatsApp.</span>\n      </div>\n      <div style=\"display: flex; flex-wrap: wrap; gap: 10px\">\n        <a href=\"SuporteCliente.dc.html\" style=\"height: 50px; padding: 0 20px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 15px; display: flex; align-items: center; text-decoration: none\">Abrir o chat de suporte</a>\n        <a href=\"https://wa.me/5511993931841?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20o%20WhiteLink\" target=\"_blank\" rel=\"noopener\" style=\"height: 50px; padding: 0 20px; border-radius: 14px; border: 1px solid #33333E; color: #F3F3F7; font-weight: 600; font-size: 15px; display: flex; align-items: center; text-decoration: none\">WhatsApp (11) 99393-1841</a>\n      </div>\n    </section>\n  </div>\n</div>\n", Component, {});
+
 </script>
-</main>
-<footer class="ft"><div class="wrap">
-  <b style="color:#F3F3F7;font-family:'Space Grotesk'">WhiteLink</b>
-  <a href="/termos">Termos de uso</a><a href="/privacidade">Privacidade</a><a href="/ajuda">Ajuda e suporte</a>
-  <div class="sp"></div><a href="https://wa.me/5511993931841" target="_blank" rel="noopener">WhatsApp (11) 99393-1841</a>
-</div></footer>
 </body>
 </html>

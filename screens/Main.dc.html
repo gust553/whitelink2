@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>WhiteLink — página inicial</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B10}
+a{color:#D4FF3A}a:hover{color:#E6FF8A}
+button,input{font-family:Inter,system-ui,sans-serif}
+@media (max-width: 600px){
+[style*="font-size: 60px"]{font-size:36px !important}
+[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
+[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
+[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
+[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
+[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
+[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
+[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
+[style*="font-size: 16px"]{font-size:15px !important}
+h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
+p{line-height:1.5 !important}
+[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
+[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
+[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
+[style*="padding: 56px 32px"]{padding:32px 20px !important}
+[style*="padding: 36px"]{padding:22px !important}
+[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
+[style*="padding: 48px 24px"]{padding:24px 14px !important}
+[style*="padding: 48px;"]{padding:24px 18px !important}
+[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
+[style*="padding: 22px"]{padding:16px !important}
+[style*="gap: 48px"]{gap:28px !important}
+[style*="gap: 36px"]{gap:22px !important}
+[style*="height: 56px"]{height:50px !important}
+}
+header nav a{text-decoration:none !important}
+header nav a:hover{color:#F3F3F7 !important}
+header > a,header > button{text-decoration:none !important}
+@media (max-width: 600px){
+header{gap:10px !important;padding:12px 14px !important;align-items:center !important}
+header > div[style*="flex: 1"]{flex:1 1 0 !important}
+header nav{order:5;flex:0 0 calc(100% + 28px) !important;flex-wrap:nowrap !important;overflow-x:auto;gap:6px !important;margin:2px -14px 0 !important;padding:2px 14px 4px !important;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%)}
+header nav::-webkit-scrollbar{display:none}
+header nav a{flex:none;white-space:nowrap;height:36px;box-sizing:border-box;display:inline-flex !important;align-items:center;padding:0 14px !important;border-radius:999px !important;background:#16161D !important;border:1px solid #24242E;color:#C9C9D6 !important;font-size:13px !important;font-weight:500 !important}
+header nav a[aria-current="page"]{background:#D4FF3A !important;border-color:#D4FF3A;color:#0E0E14 !important;font-weight:600 !important}
+header > span:not(:first-child){display:none !important}
+header > a[href="Configuracoes.dc.html"]{display:none !important}
+header > a,header > button{height:38px !important;padding:0 14px !important;font-size:13px !important;border-radius:10px !important}
+}
+</style>
+</helmet>
+<div style="min-height: 3600px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif">
+
+  <header style="position: sticky; top: 0; z-index: 5; background: #0B0B10; border-bottom: 1px solid #1C1C24">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 14px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px">
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.02em">WhiteLink</span>
+      <nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px">
+        <a href="#recursos" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Recursos</a>
+        <a href="#como" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Como funciona</a>
+        <a href="#precos" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Preços</a>
+        <a href="#duvidas" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Dúvidas</a>
+      </nav>
+      <div style="flex: 1"></div>
+      <a href="Entrar.dc.html" style="height: 44px; padding: 0 16px; border-radius: 12px; color: #F3F3F7; font-size: 14px; display: flex; align-items: center; text-decoration: none">Entrar</a>
+      <a href="Teste.dc.html" style="height: 44px; padding: 0 18px; border-radius: 12px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 14px; display: flex; align-items: center; text-decoration: none">Testar grátis</a>
+    </div>
+  </header>
+
+  <section style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 56px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 48px; align-items: center">
+    <div style="display: flex; flex-direction: column; gap: 22px">
+      <span style="align-self: flex-start; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: #1A2008; color: #D4FF3A; border: 1px solid #3A4714">Diamante grátis por 3 dias · depois Prata grátis</span>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 60px; line-height: 1.02; font-weight: 700; letter-spacing: -0.03em">O link da sua bio,<br>feito para vender.</h1>
+      <p style="margin: 0; font-size: 19px; line-height: 1.55; color: #C9C9D6; max-width: 520px">Monte sua página arrastando blocos, venda com Pix e produtos, capture contatos e veja de onde vem cada clique. Tudo em um só link.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; max-width: 520px">
+        <label style="flex: 1 1 260px; display: flex; align-items: center; height: 56px; border-radius: 14px; background: #14141B; border: 1px solid #33333E; padding: 0 6px 0 16px; box-sizing: border-box; font-size: 16px; color: #A7A7B8">
+          <span>whitelink.site/</span>
+          <input aria-label="Escolha seu nome de usuário" value="{{handle}}" onInput="{{setHandle}}" placeholder="seunome" style="flex: 1; min-width: 0; height: 100%; border: none; background: transparent; color: #F3F3F7; font-size: 16px; outline: none">
+        </label>
+        <a href="{{claimHref}}" style="height: 56px; padding: 0 22px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 16px; display: flex; align-items: center; text-decoration: none">Garantir meu link</a>
+      </div>
+      <span style="font-size: 13px; color: {{handleColor}}; min-height: 18px">{{handleMsg}}</span>
+    </div>
+
+    <div style="display: flex; justify-content: center">
+      <div aria-hidden="true" style="width: 300px; border-radius: 40px; padding: 12px; background: #1A1A22; border: 1px solid #2A2A34">
+        <div style="border-radius: 30px; overflow: hidden; background: linear-gradient(180deg, #1C1F10 0%, #0E0E14 60%); padding: 28px 18px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+          <div style="width: 76px; height: 76px; border-radius: 50%; background: #2A2A34; border: 3px solid #D4FF3A"></div>
+          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px">@{{shownHandle}}</span>
+          <span style="font-size: 12px; color: #A7A7B8; text-align: center">[sua descrição curta aqui]</span>
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 8px">
+            <div style="height: 46px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center">Meu produto em destaque</div>
+            <div style="height: 46px; border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; font-size: 13px; display: flex; align-items: center; justify-content: center">Canal no YouTube</div>
+            <div style="border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; padding: 12px; display: flex; flex-direction: column; gap: 6px; align-items: center">
+              <span style="font-size: 11px; color: #A7A7B8">A promoção acaba em</span>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: .04em">02 : 14 : 37</span>
+            </div>
+            <div style="height: 46px; border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px">Pagar com Pix</div>
+            <div style="height: 46px; border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; font-size: 13px; display: flex; align-items: center; justify-content: center">Entre na minha lista VIP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-top: 1px solid #1C1C24; border-bottom: 1px solid #1C1C24; background: #0E0E14">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 22px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 40px; font-size: 14px; color: #C9C9D6">
+      <span>Sem login com Instagram: sua conta fica segura</span>
+      <span>Funciona em qualquer rede social</span>
+      <span>Pronto em menos de 5 minutos</span>
+      <span>Plano Prata grátis para sempre</span>
+    </div>
+  </section>
+
+  <section id="recursos" style="max-width: 1200px; margin: 0 auto; padding: 88px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 36px">
+    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 680px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Muito mais que uma lista de links</h2>
+      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #C9C9D6">Tudo o que você precisa para transformar quem clica na sua bio em cliente.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px">
+      <sc-for list="{{features}}" as="f" hint-placeholder-count="6">
+        <div style="padding: 26px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 12px">
+          <span style="width: 44px; height: 44px; border-radius: 12px; background: #1A2008; display: flex; align-items: center; justify-content: center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4FF3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{f.icon}}"></path></svg>
+          </span>
+          <h3 style="margin: 0; font-size: 19px; font-weight: 600">{{f.t}}</h3>
+          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #C9C9D6">{{f.d}}</p>
+          <span style="font-size: 12px; color: #A7A7B8">{{f.plan}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="como" style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Como funciona</h2>
+    <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+      <sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
+        <li style="padding: 26px; border-radius: 20px; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; color: #D4FF3A; line-height: 1">{{s.n}}</span>
+          <h3 style="margin: 0; font-size: 19px; font-weight: 600">{{s.t}}</h3>
+          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #C9C9D6">{{s.d}}</p>
+        </li>
+      </sc-for>
+    </ol>
+  </section>
+
+  <section id="precos" style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Preços simples</h2>
+        <p style="margin: 0; font-size: 17px; color: #C9C9D6">Teste 3 dias com tudo do Diamante. Depois, continue no Prata grátis ou assine.</p>
+      </div>
+      <div role="group" aria-label="Forma de pagamento" style="display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: #14141B; border: 1px solid #22222B">
+        <button onClick="{{setMonthly}}" aria-pressed="{{monthly}}" style="{{mStyle}}">Mensal</button>
+        <button onClick="{{setYearly}}" aria-pressed="{{yearly}}" style="{{yStyle}}">Anual</button>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+      <sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
+        <div style="{{p.card}}">
+          <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: {{p.color}}">{{p.name}}</h3>
+          <div style="display: flex; align-items: baseline; gap: 6px">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 700">{{p.price}}</span>
+            <span style="font-size: 14px; color: #A7A7B8">{{p.per}}</span>
+          </div>
+          <span style="font-size: 13px; color: #A7A7B8; min-height: 18px">{{p.note}}</span>
+          <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #E4E4EC">
+            <sc-for list="{{p.items}}" as="it" hint-placeholder-count="4">
+              <li style="display: flex; gap: 10px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{p.color}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 1px"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+                <span>{{it}}</span>
+              </li>
+            </sc-for>
+          </ul>
+          <a href="{{p.href}}" style="{{p.btn}}">{{p.cta}}</a>
+        </div>
+      </sc-for>
+    </div>
+    <a href="Planos.dc.html" style="align-self: flex-start; font-size: 15px">Ver a comparação completa dos planos</a>
+  </section>
+
+  <section style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 24px; box-sizing: border-box">
+    <div style="padding: 36px; border-radius: 24px; background: #14141B; border: 1px solid #22222B; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 640px">
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">Indique e ganhe dias de plano</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #C9C9D6">Cada amigo que assinar pelo seu convite rende dias grátis para você, e ele também ganha um bônus para começar.</p>
+      </div>
+      <a href="Indique.dc.html" style="height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid #D4FF3A; color: #D4FF3A; font-weight: 600; font-size: 15px; display: flex; align-items: center; text-decoration: none">Como funciona a indicação</a>
+    </div>
+  </section>
+
+  <section id="duvidas" style="max-width: 860px; margin: 0 auto; padding: 72px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Dúvidas frequentes</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <sc-for list="{{faq}}" as="q" hint-placeholder-count="6">
+        <div style="border-radius: 16px; background: #14141B; border: 1px solid #22222B">
+          <button onClick="{{q.toggle}}" aria-expanded="{{q.open}}" style="width: 100%; min-height: 60px; padding: 16px 20px; border: none; background: transparent; color: #F3F3F7; font-size: 16px; font-weight: 500; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">
+            <span style="flex: 1">{{q.q}}</span>
+            <span aria-hidden="true" style="font-size: 22px; color: #D4FF3A">{{q.sign}}</span>
+          </button>
+          <sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 20px 18px; font-size: 15px; line-height: 1.6; color: #C9C9D6">{{q.a}}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 72px; box-sizing: border-box">
+    <div style="padding: 56px 32px; border-radius: 28px; background: #D4FF3A; color: #0E0E14; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.02em">Seu novo link está a 5 minutos</h2>
+      <p style="margin: 0; font-size: 17px; max-width: 520px; line-height: 1.5">3 dias com tudo do Diamante e depois o Prata grátis para sempre. Sem cartão de crédito.</p>
+      <a href="Teste.dc.html" style="height: 56px; padding: 0 28px; border-radius: 14px; background: #0E0E14; color: #F3F3F7; font-weight: 600; font-size: 16px; display: flex; align-items: center; text-decoration: none">Começar meu teste grátis</a>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid #1C1C24">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 28px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; font-size: 14px; color: #A7A7B8">
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: #F3F3F7">WhiteLink</span>
+      <a href="Termos.dc.html" style="color: #A7A7B8">Termos de uso</a>
+      <a href="Privacidade.dc.html" style="color: #A7A7B8">Privacidade</a>
+      <a href="CentralAjuda.dc.html" style="color: #A7A7B8">Ajuda e suporte</a>
+      <div style="flex: 1"></div>
+      <a href="https://wa.me/5511993931841" target="_blank" rel="noopener" style="color: #A7A7B8">WhatsApp (11) 99393-1841</a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3600}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { handle: '', yearly: false, open: 0 }; }
+  renderVals() {
+    const s = this.state;
+    const h = s.handle.toLowerCase().replace(/[^a-z0-9._]/g, '');
+    const chk = s.chk || {};
+    let msg = 'Escolha seu endereço antes que alguém pegue.', col = '#A7A7B8';
+    if (h.length > 0 && h.length < 3) { msg = 'Use pelo menos 3 caracteres.'; col = '#FF8A6B'; }
+    else if (h.length >= 3 && chk.h !== h) { msg = 'Conferindo whitelink.site/' + h + '…'; }
+    else if (h.length >= 3 && chk.free === false) { msg = chk.reason || ('whitelink.site/' + h + ' já está em uso. Tente outro.'); col = '#FF8A6B'; }
+    else if (h.length >= 3 && chk.free) { msg = 'whitelink.site/' + h + ' está livre!'; col = '#D4FF3A'; }
+    const yr = s.yearly;
+    const tog = (sel) => 'height: 44px; padding: 0 18px; border-radius: 10px; border: none; cursor: pointer; font-size: 14px; ' + (sel ? 'background: #F3F3F7; color: #0E0E14; font-weight: 600' : 'background: transparent; color: #C9C9D6');
+    const P = [
+      { name: 'Prata', color: '#C9CDD6', free: true, items: ['Grátis para sempre', 'Até 3 links', 'Blocos de link e texto', '2 temas prontos', 'Total de visitas dos últimos 7 dias'] },
+      { name: 'Ouro', color: '#F2C14E', m: 'R$ 19,90', y: 'R$ 199,90', items: ['Até 10 links', 'Produtos, contagem, captura e Pix', '13 temas e editor de aparência', 'Vídeos, estatísticas de 30 dias e links agendados', 'Sem a marca WhiteLink e chat de suporte'], hi: true },
+      { name: 'Diamante', color: '#8FE3FF', m: 'R$ 39,90', y: 'R$ 399,90', items: ['Links ilimitados', '77 temas (64 exclusivos, com movimento) + crie o seu', 'Teste A/B e estatísticas de 90 dias', 'Domínio próprio, até 3 páginas e selo de verificado', 'Suporte prioritário'] }
+    ];
+    const F = [
+      { t: 'Editor arrastável', d: 'Arraste os blocos para a ordem que quiser e veja a página mudando na hora, no celular ou no computador.', plan: 'Todos os planos', icon: 'M5 9h14M5 15h14M9 5l-4 4 4 4' },
+      { t: 'Venda direto pela bio', d: 'Blocos de produto, botão de Pix, contagem regressiva para promoções e formulário para captar contatos.', plan: 'Ouro e Diamante', icon: 'M6 6h15l-2 9H8L6 3H3M9 20h.01M18 20h.01' },
+      { t: 'Estatísticas de verdade', d: 'Saiba quantas pessoas clicaram, em qual link, de qual rede social, aparelho e cidade.', plan: 'Detalhadas no Ouro e Diamante', icon: 'M4 20V10M10 20V4M16 20v-7M22 20H2' },
+      { t: 'Links agendados e destaque', d: 'Programe um link para aparecer e sumir sozinho e chame atenção para o mais importante com animação.', plan: 'Ouro e Diamante', icon: 'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0' },
+      { t: 'Teste A/B', d: 'Coloque dois títulos no mesmo link e descubra qual deles faz mais gente clicar.', plan: 'Diamante', icon: 'M7 4v16M17 4v16M3 8h8M13 16h8' },
+      { t: 'Temas e tema próprio', d: 'Escolha um tema pronto ou crie o seu, com suas cores, fontes e até fotos e vídeo de fundo.', plan: 'Tema próprio no Diamante', icon: 'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-1.2-1-1.5-1-2.5S13.5 15 15 15h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8' }
+    ];
+    const Q = [
+      ['Preciso conectar meu Instagram?', 'Não. Você só copia o seu link do WhiteLink e cola na bio do Instagram, TikTok, YouTube ou onde quiser. Não pedimos sua senha nem acesso à sua conta.'],
+      ['Como funciona o teste grátis?', 'Você usa todos os recursos do Diamante, o plano mais completo, por 3 dias sem colocar cartão. Para ser justo com todos, cada pessoa pode fazer o teste uma vez, confirmado pelo celular e pelo e-mail.'],
+      ['O que acontece quando o teste acaba?', 'Sua conta passa para o Prata, que é grátis para sempre, e a página continua no ar. O que passa do limite do Prata fica guardado e volta na hora em que você assinar o Ouro ou o Diamante.'],
+      ['O plano Prata é grátis mesmo?', 'Sim, para sempre e sem cartão. Ele tem o básico para ter sua página: até 3 links, 2 temas e o total de visitas da semana.'],
+      ['Posso trocar de plano depois?', 'Sim. Você pode subir ou descer de plano quando quiser, em Meu plano.'],
+      ['Quais formas de pagamento vocês aceitam?', 'Só Pix. No Pix automático o plano é liberado na hora, assim que o banco confirma. No Pix direto você paga o valor exato do pedido, envia o comprovante e liberamos assim que conferirmos. Se o plano vencer sem pagamento, sua conta volta para o Prata grátis e tudo volta quando o pagamento for conferido.'],
+      ['Como cancelo?', 'Em Meu plano, a qualquer momento. Você usa o plano até o fim do período já pago e depois continua no Prata grátis.']
+    ];
+    return {
+      handle: s.handle,
+      setHandle: (e) => {
+        const v = e.target.value; this.setState({ handle: v });
+        const hh = v.toLowerCase().replace(/[^a-z0-9._]/g, '');
+        clearTimeout(this.ht);
+        if (hh.length >= 3) this.ht = setTimeout(async () => { const d = await DC.api('handle-check?h=' + encodeURIComponent(hh)); this.setState({ chk: { h: hh, free: d.free, reason: d.reason } }); }, 350);
+      },
+      claimHref: '/entrar?h=' + encodeURIComponent(h) + '#cadastro',
+      handleMsg: msg, handleColor: col,
+      shownHandle: h || 'seunome',
+      features: F,
+      steps: [
+        { n: '1', t: 'Escolha seu endereço', d: 'Crie sua conta com e-mail e garanta o seu whitelink.site/seunome.' },
+        { n: '2', t: 'Monte sua página', d: 'Adicione links, produtos e vídeos, escolha um tema e arraste tudo para o lugar.' },
+        { n: '3', t: 'Cole na bio e acompanhe', d: 'Coloque o link na bio das suas redes e veja os cliques chegando no painel.' }
+      ],
+      monthly: !yr, yearly: yr, mStyle: tog(!yr), yStyle: tog(yr),
+      setMonthly: () => this.setState({ yearly: false }),
+      setYearly: () => this.setState({ yearly: true }),
+      plans: P.map((p) => ({ name: p.name, color: p.color, items: p.items,
+        price: p.free ? 'Grátis' : (yr ? p.y : p.m), per: p.free ? '' : (yr ? '/ano' : '/mês'), note: p.free ? 'para sempre, sem cartão' : (yr ? 'pagamento único por 12 meses' : 'ou ' + p.y + ' por ano'),
+        href: p.free ? 'Teste.dc.html' : 'Pagamento.dc.html', cta: p.free ? 'Começar grátis' : 'Assinar ' + p.name,
+        btn: 'margin-top: auto; height: 48px; border-radius: 12px; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; text-decoration: none; ' + (p.hi ? 'background: ' + p.color + '; color: #0E0E14' : 'border: 1px solid #33333E; color: #F3F3F7'),
+        card: 'padding: 26px; border-radius: 20px; display: flex; flex-direction: column; gap: 12px; background: ' + (p.hi ? '#17171F' : '#121218') + '; border: ' + (p.hi ? '2px solid ' + p.color : '1px solid #22222B') })),
+      faq: Q.map((q, i) => ({ q: q[0], a: q[1], open: s.open === i, sign: s.open === i ? '−' : '+', toggle: () => this.setState({ open: s.open === i ? -1 : i }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

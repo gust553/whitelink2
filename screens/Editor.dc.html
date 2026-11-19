@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Editor da página — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B10}
+a{color:#D4FF3A}a:hover{color:#E6FF8A}
+.ed-row{transition:background .12s ease,border-color .12s ease}
+.ed-row:hover{border-color:#3A3A46}
+.ed-lib:hover{background:#1E1E28;border-color:#3A3A46}
+button,input{font-family:Inter,system-ui,sans-serif}
+.ed-in{height:44px;width:100%;box-sizing:border-box;border-radius:10px;border:1px solid #33333E;background:#0E0E14;color:#F3F3F7;padding:0 12px;font-size:15px}
+.ed-in:focus{outline:2px solid #D4FF3A;outline-offset:1px}
+header nav a{text-decoration:none !important}
+header nav a:hover{color:#F3F3F7 !important}
+header > a,header > button{text-decoration:none !important}
+@media (max-width: 600px){
+[style*="font-size: 24px"],[style*="font-size: 22px"]{font-size:19px !important}
+[style*="font-size: 20px"]{font-size:17px !important}
+[style*="padding: 20px 24px"]{padding:14px 12px !important}
+[style*="padding: 10px 24px"]{padding:8px 12px !important}
+header{gap:10px !important;padding:12px 14px !important;align-items:center !important}
+header > div[style*="flex: 1"]{flex:1 1 0 !important}
+header nav{order:5;flex:0 0 calc(100% + 28px) !important;flex-wrap:nowrap !important;overflow-x:auto;gap:6px !important;margin:2px -14px 0 !important;padding:2px 14px 4px !important;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%)}
+header nav::-webkit-scrollbar{display:none}
+header nav a{flex:none;white-space:nowrap;height:36px;box-sizing:border-box;display:inline-flex !important;align-items:center;padding:0 14px !important;border-radius:999px !important;background:#16161D !important;border:1px solid #24242E;color:#C9C9D6 !important;font-size:13px !important;font-weight:500 !important}
+header nav a[aria-current="page"]{background:#D4FF3A !important;border-color:#D4FF3A;color:#0E0E14 !important;font-weight:600 !important}
+header > span:not(:first-child){display:none !important}
+header > a[href="/painel/configuracoes"]{display:none !important}
+header > a,header > button{height:38px !important;padding:0 14px !important;font-size:13px !important;border-radius:10px !important}
+.ed-phone{display:none !important}
+}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid #22222B; background: #0E0E14">
+    <a href="Main.dc.html" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.02em; color: #F3F3F7">WhiteLink</a>
+    <nav aria-label="Seções" style="display: flex; gap: 4px; flex-wrap: wrap">
+      <a href="#" aria-current="page" style="padding: 10px 14px; border-radius: 10px; background: #1A1A22; color: #F3F3F7; font-size: 14px; font-weight: 500">Editor</a>
+      <a href="Temas.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Temas</a>
+      <a href="Agenda.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Agendamentos</a>
+      <a href="Stats.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Estatísticas</a>
+      <a href="Contatos.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Contatos</a>
+      <a href="Configuracoes.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Configurações</a>
+      <a href="Indique.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Indique e ganhe</a>
+      <a href="MeuPlano.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Meu plano</a>
+      <a href="Conta.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Minha conta</a>
+    </nav>
+    <div style="flex: 1"></div>
+    <span style="font-size: 13px; color: #A7A7B8">whitelink.site/<strong style="color: #F3F3F7">{{handle}}</strong></span>
+    <button onClick="{{copyLink}}" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #33333E; background: transparent; color: #F3F3F7; font-weight: 500; font-size: 14px; cursor: pointer">{{copyLabel}}</button>
+    <a href="{{pageUrl}}" target="_blank" rel="noopener" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #33333E; color: #F3F3F7; font-weight: 500; font-size: 14px; display: flex; align-items: center">Ver página</a>
+    <button onClick="{{publish}}" style="height: 44px; padding: 0 18px; border-radius: 12px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 14px; cursor: pointer">{{pubLabel}}</button>
+    <button onClick="{{logout}}" style="height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #33333E; background: transparent; color: #A7A7B8; font-size: 14px; cursor: pointer">Sair</button>
+  </header>
+
+  <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+    <div style="padding: 48px 24px; color: #A7A7B8">Carregando a sua página…</div>
+  </sc-if>
+  <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+  <div style="display: flex; flex-direction: column; flex: 1">
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 24px; border-bottom: 1px solid #22222B; font-size: 13px; color: #C9C9D6">
+    <span style="font-weight: 600; color: {{planColor}}">{{planLabel}}</span>
+    <span style="color: {{limitColor}}">{{limitText}}</span>
+    <a href="MeuPlano.dc.html" style="font-size: 13px">Meu plano</a>
+    <div style="flex: 1"></div>
+    <span role="status" style="color: {{saveColor}}">{{saveText}}</span>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px 24px; flex: 1">
+
+    <aside style="flex: 1 1 220px; max-width: 260px; min-width: 200px; display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600; color: #A7A7B8; text-transform: uppercase; letter-spacing: .06em">Adicionar bloco</h2>
+      <sc-for list="{{library}}" as="b" hint-placeholder-count="8">
+        <button onClick="{{b.add}}" disabled="{{b.locked}}" class="ed-lib" style="{{b.style}}">
+          <span style="width: 32px; height: 32px; border-radius: 8px; background: #22222B; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; color: #D4FF3A">{{b.ic}}</span>
+          <span style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 500">{{b.label}}</span>
+            <span style="font-size: 12px; color: #A7A7B8">{{b.hint}}</span>
+          </span>
+          <sc-if value="{{b.locked}}" hint-placeholder-val="{{ false }}"><span style="margin-left: auto; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; border: 1px solid #F2C14E; color: #F2C14E">{{b.need}}</span></sc-if>
+        </button>
+      </sc-for>
+    </aside>
+
+    <main style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">Blocos da página</h1>
+        <span style="font-size: 13px; color: #A7A7B8">Arraste pela alça para reordenar · {{count}} blocos</span>
+      </div>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 28px; border-radius: 14px; border: 1px dashed #33333E; color: #A7A7B8; font-size: 14px; text-align: center">Sua página ainda está vazia. Clique em "Link", na coluna da esquerda, para adicionar o primeiro bloco.</div>
+      </sc-if>
+      <sc-for list="{{blocks}}" as="k" hint-placeholder-count="7">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+        <div class="ed-row" draggable="true" onDragStart="{{k.dragStart}}" onDragOver="{{k.dragOver}}" onDrop="{{k.drop}}" onDragEnd="{{k.dragEnd}}" style="{{k.rowStyle}}">
+          <span aria-hidden="true" style="cursor: grab; color: #6F6F80; display: flex; padding: 4px"><svg width="16" height="16" viewBox="0 0 24 24" fill="#8A8A9A"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></span>
+          <span style="width: 36px; height: 36px; border-radius: 10px; background: #22222B; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; color: #D4FF3A; flex: none">{{k.ic}}</span>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{k.title}}</span>
+            <span style="font-size: 12px; color: #A7A7B8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{k.kindLabel}}{{k.extra}}</span>
+          </span>
+          <sc-if value="{{k.featured}}" hint-placeholder-val="{{ false }}">
+            <span style="font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 999px; background: #2A3310; color: #D4FF3A">Destaque</span>
+          </sc-if>
+          <button onClick="{{k.edit}}" aria-label="Editar bloco" style="width: 44px; height: 44px; border-radius: 10px; border: 1px solid #2A2A34; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9C9D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"></path></svg></button>
+          <button onClick="{{k.up}}" aria-label="Mover para cima" style="width: 44px; height: 44px; border-radius: 10px; border: 1px solid #2A2A34; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9C9D6" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg></button>
+          <button onClick="{{k.toggle}}" aria-label="{{k.toggleLabel}}" aria-pressed="{{k.on}}" style="{{k.switchStyle}}"><span style="{{k.knobStyle}}"></span></button>
+          <button onClick="{{k.remove}}" aria-label="Remover bloco" style="width: 44px; height: 44px; border-radius: 10px; border: 1px solid #2A2A34; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9C9D6" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"></path></svg></button>
+        </div>
+        <sc-if value="{{k.editing}}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 14px; border-radius: 14px; background: #14141B; border: 1px solid #3A4714; display: flex; flex-direction: column; gap: 10px">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">{{k.titleLabel}}
+              <input class="ed-in" value="{{k.title}}" onInput="{{k.setTitle}}" maxlength="80">
+            </label>
+            <sc-if value="{{k.hasUrl}}" hint-placeholder-val="{{ true }}">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">{{k.urlLabel}}
+                <input class="ed-in" value="{{k.url}}" onInput="{{k.setUrl}}" placeholder="{{k.urlHint}}">
+              </label>
+            </sc-if>
+            <sc-if value="{{k.canFeature}}" hint-placeholder-val="{{ false }}">
+              <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: #C9C9D6; cursor: pointer"><input type="checkbox" checked="{{k.featured}}" onChange="{{k.setFeatured}}" style="width: 18px; height: 18px; accent-color: #D4FF3A">Destacar este link (aparece em cima, com a cor de destaque)</label>
+            </sc-if>
+            <button onClick="{{k.done}}" style="align-self: flex-start; height: 40px; padding: 0 16px; border-radius: 10px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 14px; cursor: pointer">Pronto</button>
+          </div>
+        </sc-if>
+        </div>
+      </sc-for>
+    </main>
+
+    <section aria-label="Pré-visualização e aparência" style="flex: 1 1 340px; max-width: 380px; min-width: 300px; display: flex; flex-direction: column; gap: 16px">
+      <div class="ed-phone" style="align-self: center; width: 300px; height: 580px; border-radius: 36px; border: 8px solid #22222B; background: {{bg}}; overflow: hidden; display: flex; flex-direction: column">
+        <div style="flex: 1; overflow-y: auto; padding: 26px 14px 18px; display: flex; flex-direction: column; gap: 8px; font-family: {{fontStack}}; color: {{fg}}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 6px">
+            <div style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid {{accent}}; background: {{card}}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px">{{initials}}</div>
+            <span style="font-weight: 700; font-size: 15px">{{pageTitle}}</span>
+            <span style="font-size: 11px; color: {{muted}}">@{{instagram}}</span>
+          </div>
+          <sc-for list="{{visible}}" as="v" hint-placeholder-count="5">
+            <div style="{{v.pStyle}}">
+              <span style="flex: 1">{{v.title}}</span>
+              <span style="font-size: 10px; opacity: .7">{{v.kindLabel}}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{showBrand}}" hint-placeholder-val="{{ true }}"><span style="margin-top: auto; text-align: center; font-size: 10px; color: {{muted}}">Crie a sua com WhiteLink</span></sc-if>
+        </div>
+      </div>
+
+      <div style="padding: 16px; border-radius: 16px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 13px; font-weight: 600; color: #A7A7B8; text-transform: uppercase; letter-spacing: .06em">Perfil</h2>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">Nome que aparece
+          <input class="ed-in" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60">
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">Bio (até 160 letras)
+          <input class="ed-in" value="{{bio}}" onInput="{{setBio}}" maxlength="160">
+        </label>
+        <h2 style="margin: 6px 0 0; font-size: 13px; font-weight: 600; color: #A7A7B8; text-transform: uppercase; letter-spacing: .06em">Aparência</h2>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; color: #C9C9D6">Tema</span>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+            <sc-for list="{{themes}}" as="t" hint-placeholder-count="4">
+              <button onClick="{{t.pick}}" aria-label="{{t.name}}" aria-pressed="{{t.sel}}" style="{{t.style}}">
+                <span style="width: 22px; height: 22px; border-radius: 50%; background: {{t.accent}}"></span>
+                <span style="font-size: 11px; color: {{t.fg}}">{{t.name}}</span>
+              </button>
+            </sc-for>
+          </div>
+          <a href="Temas.dc.html" style="font-size: 13px">Ver os 77 temas</a>
+        </div>
+        <sc-if value="{{noStyle}}" hint-placeholder-val="{{ false }}"><a href="MeuPlano.dc.html" style="font-size: 13px; line-height: 1.5">Cor de destaque, fonte e formato dos botões: a partir do Ouro</a></sc-if>
+        <sc-if value="{{canStyle}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #C9C9D6"><input type="color" value="{{acc}}" onChange="{{setAcc}}" style="width: 44px; height: 44px; border: 1px solid #33333E; border-radius: 10px; background: #0E0E14; padding: 3px; cursor: pointer">Cor de destaque</label>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; color: #C9C9D6">Fonte</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <sc-for list="{{fonts}}" as="f" hint-placeholder-count="3">
+              <button onClick="{{f.pick}}" aria-pressed="{{f.sel}}" style="{{f.style}}">{{f.name}}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; color: #C9C9D6">Formato dos botões</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <sc-for list="{{shapes}}" as="s" hint-placeholder-count="3">
+              <button onClick="{{s.pick}}" aria-pressed="{{s.sel}}" style="{{s.style}}">{{s.name}}</button>
+            </sc-for>
+          </div>
+        </div>
+        </div>
+        </sc-if>
+      </div>
+    </section>
+  </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":980}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.uid = 1;
+    this.state = { loading: true, user: null, theme: 0, font: 0, shape: 1, acc: '', title: '', bio: '', blocks: [],
+      drag: null, over: null, editing: null, saved: 'idle', copied: false };
+  }
+  async componentDidMount() {
+    const d = await DC.api('editor');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    if (!d.ok) { this.setState({ loading: false, saved: 'error', err: d.error }); return; }
+    const a = d.appearance || {};
+    this.uid = d.blocks.reduce((m, b) => Math.max(m, b.id || 0), 0) + 1;
+    this.setState({ loading: false, user: d.user, blocks: d.blocks, title: d.profile.title || '', bio: d.profile.bio || '',
+      theme: a.theme || 0, font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '' });
+  }
+  change(patch) {
+    this.setState(Object.assign({ saved: 'dirty' }, patch));
+    clearTimeout(this.st);
+    this.st = setTimeout(() => this.save(), 900);
+  }
+  async save() {
+    clearTimeout(this.st);
+    const s = this.state;
+    this.setState({ saved: 'saving' });
+    const d = await DC.api('editor', 'PUT', { blocks: s.blocks, title: s.title, bio: s.bio,
+      appearance: { theme: s.theme, font: s.font, shape: s.shape, acc: s.acc } });
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ saved: d.ok ? 'saved' : 'error', err: d.error });
+  }
+  kinds() {
+    return {
+      link: { label: 'Link', ic: 'Ln', hint: 'Botão com destino', t: 'Título do botão', u: 'Endereço (para onde o botão leva)', uh: 'minhaloja.com.br' },
+      video: { label: 'Vídeo', ic: 'Vd', hint: 'YouTube, TikTok, Reels', t: 'Título do vídeo', u: 'Link do vídeo', uh: 'https://youtube.com/watch?v=...' },
+      gallery: { label: 'Galeria', ic: 'Gl', hint: 'Fotos em carrossel', t: 'Título da galeria', u: 'Link do álbum (opcional)', uh: '' },
+      timer: { label: 'Contagem regressiva', ic: 'Ct', hint: 'Urgência para ofertas', t: 'Texto (ex.: Promoção termina em)', u: 'Data e hora do fim (AAAA-MM-DD HH:MM)', uh: '2026-12-31 23:59' },
+      shop: { label: 'Produtos', ic: 'Pr', hint: 'Vitrine com preço', t: 'Nome do produto e preço', u: 'Link para comprar', uh: 'minhaloja.com.br/produto' },
+      lead: { label: 'Captura de contato', ic: 'Cc', hint: 'E-mail ou WhatsApp', t: 'Chamada (ex.: Receba novidades no WhatsApp)', u: '', uh: '' },
+      pix: { label: 'Pix', ic: 'Px', hint: 'Doação ou pagamento', t: 'Texto do botão (ex.: Me apoie com um Pix)', u: 'Sua chave Pix', uh: 'e-mail, celular ou chave aleatória' },
+      text: { label: 'Texto', ic: 'Tx', hint: 'Título ou parágrafo', t: 'Texto', u: '', uh: '' }
+    };
+  }
+  move(from, to) {
+    const b = this.state.blocks.slice();
+    if (to < 0 || to >= b.length || from === to) return;
+    const [x] = b.splice(from, 1);
+    b.splice(to, 0, x);
+    this.change({ blocks: b });
+  }
+  update(id, patch) {
+    this.change({ blocks: this.state.blocks.map((b) => (b.id === id ? Object.assign({}, b, patch) : b)) });
+  }
+  renderVals() {
+    const K = this.kinds();
+    const s = this.state;
+    const u = s.user || { plan: 'prata', trial: false, handle: '', instagram: '', limit: 3 };
+    const plan = { prata: 0, ouro: 1, diamante: 2 }[u.plan] || 0;
+    const themes = [
+      { name: 'Noite', bg: '#0E0E14', fg: '#F3F3F7', card: '#1A1A22', muted: '#A7A7B8', accent: '#D4FF3A', ink: '#0E0E14' },
+      { name: 'Papel', bg: '#F4F2EC', fg: '#16161A', card: '#FFFFFF', muted: '#5C5C66', accent: '#1F5BFF', ink: '#FFFFFF' },
+      { name: 'Oceano', bg: '#06222B', fg: '#EAF7F7', card: '#0D3340', muted: '#9CC3C9', accent: '#7CF5D0', ink: '#06222B' },
+      { name: 'Brasa', bg: '#1A0F0B', fg: '#FBEFE7', card: '#2A1912', muted: '#C9A999', accent: '#FF8A3D', ink: '#1A0F0B' }
+    ];
+    const themeIdx = plan === 0 && s.theme >= 2 ? 0 : s.theme;
+    const th = Object.assign({}, themes[themeIdx], (plan >= 1 && s.acc) ? { accent: s.acc } : {});
+    const fonts = [
+      { name: 'Grotesk', stack: "'Space Grotesk', Inter, sans-serif" },
+      { name: 'Inter', stack: 'Inter, system-ui, sans-serif' },
+      { name: 'Serifada', stack: 'Georgia, serif' }
+    ];
+    const shapes = [{ name: 'Reto', r: '4px' }, { name: 'Suave', r: '12px' }, { name: 'Pílula', r: '999px' }];
+    const radius = shapes[plan >= 1 ? s.shape : 1].r;
+    const pill = (sel) => 'height: 44px; padding: 0 14px; border-radius: 10px; cursor: pointer; font-size: 13px; ' +
+      (sel ? 'border: 1px solid ' + th.accent + '; background: #22222B; color: #F3F3F7; font-weight: 600' : 'border: 1px solid #2A2A34; background: transparent; color: #C9C9D6');
+    const list = s.blocks;
+    const NEED = { link: 0, video: 1, text: 0, gallery: 1, timer: 1, shop: 1, lead: 1, pix: 1 };
+    const limit = u.limit || 0;
+    const links = list.filter((b) => b.kind === 'link').length;
+    const full = limit > 0 && links >= limit;
+    const tierC = ['#C9CDD6', '#F2C14E', '#8FE3FF'];
+    const blocks = list.map((b, i) => {
+      const k = K[b.kind] || K.link;
+      const isOver = s.over === i && s.drag !== null && s.drag !== i;
+      const isDrag = s.drag === i;
+      const hidden = NEED[b.kind] > plan;
+      return {
+        title: b.title, url: b.url || '', ic: k.ic, kindLabel: k.label,
+        extra: hidden ? ' · só no Ouro, escondido na página' : (b.url ? ' · ' + b.url : ''),
+        featured: !!b.featured, on: b.on, editing: s.editing === b.id,
+        titleLabel: k.t, urlLabel: k.u, urlHint: k.uh, hasUrl: !!k.u, canFeature: b.kind === 'link',
+        toggleLabel: b.on ? 'Ocultar bloco' : 'Mostrar bloco',
+        rowStyle: 'display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 14px; background: ' + (isDrag ? '#1E1E28' : '#14141B') +
+          '; border: 1px solid ' + (isOver ? th.accent : (s.editing === b.id ? '#3A4714' : '#22222B')) + '; opacity: ' + (b.on ? (isDrag ? '.5' : '1') : '.55'),
+        switchStyle: 'width: 48px; height: 28px; flex: none; border-radius: 999px; border: none; padding: 3px; cursor: pointer; display: flex; justify-content: ' + (b.on ? 'flex-end' : 'flex-start') + '; background: ' + (b.on ? '#D4FF3A' : '#33333E'),
+        knobStyle: 'width: 22px; height: 22px; border-radius: 50%; background: ' + (b.on ? '#0E0E14' : '#A7A7B8'),
+        dragStart: (e) => { try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(i)); } catch (x) {} this.setState({ drag: i }); },
+        dragOver: (e) => { e.preventDefault(); if (this.state.over !== i) this.setState({ over: i }); },
+        drop: (e) => { e.preventDefault(); const from = this.state.drag; this.setState({ drag: null, over: null }); if (from !== null) this.move(from, i); },
+        dragEnd: () => this.setState({ drag: null, over: null }),
+        edit: () => this.setState({ editing: s.editing === b.id ? null : b.id }),
+        done: () => { this.setState({ editing: null }); this.save(); },
+        setTitle: (e) => this.update(b.id, { title: e.target.value.slice(0, 80) }),
+        setUrl: (e) => this.update(b.id, { url: e.target.value.slice(0, 600) }),
+        setFeatured: (e) => this.update(b.id, { featured: e.target.checked }),
+        up: () => this.move(i, i - 1),
+        toggle: () => this.update(b.id, { on: !b.on }),
+        remove: () => { if (confirm('Remover o bloco "' + b.title + '"?')) this.change({ blocks: list.filter((x) => x.id !== b.id), editing: null }); }
+      };
+    });
+    let shown = list.filter((b) => b.on && NEED[b.kind] <= plan);
+    const feat = shown.filter((b) => b.featured && b.kind === 'link');
+    shown = feat.concat(shown.filter((b) => !(b.featured && b.kind === 'link')));
+    const visible = shown.map((b) => ({
+      title: b.title, kindLabel: (K[b.kind] || K.link).label,
+      pStyle: 'display: flex; align-items: center; gap: 6px; padding: 11px 12px; font-size: 12px; font-weight: 500; border-radius: ' + radius + '; ' +
+        (b.kind === 'text' ? 'background: transparent; color: ' + th.fg + '; justify-content: center; text-align: center' :
+          (b.featured ? 'background: ' + th.accent + '; color: ' + th.ink : 'background: ' + th.card + '; color: ' + th.fg))
+    }));
+    const saveMap = { idle: ['Tudo salvo', '#A7A7B8'], dirty: ['Alterações não salvas…', '#F2C14E'], saving: ['Salvando…', '#C9C9D6'], saved: ['Tudo salvo ✓', '#D4FF3A'], error: [s.err || 'Não foi possível salvar. Tente de novo.', '#FF8A6B'] };
+    const days = u.until ? Math.max(0, Math.ceil((u.until - Date.now()) / 86400000)) : 0;
+    const title = s.title || u.name || '';
+    return {
+      loading: s.loading, ready: !s.loading,
+      handle: u.handle, instagram: u.instagram, pageUrl: '/' + u.handle,
+      planLabel: u.trial ? 'Teste Diamante · ' + days + (days === 1 ? ' dia restante' : ' dias restantes') : 'Plano ' + ['Prata', 'Ouro', 'Diamante'][plan],
+      planColor: tierC[plan],
+      limitText: limit ? links + ' de ' + limit + ' links usados' + (full ? ' · limite atingido' : '') : links + ' links · ilimitados',
+      limitColor: full ? '#F2C14E' : '#C9C9D6',
+      saveText: saveMap[s.saved][0], saveColor: saveMap[s.saved][1],
+      copyLabel: s.copied ? 'Link copiado!' : 'Copiar link',
+      copyLink: async () => { try { await navigator.clipboard.writeText('https://whitelink.site/' + u.handle); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 2000); },
+      pubLabel: s.saved === 'saved' || s.saved === 'idle' ? 'Publicado ✓' : 'Publicar',
+      publish: () => this.save(),
+      logout: async () => { await DC.api('auth/logout', 'POST', {}); location.href = '/'; },
+      canStyle: plan >= 1, noStyle: plan === 0,
+      acc: s.acc || th.accent,
+      setAcc: (e) => this.change({ acc: e.target.value }),
+      count: list.length, empty: list.length === 0,
+      blocks: blocks,
+      visible: visible, showBrand: plan === 0,
+      initials: (title.split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2) || 'WL').toUpperCase(),
+      pageTitle: title, bio: s.bio,
+      setPageTitle: (e) => this.change({ title: e.target.value.slice(0, 60) }),
+      setBio: (e) => this.change({ bio: e.target.value.slice(0, 160) }),
+      bg: th.bg, fg: th.fg, card: th.card, muted: th.muted, accent: th.accent,
+      fontStack: fonts[plan >= 1 ? s.font : 0].stack,
+      library: Object.keys(K).map((key) => {
+        const lim = key === 'link' && full;
+        const locked = NEED[key] > plan || lim;
+        return Object.assign({}, K[key], {
+          locked: locked, need: lim ? 'Limite' : 'Ouro',
+          style: 'display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 12px; border-radius: 12px; border: 1px solid #22222B; background: #14141B; color: #F3F3F7; text-align: left; ' + (locked ? 'opacity: .55; cursor: not-allowed' : 'cursor: pointer'),
+          add: () => {
+            if (locked) return;
+            const id = this.uid++;
+            const nb = { id: id, kind: key, title: key === 'text' ? 'Escreva seu texto aqui' : 'Novo bloco: ' + K[key].label, url: '', on: true };
+            this.change({ blocks: list.concat([nb]), editing: id });
+          }
+        });
+      }),
+      themes: themes.map((t, i) => ({
+        name: t.name, accent: t.accent, fg: t.fg, sel: themeIdx === i,
+        style: 'height: 64px; border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: ' + t.bg + '; border: 2px solid ' + (themeIdx === i ? '#D4FF3A' : '#2A2A34') + (plan === 0 && i >= 2 ? '; opacity: .35; cursor: not-allowed' : ''),
+        pick: () => { if (plan >= 1 || i < 2) this.change({ theme: i }); }
+      })),
+      fonts: fonts.map((f, i) => ({ name: f.name, sel: s.font === i, style: pill(s.font === i), pick: () => this.change({ font: i }) })),
+      shapes: shapes.map((x, i) => ({ name: x.name, sel: s.shape === i, style: pill(s.shape === i), pick: () => this.change({ shape: i }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

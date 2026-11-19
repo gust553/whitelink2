@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Assinar plano — WhiteLink</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B10}
+a{color:#D4FF3A}a:hover{color:#E6FF8A}
+button,input{font-family:Inter,system-ui,sans-serif}
+.pg-in{height:48px;box-sizing:border-box;border-radius:12px;border:1px solid #33333E;background:#0E0E14;color:#F3F3F7;padding:0 14px;font-size:15px;width:100%}
+.pg-in:focus{outline:2px solid #D4FF3A;outline-offset:1px}
+@media (max-width: 600px){
+[style*="font-size: 60px"]{font-size:36px !important}
+[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
+[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
+[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
+[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
+[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
+[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
+[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
+[style*="font-size: 16px"]{font-size:15px !important}
+h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
+p{line-height:1.5 !important}
+[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
+[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
+[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
+[style*="padding: 56px 32px"]{padding:32px 20px !important}
+[style*="padding: 36px"]{padding:22px !important}
+[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
+[style*="padding: 48px 24px"]{padding:24px 14px !important}
+[style*="padding: 48px;"]{padding:24px 18px !important}
+[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
+[style*="padding: 22px"]{padding:16px !important}
+[style*="gap: 48px"]{gap:28px !important}
+[style*="gap: 36px"]{gap:22px !important}
+[style*="height: 56px"]{height:50px !important}
+}
+
+</style>
+</helmet>
+<div style="min-height: 1400px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif">
+
+  <header style="border-bottom: 1px solid #22222B; background: #0E0E14">
+    <div style="max-width: 1160px; margin: 0 auto; padding: 14px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <a href="Main.dc.html" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #F3F3F7; text-decoration: none">WhiteLink</a>
+      <div style="flex: 1"></div>
+      <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #C9C9D6">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4FF3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        {{headerNote}}
+      </span>
+    </div>
+  </header>
+
+  <div style="max-width: 1160px; margin: 0 auto; padding: 32px 24px 56px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <div style="display: flex; flex-direction: column; gap: 20px; flex: 2 1 560px; min-width: 0">
+      <div role="group" aria-label="Protótipo: forma de pagamento ligada no admin" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; border: 1px dashed #33333E; background: #0E0E14">
+        <span style="font-size: 12px; color: #A7A7B8">Protótipo · forma ligada no admin:</span>
+        <sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
+          <button onClick="{{m.pick}}" aria-pressed="{{m.sel}}" style="{{m.style}}">{{m.name}}</button>
+        </sc-for>
+      </div>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700">Assinar o WhiteLink</h1>
+
+      <section aria-label="Plano" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 600">1. Escolha o plano</h2>
+          <div role="group" aria-label="Período" style="display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #0E0E14; border: 1px solid #22222B">
+            <button onClick="{{setMonthly}}" aria-pressed="{{monthly}}" style="{{mStyle}}">Mensal</button>
+            <button onClick="{{setYearly}}" aria-pressed="{{yearly}}" style="{{yStyle}}">Anual · ~16% off</button>
+          </div>
+        </div>
+        <div role="radiogroup" aria-label="Plano" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+          <sc-for list="{{plans}}" as="p" hint-placeholder-count="2">
+            <button role="radio" aria-checked="{{p.sel}}" onClick="{{p.pick}}" style="{{p.style}}">
+              <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: {{p.color}}">{{p.name}}</span>
+              <span style="font-size: 22px; font-weight: 600; color: #F3F3F7">{{p.price}}<span style="font-size: 13px; font-weight: 400; color: #A7A7B8">{{p.per}}</span></span>
+              <span style="font-size: 12px; color: #A7A7B8">{{p.hint}}</span>
+            </button>
+          </sc-for>
+        </div>
+        <a href="Planos.dc.html" style="font-size: 13px; align-self: flex-start">Comparar com o Prata grátis</a>
+      </section>
+
+      <section aria-label="Pagamento por Pix" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 16px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">2. Pague com Pix</h2>
+
+        <sc-if value="{{showChoice}}" hint-placeholder-val="{{ false }}">
+          <div role="radiogroup" aria-label="Como pagar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px">
+            <sc-for list="{{methods}}" as="w" hint-placeholder-count="2">
+              <button role="radio" aria-checked="{{w.sel}}" onClick="{{w.pick}}" style="{{w.style}}">
+                <span style="display: flex; justify-content: space-between; gap: 8px; align-items: center; width: 100%">
+                  <span style="font-size: 16px; font-weight: 600; color: #F3F3F7">{{w.name}}</span>
+                  <span style="{{w.tagStyle}}">{{w.tag}}</span>
+                </span>
+                <span style="font-size: 13px; color: #A7A7B8; line-height: 1.45">{{w.hint}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{gwIdle}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 14px; color: #C9C9D6; line-height: 1.55">O Pix é gerado pelo nosso parceiro de pagamento. Assim que o banco confirmar, o plano é liberado sozinho, sem precisar mandar comprovante.</span>
+            <ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #C9C9D6; line-height: 1.5">
+              <li>Você gera o Pix e paga pelo app do banco.</li>
+              <li>O banco confirma o pagamento em segundos.</li>
+              <li>O plano é liberado na hora e você recebe aviso por e-mail e SMS.</li>
+            </ol>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{gwOrdered}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center">
+              <div role="img" aria-label="QR code do Pix gerado pelo gateway" style="width: 180px; height: 180px; border-radius: 16px; background: #F3F3F7; display: flex; align-items: center; justify-content: center; color: #0E0E14; font-size: 12px; text-align: center; padding: 14px; box-sizing: border-box; flex: none">[QR code Pix gerado pelo gateway]</div>
+              <div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 10px; min-width: 0">
+                <span style="font-size: 13px; color: #A7A7B8">Valor</span>
+                <span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #D4FF3A; margin-top: -6px">{{base}}</span>
+                <span style="font-size: 13px; color: #C9C9D6">Pix copia e cola:</span>
+                <div style="display: flex; gap: 8px">
+                  <input class="pg-in" readonly value="00020126...[gerado pelo gateway]" aria-label="Pix copia e cola" style="flex: 1; min-width: 0; color: #A7A7B8">
+                  <button onClick="{{copyCode}}" style="height: 48px; padding: 0 16px; border-radius: 12px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 14px; cursor: pointer; flex: none">{{copyCodeLabel}}</button>
+                </div>
+                <span style="font-size: 13px; color: #A7A7B8">Recebedor: <strong style="color: #F3F3F7">GM DIGITAL</strong></span>
+              </div>
+            </div>
+            <div role="status" style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; background: #0E0E14; border: 1px solid #22222B">
+              <span aria-hidden="true" style="flex: none; width: 12px; height: 12px; border-radius: 50%; background: #F2C14E; box-shadow: 0 0 0 4px #2B2210"></span>
+              <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Aguardando o pagamento. Esta tela atualiza sozinha quando o banco confirmar. O Pix vale por 30 minutos.</span>
+            </div>
+            <button onClick="{{simPaid}}" style="align-self: flex-start; height: 44px; padding: 0 16px; border-radius: 12px; border: 1px dashed #33333E; background: transparent; color: #C9C9D6; font-size: 13px; cursor: pointer">Protótipo: simular pagamento aprovado</button>
+            <button onClick="{{restart}}" style="align-self: flex-start; min-height: 44px; border: none; background: transparent; color: #A7A7B8; font-size: 14px; cursor: pointer; padding: 0">Trocar de plano</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{gwPaid}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start; padding: 20px; border-radius: 16px; background: #1A2008; border: 1px solid #3A4714">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D4FF3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg>
+            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700">Pagamento aprovado. Plano {{planName}} liberado!</span>
+            <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Tudo do plano já está ativo na sua página. Mandamos o recibo por e-mail.</span>
+            <a href="Editor.dc.html" style="height: 50px; padding: 0 20px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 15px; display: flex; align-items: center; text-decoration: none">Ir para o meu painel</a>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{idle}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 14px; color: #C9C9D6; line-height: 1.55">Vamos gerar um pedido só seu, com um valor exato e um código. É assim que encontramos o seu Pix no extrato e liberamos o plano com segurança.</span>
+            <ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #C9C9D6; line-height: 1.5">
+              <li>Você paga o Pix com o valor exato do pedido.</li>
+              <li>Envia o comprovante na tela seguinte.</li>
+              <li>Conferimos no extrato e liberamos o seu plano.</li>
+            </ol>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{pixOrdered}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-wrap: wrap; gap: 12px">
+              <div style="flex: 1 1 200px; padding: 14px; border-radius: 14px; background: #0E0E14; border: 1px solid #3A4714; display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 12px; color: #A7A7B8">Valor exato a pagar</span>
+                <span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #D4FF3A">{{exact}}</span>
+                <span style="font-size: 12px; color: #A7A7B8">Os centavos identificam o seu pedido. Pague exatamente esse valor.</span>
+              </div>
+              <div style="flex: 1 1 200px; padding: 14px; border-radius: 14px; background: #0E0E14; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 12px; color: #A7A7B8">Código do pedido</span>
+                <span style="font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700">{{code}}</span>
+                <span style="font-size: 12px; color: #A7A7B8">Escreva esse código na mensagem do Pix, se o seu banco deixar.</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center">
+              <div role="img" aria-label="QR code do Pix" style="width: 180px; height: 180px; border-radius: 16px; background: #F3F3F7; display: flex; align-items: center; justify-content: center; color: #0E0E14; font-size: 12px; text-align: center; padding: 14px; box-sizing: border-box; flex: none">[QR code Pix com o valor e o código do pedido]</div>
+              <div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 10px; min-width: 0">
+                <span style="font-size: 13px; color: #C9C9D6">Chave Pix (aleatória)</span>
+                <div style="display: flex; gap: 8px">
+                  <input class="pg-in" readonly value="fcaf9712-5ed5-47c7-bf1a-dbcaa9614ab6" aria-label="Chave Pix" style="flex: 1; min-width: 0; font-family: 'Space Mono', monospace; font-size: 13px">
+                  <button onClick="{{copyKey}}" style="height: 48px; padding: 0 16px; border-radius: 12px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 14px; cursor: pointer; flex: none">{{copyKeyLabel}}</button>
+                </div>
+                <span style="font-size: 13px; color: #C9C9D6">Ou copie o Pix copia e cola, que já vem com o valor e o código:</span>
+                <div style="display: flex; gap: 8px">
+                  <input class="pg-in" readonly value="00020126...[Pix copia e cola do pedido]" aria-label="Pix copia e cola" style="flex: 1; min-width: 0; color: #A7A7B8">
+                  <button onClick="{{copyCode}}" style="height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #33333E; background: transparent; color: #F3F3F7; font-weight: 600; font-size: 14px; cursor: pointer; flex: none">{{copyCodeLabel}}</button>
+                </div>
+                <span style="font-size: 13px; color: #A7A7B8">Recebedor: <strong style="color: #F3F3F7">GM DIGITAL</strong>. Confira antes de pagar.</span>
+              </div>
+            </div>
+
+            <div style="padding: 14px; border-radius: 12px; background: #2B2210; color: #F2C14E; font-size: 14px; line-height: 1.5">Não use Pix agendado. O pedido vale por 24 horas. Depois disso é preciso gerar outro, com um novo valor.</div>
+
+            <a href="ConfirmarPagamento.dc.html" style="height: 54px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 16px; display: flex; align-items: center; justify-content: center; text-decoration: none">Já paguei, enviar comprovante</a>
+            <button onClick="{{restart}}" style="align-self: flex-start; min-height: 44px; border: none; background: transparent; color: #A7A7B8; font-size: 14px; cursor: pointer; padding: 0">Trocar de plano</button>
+          </div>
+        </sc-if>
+      </section>
+    </div>
+
+    <aside aria-label="Resumo" style="flex: 1 1 320px; box-sizing: border-box; padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 600">Resumo</h2>
+      <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 15px">
+        <span>Plano <strong style="color: {{planColor}}">{{planName}}</strong> · {{periodName}}</span>
+        <span>{{base}}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: #D4FF3A">
+        <span>Bônus do convite de @[quem indicou]</span><span>+7 dias</span>
+      </div>
+      <div style="height: 1px; background: #26262F"></div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px">
+        <span style="font-size: 15px; font-weight: 600">Total</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">{{totalShown}}</span>
+      </div>
+      <span style="font-size: 13px; color: #A7A7B8; margin-top: -8px">{{totalNote}}</span>
+      <sc-if value="{{anyIdle}}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{order}}" style="width: 100%; height: 54px; border-radius: 14px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 16px; cursor: pointer">{{orderLabel}}</button>
+      </sc-if>
+      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #C9C9D6">
+        <sc-for list="{{perks}}" as="k" hint-placeholder-count="3"><li>{{k}}</li></sc-for>
+      </ul>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { mode: 'both', method: 'gw', plan: 0, yearly: false, step: 'idle', ck: false, cc: false }; }
+  renderVals() {
+    const s = this.state, yr = s.yearly;
+    const P = [
+      { name: 'Ouro', color: '#F2C14E', m: 19.9, y: 199.9 },
+      { name: 'Diamante', color: '#8FE3FF', m: 39.9, y: 399.9 }
+    ];
+    const brl = (n) => 'R$ ' + n.toFixed(2).replace('.', ',');
+    const tog = (sel) => 'height: 40px; padding: 0 14px; border-radius: 9px; border: none; cursor: pointer; font-size: 13px; ' + (sel ? 'background: #F3F3F7; color: #0E0E14; font-weight: 600' : 'background: transparent; color: #C9C9D6');
+    const cur = P[s.plan];
+    const base = yr ? cur.y : cur.m;
+    const exact = base - 0.03;
+    const how = s.mode === 'both' ? s.method : s.mode;
+    const gw = how === 'gw';
+    const ordered = s.step === 'ordered', paid = s.step === 'paid';
+    const M = [['pix', 'Só Pix direto'], ['gw', 'Só gateway'], ['both', 'Os dois']];
+    const W = [
+      { k: 'gw', name: 'Pix automático', tag: 'Liberação na hora', hint: 'Pague e o plano é liberado sozinho, sem enviar comprovante.' },
+      { k: 'pix', name: 'Pix direto', tag: 'Com comprovante', hint: 'Pague na chave do WhiteLink e envie o comprovante para conferirmos.' }
+    ];
+    return {
+      headerNote: gw ? 'Pix automático e seguro' : 'Pagamento por Pix direto',
+      modes: M.map((m) => ({ name: m[1], sel: s.mode === m[0], style: 'height: 34px; padding: 0 12px; border-radius: 8px; cursor: pointer; font-size: 12px; ' + (s.mode === m[0] ? 'border: 1px solid #D4FF3A; background: #22222B; color: #F3F3F7; font-weight: 600' : 'border: 1px solid #2A2A34; background: transparent; color: #C9C9D6'),
+        pick: () => this.setState({ mode: m[0], step: 'idle', ck: false, cc: false }) })),
+      showChoice: s.mode === 'both' && s.step === 'idle',
+      methods: W.map((w) => ({ name: w.name, tag: w.tag, hint: w.hint, sel: s.method === w.k,
+        tagStyle: 'font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; ' + (w.k === 'gw' ? 'background: #1A2008; color: #D4FF3A' : 'background: #1A1A22; color: #C9C9D6'),
+        style: 'min-height: 96px; padding: 14px; border-radius: 14px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 6px; background: #0E0E14; ' + (s.method === w.k ? 'border: 2px solid #D4FF3A' : 'border: 1px solid #2A2A34'),
+        pick: () => this.setState({ method: w.k }) })),
+      idle: !gw && !ordered, pixOrdered: !gw && ordered,
+      gwIdle: gw && s.step === 'idle', gwOrdered: gw && ordered, gwPaid: gw && paid,
+      anyIdle: s.step === 'idle',
+      orderLabel: gw ? 'Gerar Pix' : 'Gerar meu pedido Pix',
+      monthly: !yr, yearly: yr, mStyle: tog(!yr), yStyle: tog(yr),
+      setMonthly: () => this.setState({ yearly: false, step: 'idle' }),
+      setYearly: () => this.setState({ yearly: true, step: 'idle' }),
+      plans: P.map((p, i) => ({ name: p.name, color: p.color, sel: s.plan === i,
+        price: brl(yr ? p.y : p.m), per: yr ? '/ano' : '/mês', hint: yr ? 'equivale a ' + brl(p.y / 12) + '/mês' : 'ou ' + brl(p.y) + ' por ano',
+        pick: () => this.setState({ plan: i, step: 'idle' }),
+        style: 'min-height: 104px; padding: 14px; border-radius: 14px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 4px; background: #0E0E14; ' + (s.plan === i ? 'border: 2px solid ' + p.color : 'border: 1px solid #2A2A34') })),
+      planName: cur.name, planColor: cur.color, periodName: yr ? 'anual' : 'mensal',
+      base: brl(base),
+      exact: brl(exact),
+      code: 'WL-4827',
+      totalShown: (ordered && !gw) ? brl(exact) : brl(base),
+      totalNote: (ordered && !gw) ? 'Valor exato do seu pedido (com centavos de identificação)' : (yr ? 'Pagamento único por 12 meses' : 'Renova a cada mês'),
+      order: () => this.setState({ step: 'ordered' }),
+      simPaid: () => this.setState({ step: 'paid' }),
+      restart: () => this.setState({ step: 'idle', ck: false, cc: false }),
+      copyKeyLabel: s.ck ? 'Copiada!' : 'Copiar',
+      copyKey: () => this.setState({ ck: true }),
+      copyCodeLabel: s.cc ? 'Copiado!' : 'Copiar',
+      copyCode: () => this.setState({ cc: true }),
+      perks: gw ? ['Plano liberado na hora, sem comprovante', 'Pix processado por parceiro de pagamento seguro', 'A cada 3 renovações seguidas, ganhe 7 dias grátis']
+        : ['Pix direto para o WhiteLink, sem intermediário', 'Liberação depois da conferência do comprovante', 'A cada 3 renovações seguidas, ganhe 7 dias grátis']
+    };
+  }
+}
+</script>
+</body>
+</html>

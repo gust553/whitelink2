@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Confirmar pagamento — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B10}
+a{color:#D4FF3A}a:hover{color:#E6FF8A}
+button,input{font-family:Inter,system-ui,sans-serif}
+.cp-in{height:48px;box-sizing:border-box;border-radius:12px;border:1px solid #33333E;background:#0E0E14;color:#F3F3F7;padding:0 14px;font-size:15px;width:100%}
+.cp-in:focus{outline:2px solid #D4FF3A;outline-offset:1px}
+.cp-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+@media (max-width: 600px){
+[style*="font-size: 60px"]{font-size:36px !important}
+[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
+[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
+[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
+[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
+[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
+[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
+[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
+[style*="font-size: 16px"]{font-size:15px !important}
+h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
+p{line-height:1.5 !important}
+[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
+[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
+[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
+[style*="padding: 56px 32px"]{padding:32px 20px !important}
+[style*="padding: 36px"]{padding:22px !important}
+[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
+[style*="padding: 48px 24px"]{padding:24px 14px !important}
+[style*="padding: 48px;"]{padding:24px 18px !important}
+[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
+[style*="padding: 22px"]{padding:16px !important}
+[style*="gap: 48px"]{gap:28px !important}
+[style*="gap: 36px"]{gap:22px !important}
+[style*="height: 56px"]{height:50px !important}
+}
+
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:50;background:#2B2210;border-bottom:1px solid #4A3A14;color:#F7DFA0;font:500 13px Inter,sans-serif;padding:8px 16px;text-align:center">Prévia: esta tela ainda mostra dados de exemplo. Ela será ligada à sua conta nas próximas atualizações. <a href="/painel" style="color:#D4FF3A">Voltar ao editor</a></div>
+<div id="root"></div>
+<script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Temas.dc.html":"/painel/em-breve?t=Temas","CriadorTema.dc.html":"/painel/em-breve?t=Criador%20de%20tema","Agenda.dc.html":"/painel/em-breve?t=Agendamentos","Stats.dc.html":"/painel/em-breve?t=Estat%C3%ADsticas","Contatos.dc.html":"/painel/contatos","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/em-breve?t=Indique%20e%20ganhe","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/em-breve?t=Minha%20conta","EditarLink.dc.html":"/painel/editar-link","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/ajuda","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
+<script src="/assets/dc.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { step: 'form', file: '', payer: '', agree: false }; }
+  renderVals() {
+    const s = this.state;
+    const can = !!s.file && s.payer.trim().length > 2 && s.agree;
+    const idx = { form: 1, waiting: 2, done: 3 }[s.step];
+    const N = ['Pedido criado', 'Comprovante', 'Conferência', 'Plano liberado'];
+    return {
+      steps: N.map((n, i) => ({ name: n, color: i <= idx ? '#F3F3F7' : '#8A8A9A', bar: 'height: 5px; border-radius: 999px; background: ' + (i < idx ? '#D4FF3A' : (i === idx ? '#F2C14E' : '#26262F')) })),
+      isForm: s.step === 'form', isWaiting: s.step === 'waiting', isDone: s.step === 'done',
+      onFile: (e) => { const f = e.target.files && e.target.files[0]; if (f) this.setState({ file: f.name }); },
+      fileLabel: s.file ? 'Enviado: ' + s.file : 'Toque para enviar o comprovante',
+      fileBorder: s.file ? '#D4FF3A' : '#44444F',
+      payer: s.payer, setPayer: (e) => this.setState({ payer: e.target.value }),
+      agree: s.agree, toggleAgree: () => this.setState({ agree: !s.agree }),
+      cantSend: !can,
+      sendStyle: 'height: 54px; border-radius: 14px; border: none; font-weight: 600; font-size: 16px; ' + (can ? 'background: #D4FF3A; color: #0E0E14; cursor: pointer' : 'background: #26262F; color: #8A8A9A; cursor: not-allowed'),
+      send: () => { if (can) this.setState({ step: 'waiting' }); },
+      release: () => this.setState({ step: 'done' }),
+      restart: () => this.setState({ step: 'form', file: '', payer: '', agree: false })
+    };
+  }
+}
+
+DC.mount(document.getElementById('root'), "\n<div style=\"min-height: 1200px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif\">\n  <header style=\"border-bottom: 1px solid #22222B; background: #0E0E14\">\n    <div style=\"max-width: 880px; margin: 0 auto; padding: 14px 24px; box-sizing: border-box; display: flex; align-items: center; gap: 12px\">\n      <a href=\"Main.dc.html\" style=\"font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #F3F3F7; text-decoration: none\">WhiteLink</a>\n      <div style=\"flex: 1\"></div>\n      <span style=\"font-size: 13px; color: #C9C9D6\">Pedido <strong style=\"font-family: 'Space Mono', monospace; color: #F3F3F7\">WL-4827</strong></span>\n    </div>\n  </header>\n\n  <div style=\"max-width: 880px; margin: 0 auto; padding: 32px 24px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px\">\n\n    <ol aria-label=\"Etapas\" style=\"margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px\">\n      <sc-for list=\"{{steps}}\" as=\"t\" hint-placeholder-count=\"4\">\n        <li style=\"display: flex; flex-direction: column; gap: 6px\">\n          <span style=\"{{t.bar}}\"></span>\n          <span style=\"font-size: 12px; color: {{t.color}}\">{{t.name}}</span>\n        </li>\n      </sc-for>\n    </ol>\n\n    <sc-if value=\"{{isForm}}\" hint-placeholder-val=\"{{ true }}\">\n      <section aria-label=\"Enviar comprovante\" style=\"padding: 24px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 16px\">\n        <div style=\"display: flex; flex-direction: column; gap: 6px\">\n          <h1 style=\"margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700\">Envie o comprovante do Pix</h1>\n          <span style=\"font-size: 15px; color: #C9C9D6; line-height: 1.5\">Pedido <strong style=\"color: #F3F3F7\">WL-4827</strong> · Ouro mensal · valor exato <strong style=\"color: #D4FF3A\">R$ 19,87</strong></span>\n        </div>\n\n        <label class=\"cp-up\" style=\"display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 140px; border-radius: 16px; border: 1.5px dashed {{fileBorder}}; background: #0E0E14; cursor: pointer; text-align: center; padding: 16px; box-sizing: border-box\">\n          <input class=\"cp-file\" type=\"file\" accept=\"image/*,application/pdf\" onChange=\"{{onFile}}\">\n          <svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#D4FF3A\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 16V4M7 9l5-5 5 5M5 20h14\"></path></svg>\n          <span style=\"font-size: 15px; font-weight: 600\">{{fileLabel}}</span>\n          <span style=\"font-size: 12px; color: #A7A7B8\">Print ou PDF do comprovante do seu banco</span>\n        </label>\n\n        <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px\">\n          <label style=\"display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6\">Nome de quem pagou\n            <input class=\"cp-in\" value=\"{{payer}}\" onInput=\"{{setPayer}}\" placeholder=\"Como aparece no comprovante\">\n          </label>\n          <label style=\"display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6\">Banco de onde saiu o Pix\n            <input class=\"cp-in\" placeholder=\"Ex.: Nubank, Itaú, Caixa\">\n          </label>\n          <label style=\"display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6; grid-column: 1 / -1\">ID da transação (opcional, ajuda a liberar mais rápido)\n            <input class=\"cp-in\" placeholder=\"Começa com E e tem 32 letras e números\" style=\"font-family: 'Space Mono', monospace; font-size: 13px\">\n            <span style=\"font-size: 12px; color: #A7A7B8\">Fica no comprovante, com o nome \"ID da transação\", \"Identificador\" ou \"E2E\".</span>\n          </label>\n        </div>\n\n        <label style=\"display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #C9C9D6; line-height: 1.5; cursor: pointer\">\n          <input type=\"checkbox\" checked=\"{{agree}}\" onChange=\"{{toggleAgree}}\" style=\"width: 18px; height: 18px; margin-top: 2px; accent-color: #D4FF3A; flex: none\">\n          <span>Confirmo que fiz o Pix de verdade, no valor exato. Sei que comprovante falso ou Pix devolvido bloqueia a conta.</span>\n        </label>\n\n        <button onClick=\"{{send}}\" disabled=\"{{cantSend}}\" style=\"{{sendStyle}}\">Enviar comprovante</button>\n      </section>\n    </sc-if>\n\n    <sc-if value=\"{{isWaiting}}\" hint-placeholder-val=\"{{ false }}\">\n      <section aria-label=\"Aguardando liberação\" style=\"padding: 24px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 16px\">\n        <div style=\"display: flex; gap: 14px; align-items: center\">\n          <span style=\"width: 52px; height: 52px; border-radius: 50%; background: #2B2210; display: flex; align-items: center; justify-content: center; flex: none\">\n            <svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#F2C14E\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"8\"></circle><path d=\"M12 8v4.5l3 2\"></path></svg>\n          </span>\n          <div style=\"display: flex; flex-direction: column; gap: 4px\">\n            <h1 style=\"margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700\">Comprovante recebido!</h1>\n            <span style=\"font-size: 15px; color: #C9C9D6\">Estamos conferindo o Pix no extrato. Liberamos assim que conferirmos e avisamos por e-mail e SMS.</span>\n          </div>\n        </div>\n        <div style=\"padding: 14px; border-radius: 12px; background: #0E0E14; border: 1px solid #22222B; font-size: 14px; color: #C9C9D6; line-height: 1.6\">\n          Enquanto isso, sua página continua no ar no plano atual. Nada é perdido.\n        </div>\n        <div style=\"display: flex; flex-direction: column; gap: 10px\">\n          <span style=\"font-size: 15px; font-weight: 600\">Precisa de ajuda ou está demorando?</span>\n          <div style=\"display: flex; flex-wrap: wrap; gap: 10px\">\n            <a href=\"SuporteCliente.dc.html\" style=\"flex: 1 1 220px; height: 52px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none\">Falar no chat de suporte</a>\n            <a href=\"https://wa.me/5511993931841?text=Ol%C3%A1!%20Enviei%20o%20comprovante%20do%20pedido%20WL-4827\" style=\"flex: 1 1 220px; height: 52px; border-radius: 14px; border: 1px solid #33333E; color: #F3F3F7; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none\">\n              <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20l1.3-3.9A8 8 0 1 1 8 18.8z\"></path></svg>\n              Chamar no WhatsApp\n            </a>\n          </div>\n          <span style=\"font-size: 13px; color: #A7A7B8; line-height: 1.5\">Se o chat não responder, chame no WhatsApp. A mensagem já vai com o número do seu pedido.</span>\n        </div>\n        <button onClick=\"{{release}}\" style=\"align-self: flex-start; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px dashed #33333E; background: transparent; color: #A7A7B8; font-size: 13px; cursor: pointer\">(protótipo) Simular liberação pelo admin</button>\n      </section>\n    </sc-if>\n\n    <sc-if value=\"{{isDone}}\" hint-placeholder-val=\"{{ false }}\">\n      <section aria-label=\"Plano liberado\" style=\"padding: 40px 24px; border-radius: 20px; background: #14141B; border: 1px solid #3A4714; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center\">\n        <span style=\"width: 72px; height: 72px; border-radius: 50%; background: #D4FF3A; display: flex; align-items: center; justify-content: center\">\n          <svg width=\"36\" height=\"36\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#0E0E14\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12.5l4.5 4.5L19 7.5\"></path></svg>\n        </span>\n        <h1 style=\"margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700\">Plano Ouro liberado!</h1>\n        <span style=\"font-size: 15px; color: #C9C9D6\">Pagamento conferido. Seu plano vale até [DATA].</span>\n        <a href=\"Editor.dc.html\" style=\"height: 52px; padding: 0 24px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 16px; display: flex; align-items: center; text-decoration: none\">Ir para o editor</a>\n        <button onClick=\"{{restart}}\" style=\"min-height: 44px; border: none; background: transparent; color: #A7A7B8; font-size: 14px; cursor: pointer\">Ver a tela de novo</button>\n      </section>\n    </sc-if>\n  </div>\n</div>\n", Component, {});
+(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar';})();
+</script>
+</body>
+</html>

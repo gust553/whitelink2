@@ -234,3 +234,58 @@ export function codeReply(issued, extra = {}) {
   if (!issued.sms.ok) return { ok: false, error: 'Não conseguimos enviar o SMS agora. Tente de novo em alguns minutos.' };
   return out;
 }
+
+// ---------- tabelas novas, criadas sozinhas (sem precisar do console) ----------
+let schemaReady = false;
+export async function ensureSchema(env) {
+  if (schemaReady) return;
+  const S = [
+    'CREATE TABLE IF NOT EXISTS page_data (user_id INTEGER PRIMARY KEY, blocks TEXT NOT NULL, appearance TEXT, updated_at INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, name TEXT, phone TEXT, email TEXT, source TEXT, created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_contacts_user ON contacts(user_id, created_at)',
+    'CREATE TABLE IF NOT EXISTS clicks (user_id INTEGER NOT NULL, block_id INTEGER NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, block_id, day))'
+  ];
+  for (const q of S) await env.DB.prepare(q).run();
+  schemaReady = true;
+}
+
+export const BLOCK_KINDS = ['link', 'video', 'gallery', 'timer', 'shop', 'lead', 'pix', 'text'];
+export const BLOCK_NEED = { link: 0, text: 0, video: 1, gallery: 1, timer: 1, shop: 1, lead: 1, pix: 1 };
+export const PLAN_LEVEL = { prata: 0, ouro: 1, diamante: 2 };
+
+export async function loadPage(env, userId) {
+  const row = await env.DB.prepare('SELECT blocks, appearance FROM page_data WHERE user_id = ?').bind(userId).first();
+  if (row) {
+    let blocks = [], appearance = {};
+    try { blocks = JSON.parse(row.blocks) || []; } catch (e) {}
+    try { appearance = JSON.parse(row.appearance || '{}') || {}; } catch (e) {}
+    return { blocks, appearance };
+  }
+  // contas antigas: transforma os links salvos em blocos
+  const r = await env.DB.prepare('SELECT title, url, active FROM links WHERE user_id = ? ORDER BY position, id').bind(userId).all();
+  const blocks = (r.results || []).map((l, i) => ({ id: i + 1, kind: 'link', title: l.title, url: l.url, on: !!l.active }));
+  return { blocks, appearance: {} };
+}
+
+export function cleanBlocks(list) {
+  if (!Array.isArray(list)) return null;
+  const out = [];
+  const seen = new Set();
+  for (const b of list.slice(0, 100)) {
+    if (!b || !BLOCK_KINDS.includes(b.kind)) continue;
+    const id = Math.max(1, Math.min(1e9, parseInt(b.id, 10) || 0));
+    if (seen.has(id)) continue;
+    seen.add(id);
+    let url = String(b.url || '').trim();
+    if (['link', 'video', 'gallery', 'shop'].includes(b.kind)) url = url ? (cleanUrl(url) || url.slice(0, 600)) : '';
+    else url = cleanText(url, 160);
+    out.push({ id, kind: b.kind, title: cleanText(b.title, b.kind === 'text' ? 300 : 80), url, on: !!b.on, featured: b.kind === 'link' && !!b.featured });
+  }
+  return out;
+}
+
+export function cleanAppearance(a) {
+  a = a || {};
+  const n = (v, max) => Math.max(0, Math.min(max, parseInt(v, 10) || 0));
+  return { theme: n(a.theme, 3), font: n(a.font, 2), shape: a.shape == null ? 1 : n(a.shape, 2), acc: /^#[0-9a-f]{6}$/i.test(a.acc || '') ? a.acc : '' };
+}

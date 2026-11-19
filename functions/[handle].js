@@ -1,43 +1,97 @@
-import { RESERVED, escapeHtml, effectivePlan } from '../src/lib.js';
+import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, BLOCK_NEED, PLAN_LEVEL } from '../src/lib.js';
+
+const THEMES = [
+  { bg: '#0E0E14', fg: '#F3F3F7', card: '#17171F', line: '#26262F', muted: '#A7A7B8', acc: '#D4FF3A', ink: '#0E0E14' },
+  { bg: '#F4F2EC', fg: '#16161A', card: '#FFFFFF', line: '#E2DFD6', muted: '#5C5C66', acc: '#1F5BFF', ink: '#FFFFFF' },
+  { bg: '#06222B', fg: '#EAF7F7', card: '#0D3340', line: '#164A5A', muted: '#9CC3C9', acc: '#7CF5D0', ink: '#06222B' },
+  { bg: '#1A0F0B', fg: '#FBEFE7', card: '#2A1912', line: '#3D261C', muted: '#C9A999', acc: '#FF8A3D', ink: '#1A0F0B' }
+];
+const FONTS = ["'Space Grotesk', Inter, sans-serif", 'Inter, system-ui, sans-serif', 'Georgia, serif'];
+const RADII = ['6px', '14px', '999px'];
+
+function youtubeId(url) {
+  const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
 
 // Página pública: whitelink.site/nome
 export async function onRequestGet(context) {
-  const { request, env, params, next } = context;
+  const { env, params, next } = context;
   const raw = String(params.handle || '');
   const h = raw.toLowerCase();
-  if (raw.includes('.') && !/^[a-z0-9._]{3,30}$/.test(h)) return next();
-  if (RESERVED.has(h) || /\.(html|css|js|png|jpg|svg|ico|txt|xml|webmanifest)$/.test(h)) return next();
+  if (RESERVED.has(h) || /\.(html|css|js|png|jpg|jpeg|svg|ico|txt|xml|webmanifest|json)$/.test(h)) return next();
   if (!/^[a-z0-9._]{3,30}$/.test(h)) return notFound(context, raw);
+  await ensureSchema(env);
 
   const u = await env.DB.prepare('SELECT id, name, instagram, handle, plan, plan_until, trial_until, status FROM users WHERE handle = ?').bind(h).first();
   if (!u) return notFound(context, h);
-  if (u.status !== 'ativo') return page('Página indisponível', `<div class="empty"><h1>Esta página não está disponível</h1><p>Volte mais tarde.</p><a class="cta" href="/">Conheça o WhiteLink</a></div>`, 'noite', 503);
+  if (u.status !== 'ativo') return page('Página indisponível', `<main class="pg"><h1>Esta página não está disponível</h1><p class="bio">Volte mais tarde.</p><a class="lk feat" href="/">Conheça o WhiteLink</a></main>`, THEMES[0], FONTS[0], RADII[1], 503);
 
-  const prof = (await env.DB.prepare('SELECT title, bio, theme FROM profiles WHERE user_id = ?').bind(u.id).first()) || {};
+  const prof = (await env.DB.prepare('SELECT title, bio FROM profiles WHERE user_id = ?').bind(u.id).first()) || {};
   const plan = effectivePlan(u).plan;
+  const lvl = PLAN_LEVEL[plan];
+  const { blocks, appearance: a } = await loadPage(env, u.id);
+  const ti = lvl === 0 && (a.theme || 0) >= 2 ? 0 : (a.theme || 0);
+  const T = Object.assign({}, THEMES[ti] || THEMES[0]);
+  if (lvl >= 1 && a.acc) T.acc = a.acc;
+  const font = FONTS[lvl >= 1 ? (a.font || 0) : 0];
+  const radius = RADII[lvl >= 1 ? (a.shape == null ? 1 : a.shape) : 1];
+
+  let shown = blocks.filter((b) => b.on && BLOCK_NEED[b.kind] <= lvl);
   const limit = { prata: 3, ouro: 10, diamante: 0 }[plan];
-  let links = (await env.DB.prepare('SELECT id, title FROM links WHERE user_id = ? AND active = 1 ORDER BY position, id').bind(u.id).all()).results;
-  if (limit) links = links.slice(0, limit);
-  const theme = plan === 'prata' && !['noite', 'papel'].includes(prof.theme) ? 'noite' : (prof.theme || 'noite');
+  if (limit) { let n = 0; shown = shown.filter((b) => b.kind !== 'link' || ++n <= limit); }
+  const feat = shown.filter((b) => b.featured);
+  shown = feat.concat(shown.filter((b) => !b.featured));
 
   context.waitUntil(env.DB.prepare(
     'INSERT INTO visits (user_id, day, views) VALUES (?, ?, 1) ON CONFLICT(user_id, day) DO UPDATE SET views = views + 1'
   ).bind(u.id, new Date().toISOString().slice(0, 10)).run());
+
+  const go = (b) => `/go/${u.id}/${b.id}`;
+  const parts = shown.map((b) => {
+    const t = escapeHtml(b.title);
+    const hasUrl = /^https?:\/\//.test(b.url || '');
+    switch (b.kind) {
+      case 'text': return `<p class="tx">${t}</p>`;
+      case 'link': return hasUrl ? `<a class="lk${b.featured ? ' feat' : ''}" href="${go(b)}" rel="noopener">${t}</a>` : '';
+      case 'video': {
+        const id = youtubeId(b.url);
+        if (id) return `<div class="card"><div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${t}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="ct">${t}</div></div>`;
+        return hasUrl ? `<a class="lk" href="${go(b)}" rel="noopener">▶ ${t}</a>` : '';
+      }
+      case 'shop': return hasUrl ? `<a class="card shop" href="${go(b)}" rel="noopener"><span>${t}</span><b>Comprar</b></a>` : `<div class="card shop"><span>${t}</span></div>`;
+      case 'gallery': return hasUrl ? `<a class="lk" href="${go(b)}" rel="noopener">${t}</a>` : '';
+      case 'timer': {
+        const end = Date.parse(String(b.url || '').replace(' ', 'T') + ':00-03:00');
+        if (!end || end < Date.now()) return '';
+        return `<div class="card timer" data-end="${end}"><div class="ct">${t}</div><div class="tm"><span><b>--</b>dias</span><span><b>--</b>horas</span><span><b>--</b>min</span><span><b>--</b>seg</span></div></div>`;
+      }
+      case 'lead': return `<form class="card lead" data-src="${t}"><div class="ct">${t}</div><input name="name" placeholder="Seu nome" maxlength="60" aria-label="Seu nome"><input name="phone" placeholder="Seu WhatsApp com DDD" inputmode="tel" aria-label="Seu WhatsApp" required><button type="submit">Quero receber</button><span class="msg"></span></form>`;
+      case 'pix': return b.url ? `<div class="card pix"><button type="button" class="pixb">${t}</button><div class="pixk hide"><code>${escapeHtml(b.url)}</code><button type="button" data-k="${escapeHtml(b.url)}">Copiar chave</button></div></div>` : '';
+      default: return '';
+    }
+  }).join('');
 
   const title = prof.title || u.name;
   const initials = title.split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase();
   const body = `
   <main class="pg">
     <div class="av">${escapeHtml(initials)}</div>
-    <h1>${escapeHtml(title)}</h1>
+    <h1>${escapeHtml(title)}${lvl === 2 && !effectivePlan(u).trial ? ' <span class="ver" title="Verificado">✓</span>' : ''}</h1>
     <a class="ig" href="https://instagram.com/${escapeHtml(u.instagram)}" target="_blank" rel="noopener">@${escapeHtml(u.instagram)}</a>
     ${prof.bio ? `<p class="bio">${escapeHtml(prof.bio)}</p>` : ''}
-    <div class="links">
-      ${links.map((l) => `<a class="lk" href="/go/${l.id}" rel="noopener">${escapeHtml(l.title)}</a>`).join('') || '<p class="bio">Em breve, novos links por aqui.</p>'}
-    </div>
-    ${plan === 'prata' ? '<a class="brand" href="/">Crie a sua com <b>WhiteLink</b></a>' : ''}
-  </main>`;
-  return page(title + ' | WhiteLink', body, theme, 200);
+    <div class="blocks">${parts || '<p class="bio">Em breve, novos links por aqui.</p>'}</div>
+    ${lvl === 0 ? '<a class="brand" href="/">Crie a sua com <b>WhiteLink</b></a>' : ''}
+  </main>
+  <script>
+  (function(){
+    document.querySelectorAll('.timer').forEach(function(el){var end=+el.dataset.end,b=el.querySelectorAll('b');function t(){var s=Math.max(0,Math.floor((end-Date.now())/1000));var v=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];b.forEach(function(x,i){x.textContent=String(v[i]).padStart(2,'0')});}t();setInterval(t,1000);});
+    document.querySelectorAll('.pixb').forEach(function(btn){btn.onclick=function(){btn.nextElementSibling.classList.toggle('hide');};});
+    document.querySelectorAll('[data-k]').forEach(function(btn){btn.onclick=function(){try{navigator.clipboard.writeText(btn.dataset.k);}catch(e){}btn.textContent='Chave copiada!';};});
+    document.querySelectorAll('form.lead').forEach(function(f){f.onsubmit=function(e){e.preventDefault();var m=f.querySelector('.msg');fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({h:${JSON.stringify(u.handle)},name:f.name.value,phone:f.phone.value,source:f.dataset.src})}).then(function(r){return r.json()}).then(function(d){if(d.ok){f.innerHTML='<div class="ct">Pronto! Você vai receber as novidades.</div>';}else{m.textContent=d.error||'Tente de novo.';}}).catch(function(){m.textContent='Sem conexão.';});};});
+  })();
+  </script>`;
+  return page(title + ' | WhiteLink', body, T, font, radius, 200);
 }
 
 async function notFound({ env, request }, h) {
@@ -50,25 +104,31 @@ async function notFound({ env, request }, h) {
   }
 }
 
-function page(title, body, theme, status) {
-  const T = {
-    noite: { bg: '#0E0E14', fg: '#F3F3F7', card: '#17171F', line: '#26262F', muted: '#A7A7B8', acc: '#D4FF3A' },
-    papel: { bg: '#F4F2EC', fg: '#16161A', card: '#FFFFFF', line: '#E2DFD6', muted: '#5C5C66', acc: '#1F5BFF' }
-  }[theme] || {};
+function page(title, body, T, font, radius, status) {
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(title)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap">
 <style>
-*{box-sizing:border-box}body{margin:0;background:${T.bg};color:${T.fg};font-family:Inter,system-ui,sans-serif;min-height:100vh}
+*{box-sizing:border-box}body{margin:0;background:${T.bg};color:${T.fg};font-family:${font};min-height:100vh}
 .pg{max-width:480px;margin:0 auto;padding:48px 20px 32px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 .av{width:92px;height:92px;border-radius:50%;background:${T.card};border:2px solid ${T.acc};display:flex;align-items:center;justify-content:center;font:700 30px 'Space Grotesk',sans-serif}
-h1{margin:6px 0 0;font:700 22px 'Space Grotesk',sans-serif}.ig{color:${T.muted};font-size:14px;text-decoration:none}
+h1{margin:6px 0 0;font-size:22px;font-weight:700}.ver{display:inline-flex;width:20px;height:20px;border-radius:50%;background:${T.acc};color:${T.ink};font-size:12px;align-items:center;justify-content:center;vertical-align:middle}
+.ig{color:${T.muted};font-size:14px;text-decoration:none}
 .bio{margin:4px 0 0;color:${T.muted};font-size:14px;line-height:1.5;max-width:340px}
-.links{width:100%;display:flex;flex-direction:column;gap:12px;margin-top:14px}
-.lk{display:block;padding:16px 18px;border-radius:16px;background:${T.card};border:1px solid ${T.line};color:${T.fg};font-weight:600;font-size:15px;text-decoration:none;transition:transform .15s}
-.lk:first-child{background:${T.acc};color:${theme === 'papel' ? '#fff' : '#0E0E14'};border-color:${T.acc}}.lk:hover{transform:translateY(-2px)}
+.blocks{width:100%;display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.lk{display:block;padding:16px 18px;border-radius:${radius};background:${T.card};border:1px solid ${T.line};color:${T.fg};font-weight:600;font-size:15px;text-decoration:none;transition:transform .15s}
+.lk.feat{background:${T.acc};color:${T.ink};border-color:${T.acc}}.lk:hover{transform:translateY(-2px)}
+.tx{margin:4px 0;color:${T.fg};font-size:15px;line-height:1.55;white-space:pre-line}
+.card{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:${radius === '999px' ? '22px' : radius};background:${T.card};border:1px solid ${T.line};color:${T.fg};text-decoration:none;text-align:left}
+.ct{font-weight:600;font-size:15px}
+.vid{position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000}.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.shop{flex-direction:row;align-items:center;justify-content:space-between}.shop b{padding:8px 14px;border-radius:999px;background:${T.acc};color:${T.ink};font-size:13px}
+.tm{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.tm span{display:flex;flex-direction:column;align-items:center;padding:8px 0;border-radius:10px;background:${T.bg};font-size:10px;color:${T.muted};text-transform:uppercase}.tm b{font-size:22px;color:${T.fg}}
+.lead input{height:44px;border-radius:12px;border:1px solid ${T.line};background:${T.bg};color:${T.fg};padding:0 12px;font-size:15px;font-family:inherit}
+.lead button,.pix button{height:44px;border-radius:12px;border:none;background:${T.acc};color:${T.ink};font-weight:600;font-size:15px;cursor:pointer;font-family:inherit}
+.pix .pixb{background:transparent;border:1px dashed ${T.acc};color:${T.fg}}.pixk{display:flex;flex-direction:column;gap:8px}.pixk code{word-break:break-all;font-size:13px;color:${T.muted}}.hide{display:none}
+.msg{color:#FF8A6B;font-size:13px}
 .brand{margin-top:22px;color:${T.muted};font-size:12px;text-decoration:none}.brand b{color:${T.fg}}
-.empty{max-width:420px;margin:0 auto;padding:120px 24px;text-align:center}.cta{display:inline-block;margin-top:18px;padding:14px 20px;border-radius:14px;background:${T.acc};color:#0E0E14;font-weight:600;text-decoration:none}
 </style></head><body>${body}</body></html>`;
   return new Response(html, { status, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
 }
