@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Minha conta — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+</helmet>
+<div>
+  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Minha conta</h1></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div class="list" style="margin-top: 6px">
+        <button class="row" onClick="{{openEmail}}"><span class="row-tx"><b>E-mail</b><span>{{email}}</span></span><span class="chev">›</span></button>
+        <button class="row" onClick="{{openPhone}}"><span class="row-tx"><b>Celular</b><span>termina em {{phoneEnd}}</span></span><span class="chev">›</span></button>
+        <button class="row" onClick="{{openPass}}"><span class="row-tx"><b>Senha</b><span>••••••••</span></span><span class="chev">›</span></button>
+      </div>
+      <div class="sec-t">Aparelhos conectados</div>
+      <div class="list">
+        <sc-for list="{{sessions}}" as="s" hint-placeholder-count="2">
+          <div class="row" style="cursor: default"><span class="row-tx"><b>{{s.name}}</b><span>{{s.sub}}</span></span>
+            <sc-if value="{{s.current}}" hint-placeholder-val="{{ true }}"><span class="chip" style="background: rgba(212,255,58,.14); color: #D4FF3A">Este</span></sc-if>
+            <sc-if value="{{s.other}}" hint-placeholder-val="{{ false }}"><button class="btn ghost" onClick="{{s.out}}" style="height: 38px; padding: 0 14px">Sair</button></sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{many}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{outAll}}" style="margin-top: 12px">Sair de todos os outros aparelhos</button></sc-if>
+      <p style="text-align: center; font-size: 13px; color: #9C9CAD; margin-top: 22px; line-height: 1.5">Quer apagar sua conta? <a href="{{waDelete}}" target="_blank" rel="noopener">Fale com a gente no WhatsApp</a>.</p>
+    </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{sheet}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{close}}">
+      <div class="sheet" onClick="{{stop}}">
+        <div class="grab"></div>
+        <h2>{{sheetTitle}}</h2>
+        <sc-if value="{{isEmail}}" hint-placeholder-val="{{ false }}"><label class="fld">Novo e-mail<input class="inp" type="email" value="{{f.email}}" onInput="{{setEmail}}" autocomplete="email"></label></sc-if>
+        <sc-if value="{{isPass}}" hint-placeholder-val="{{ false }}"><label class="fld">Nova senha<input class="inp" type="password" value="{{f.password}}" onInput="{{setPassword}}" autocomplete="new-password" placeholder="8 ou mais, com letras e números"></label></sc-if>
+        <sc-if value="{{needCurrent}}" hint-placeholder-val="{{ false }}"><label class="fld">Senha atual<input class="inp" type="password" value="{{f.current}}" onInput="{{setCurrent}}" autocomplete="current-password"></label></sc-if>
+        <sc-if value="{{isPhone}}" hint-placeholder-val="{{ false }}"><label class="fld">Novo celular com DDD<input class="inp" type="tel" inputmode="numeric" value="{{f.phone}}" onInput="{{setPhone}}" placeholder="(11) 99999-9999"></label></sc-if>
+        <sc-if value="{{isCode}}" hint-placeholder-val="{{ false }}">
+          <div>
+            <p style="font-size: 14px; color: #C9C9D6; margin: 0 0 12px">Mandamos um código por SMS para o celular que termina em {{f.newEnd}}.</p>
+            <sc-if value="{{testCode}}" hint-placeholder-val="{{ false }}"><div style="padding: 10px 12px; border-radius: 12px; background: #2B2210; color: #F7DFA0; font-size: 13.5px; margin-bottom: 12px">Modo de teste: o código é <b>{{testCode}}</b></div></sc-if>
+            <label class="fld">Código<input class="inp" inputmode="numeric" maxlength="6" value="{{f.code}}" onInput="{{setCode}}" autocomplete="one-time-code"></label>
+          </div>
+        </sc-if>
+        <sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 12px">{{err}}</div></sc-if>
+        <sc-if value="{{done}}" hint-placeholder-val="{{ false }}"><div role="status" style="padding: 10px 12px; border-radius: 12px; background: rgba(212,255,58,.12); color: #D4FF3A; font-size: 14px; margin-bottom: 12px">{{done}}</div></sc-if>
+        <button class="btn full" onClick="{{submit}}" disabled="{{busy}}">{{btnLabel}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, mode: '', f: {}, err: '', done: '', busy: false }; }
+  componentDidMount() { this.load(); }
+  async load() {
+    const d = await DC.api('account');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d.ok ? d : null });
+  }
+  open(mode) { this.setState({ mode: mode, f: {}, err: '', done: '' }); }
+  setF(k, v) { this.setState({ f: Object.assign({}, this.state.f, { [k]: v }), err: '' }); }
+  async submit() {
+    const m = this.state.mode, f = this.state.f;
+    if (this.state.done) { this.setState({ mode: '' }); return; }
+    this.setState({ busy: true, err: '' });
+    let r;
+    if (m === 'email') r = await DC.api('account', 'PUT', { email: f.email, current: f.current });
+    else if (m === 'pass') r = await DC.api('account', 'PUT', { password: f.password, current: f.current });
+    else if (m === 'phone') {
+      r = await DC.api('account/phone', 'POST', { phone: f.phone });
+      if (r.ok) { this.setState({ busy: false, mode: 'code', f: Object.assign({}, f, { codeId: r.codeId, newEnd: r.phoneEnd, testCode: r.testCode || '' }) }); return; }
+    } else if (m === 'code') r = await DC.api('account/phone', 'POST', { codeId: f.codeId, code: f.code });
+    if (!r.ok) { this.setState({ busy: false, err: r.error || 'Não deu certo. Tente de novo.' }); return; }
+    const msg = { email: 'E-mail trocado ✓', pass: 'Senha trocada ✓. Os outros aparelhos foram desconectados.', code: 'Celular trocado ✓' }[m];
+    this.setState({ busy: false, done: msg });
+    this.load();
+  }
+  renderVals() {
+    const d = this.state.d, m = this.state.mode, f = this.state.f;
+    if (!d) return { loading: true };
+    const others = d.sessions.filter((s) => !s.current);
+    const out = async (id) => { await DC.api('account' + (id ? '?id=' + id : ''), 'DELETE'); this.load(); };
+    return {
+      loading: false, ready: true, email: d.email, phoneEnd: d.phoneEnd,
+      openEmail: () => this.open('email'), openPhone: () => this.open('phone'), openPass: () => this.open('pass'),
+      sessions: d.sessions.map((s) => ({ name: s.name, sub: 'Entrou em ' + new Date(s.at).toLocaleDateString('pt-BR'), current: s.current, other: !s.current, out: () => out(s.id) })),
+      many: others.length > 1, outAll: () => out(''),
+      waDelete: 'https://wa.me/5511993931841?text=' + encodeURIComponent('Olá! Quero apagar minha conta do WhiteLink (' + d.email + ').'),
+      sheet: !!m, sheetTitle: { email: 'Trocar e-mail', pass: 'Trocar senha', phone: 'Trocar celular', code: 'Confirmar celular' }[m] || '',
+      isEmail: m === 'email', isPass: m === 'pass', isPhone: m === 'phone', isCode: m === 'code', needCurrent: m === 'email' || m === 'pass',
+      f: f, testCode: f.testCode || '',
+      setEmail: (e) => this.setF('email', e.target.value), setPassword: (e) => this.setF('password', e.target.value),
+      setCurrent: (e) => this.setF('current', e.target.value), setPhone: (e) => this.setF('phone', e.target.value), setCode: (e) => this.setF('code', e.target.value),
+      err: this.state.err, done: this.state.done, busy: this.state.busy,
+      btnLabel: this.state.done ? 'Fechar' : this.state.busy ? 'Aguarde…' : m === 'phone' ? 'Mandar código' : m === 'code' ? 'Confirmar' : 'Salvar',
+      submit: () => this.submit(), close: () => this.setState({ mode: '' }), stop: (e) => e.stopPropagation()
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -26,13 +26,15 @@ export async function onRequestPost({ request, env }) {
     if (r) { used = true; break; }
   }
   const now = Date.now();
-  const trialUntil = used ? null : now + TRIAL_DAYS * DAY;
+  let trialUntil = used ? null : now + TRIAL_DAYS * DAY;
 
   let referredBy = null;
   if (p.ref) {
     const r = await env.DB.prepare('SELECT id FROM users WHERE ref_code = ?').bind(p.ref).first();
     if (r) referredBy = r.id;
   }
+  // amigo indicado ganha +7 dias no teste (só quem ainda tem direito ao teste)
+  if (referredBy && trialUntil) trialUntil += 7 * DAY;
   const refCode = (p.handle.replace(/[^a-z0-9]/g, '').slice(0, 8) + randomHex(2)).toUpperCase();
 
   const res = await env.DB.prepare(

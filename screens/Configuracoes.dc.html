@@ -2,225 +2,89 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Configurações da página — WhiteLink</title>
-<script src="./support.js"></script>
+<title>Configurações — WhiteLink</title>
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
 <style>
-body{margin:0;background:#0B0B10}
-a{color:#D4FF3A}a:hover{color:#E6FF8A}
-button,input{font-family:Inter,system-ui,sans-serif}
-.cf-in{height:48px;box-sizing:border-box;border-radius:12px;border:1px solid #33333E;background:#0E0E14;color:#F3F3F7;padding:0 14px;font-size:15px;width:100%}
-.cf-in:focus{outline:2px solid #D4FF3A;outline-offset:1px}
-.cf-in:disabled{opacity:.5}
-@media (max-width: 600px){
-[style*="font-size: 60px"]{font-size:36px !important}
-[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
-[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
-[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
-[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
-[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
-[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
-[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
-[style*="font-size: 16px"]{font-size:15px !important}
-h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
-p{line-height:1.5 !important}
-[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
-[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
-[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
-[style*="padding: 56px 32px"]{padding:32px 20px !important}
-[style*="padding: 36px"]{padding:22px !important}
-[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
-[style*="padding: 48px 24px"]{padding:24px 14px !important}
-[style*="padding: 48px;"]{padding:24px 18px !important}
-[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
-[style*="padding: 22px"]{padding:16px !important}
-[style*="gap: 48px"]{gap:28px !important}
-[style*="gap: 36px"]{gap:22px !important}
-[style*="height: 56px"]{height:50px !important}
-}
-header nav a{text-decoration:none !important}
-header nav a:hover{color:#F3F3F7 !important}
-header > a,header > button{text-decoration:none !important}
-@media (max-width: 600px){
-header{gap:10px !important;padding:12px 14px !important;align-items:center !important}
-header > div[style*="flex: 1"]{flex:1 1 0 !important}
-header nav{order:5;flex:0 0 calc(100% + 28px) !important;flex-wrap:nowrap !important;overflow-x:auto;gap:6px !important;margin:2px -14px 0 !important;padding:2px 14px 4px !important;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%)}
-header nav::-webkit-scrollbar{display:none}
-header nav a{flex:none;white-space:nowrap;height:36px;box-sizing:border-box;display:inline-flex !important;align-items:center;padding:0 14px !important;border-radius:999px !important;background:#16161D !important;border:1px solid #24242E;color:#C9C9D6 !important;font-size:13px !important;font-weight:500 !important}
-header nav a[aria-current="page"]{background:#D4FF3A !important;border-color:#D4FF3A;color:#0E0E14 !important;font-weight:600 !important}
-header > span:not(:first-child){display:none !important}
-header > a[href="Configuracoes.dc.html"]{display:none !important}
-header > a,header > button{height:38px !important;padding:0 14px !important;font-size:13px !important;border-radius:10px !important}
-}
+.qr{width:200px;height:200px;border-radius:18px;background:#fff;padding:10px;display:block;margin:0 auto}
+.lk{font-size:13px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid #8FE3FF;color:#8FE3FF}
 </style>
 </helmet>
-<div style="min-height: 1500px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column">
-  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid #22222B; background: #0E0E14">
-    <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.02em">WhiteLink</span>
-    <nav aria-label="Seções" style="display: flex; gap: 4px; flex-wrap: wrap">
-      <a href="Editor.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Editor</a>
-      <a href="Temas.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Temas</a>
-      <a href="Agenda.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Agendamentos</a>
-      <a href="Stats.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Estatísticas</a>
-      <a href="Contatos.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Contatos</a>
-      <a href="#" aria-current="page" style="padding: 10px 14px; border-radius: 10px; background: #1A1A22; color: #F3F3F7; font-size: 14px; font-weight: 500">Configurações</a>
-      <a href="Indique.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Indique e ganhe</a>
-      <a href="MeuPlano.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Meu plano</a>
-      <a href="Conta.dc.html" style="padding: 10px 14px; border-radius: 10px; color: #A7A7B8; font-size: 14px">Minha conta</a>
-    </nav>
-    <div style="flex: 1"></div>
-    <a href="SuporteCliente.dc.html" style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #33333E; color: #F3F3F7; font-size: 14px; display: flex; align-items: center">Suporte</a>
-  </header>
-
-  <div style="max-width: 1160px; width: 100%; box-sizing: border-box; margin: 0 auto; padding: 28px 24px 56px; display: flex; flex-direction: column; gap: 20px">
-    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">Configurações da página</h1>
-      <div role="group" aria-label="Ver como cliente do plano" style="display: flex; gap: 6px; align-items: center">
-        <span style="font-size: 12px; color: #A7A7B8">Ver como:</span>
-        <sc-for list="{{asPlan}}" as="p" hint-placeholder-count="3">
-          <button onClick="{{p.pick}}" aria-pressed="{{p.sel}}" style="{{p.style}}">{{p.name}}</button>
-        </sc-for>
+<div>
+  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Configurações</h1></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div class="sec-t" style="margin-top: 6px">QR code da sua página</div>
+      <div class="card" style="padding: 18px; display: flex; flex-direction: column; gap: 14px; align-items: center">
+        <img class="qr" src="{{qr}}" alt="QR code de whitelink.site/{{handle}}">
+        <span style="font-size: 15px">whitelink.site/<b>{{handle}}</b></span>
+        <a class="btn full" href="{{qrDownload}}" target="_blank" rel="noopener" download="whitelink-qrcode.png">Baixar QR code</a>
       </div>
-    </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 20px; align-items: start">
+      <div class="sec-t">Aparecer no Google</div>
+      <div class="card" style="padding: 16px">
+        <label class="fld">Título<input class="inp" value="{{seoTitle}}" onInput="{{setSeoTitle}}" maxlength="70" placeholder="Ex.: Mariana Souza · Moda autoral"></label>
+        <label class="fld" style="margin: 0">Descrição<input class="inp" value="{{seoDesc}}" onInput="{{setSeoDesc}}" maxlength="160" placeholder="Uma frase sobre você ou sua loja"></label>
+      </div>
 
-      <section aria-label="Minhas páginas" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-          <h2 style="margin: 0; font-size: 18px; font-weight: 600">Minhas páginas</h2>
-          <span style="font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid #8FE3FF; color: #8FE3FF">Até 3 no Diamante</span>
-        </div>
-        <sc-for list="{{pages}}" as="g" hint-placeholder-count="2">
-          <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #0E0E14">
-            <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
-              <span style="font-size: 15px; font-weight: 500">{{g.name}}</span>
-              <span style="font-size: 12px; color: #A7A7B8">whitelink.site/{{g.handle}}</span>
-            </span>
-            <a href="Editor.dc.html" style="height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid #33333E; color: #F3F3F7; font-size: 13px; display: flex; align-items: center; text-decoration: none">Editar</a>
-          </div>
-        </sc-for>
-        <button onClick="{{addPage}}" disabled="{{cantAdd}}" style="{{addStyle}}">{{addLabel}}</button>
-        <span style="font-size: 12px; color: #A7A7B8; line-height: 1.5">Cada página tem seus próprios links, tema e estatísticas. Bom para quem tem mais de um perfil ou negócio.</span>
-      </section>
-
-      <section aria-label="QR code" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-          <h2 style="margin: 0; font-size: 18px; font-weight: 600">QR code da sua página</h2>
-          <span style="font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid #F2C14E; color: #F2C14E">Ouro e Diamante</span>
-        </div>
-        <sc-if value="{{ouroUp}}" hint-placeholder-val="{{ true }}">
-          <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap">
-            <div role="img" aria-label="QR code da página" style="width: 140px; height: 140px; border-radius: 12px; background: #F3F3F7; color: #0E0E14; font-size: 12px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; box-sizing: border-box">[QR code de whitelink.site/seuperfil]</div>
-            <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 8px">
-              <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Coloque em cartões, embalagens, cardápios e vitrines. Quem escanear cai direto na sua página.</span>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                <button onClick="{{dlImg}}" style="height: 44px; padding: 0 14px; border-radius: 10px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 13px; cursor: pointer">{{dlImgLabel}}</button>
-                <button onClick="{{dlPdf}}" style="height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #33333E; background: transparent; color: #F3F3F7; font-size: 13px; cursor: pointer">{{dlPdfLabel}}</button>
-              </div>
-            </div>
+      <div class="sec-t" style="display: flex; align-items: center; gap: 8px">Pixel, Analytics e domínio <span class="lk">Diamante</span></div>
+      <div class="card" style="padding: 16px">
+        <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
+          <div>
+            <label class="fld">Pixel da Meta (ID)<input class="inp" value="{{pixel}}" onInput="{{setPixel}}" inputmode="numeric" placeholder="Ex.: 123456789012345"></label>
+            <label class="fld">Google Analytics (ID)<input class="inp" value="{{ga}}" onInput="{{setGa}}" placeholder="Ex.: G-ABC123XYZ"></label>
+            <label class="fld" style="margin: 0">Domínio próprio<input class="inp" value="{{domain}}" onInput="{{setDomain}}" placeholder="Ex.: links.seusite.com.br"></label>
+            <sc-if value="{{domain}}" hint-placeholder-val="{{ false }}"><p style="font-size: 13px; color: #9C9CAD; line-height: 1.5; margin: 10px 0 0">Para ligar o domínio, chame a gente no WhatsApp. Nós configuramos com você.</p></sc-if>
           </div>
         </sc-if>
-        <sc-if value="{{isPrata}}" hint-placeholder-val="{{ false }}">
-          <a href="MeuPlano.dc.html" style="font-size: 14px">Disponível a partir do Ouro. Ver como subir de plano</a>
-        </sc-if>
-      </section>
-
-      <section aria-label="Marca WhiteLink" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
-        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Marca WhiteLink no rodapé</h2>
-        <button onClick="{{toggleBrand}}" disabled="{{isPrata}}" aria-pressed="{{brand}}" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; border: 1px solid #22222B; background: #0E0E14; color: #F3F3F7; text-align: left; cursor: pointer">
-          <span style="{{brandSwitch}}"><span style="{{brandKnob}}"></span></span>
-          <span style="display: flex; flex-direction: column; gap: 3px">
-            <span style="font-size: 14px; font-weight: 500">Mostrar "Crie a sua com WhiteLink"</span>
-            <span style="font-size: 12px; color: #A7A7B8">{{brandHint}}</span>
-          </span>
-        </button>
-      </section>
-
-      <section aria-label="Domínio próprio" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-          <h2 style="margin: 0; font-size: 18px; font-weight: 600">Domínio próprio</h2>
-          <span style="font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid #8FE3FF; color: #8FE3FF">Diamante</span>
-        </div>
-        <sc-if value="{{isDiamante}}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{notDia}}" hint-placeholder-val="{{ false }}">
           <div style="display: flex; flex-direction: column; gap: 12px">
-            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">Seu domínio
-              <input class="cf-in" value="{{domain}}" onInput="{{setDomain}}" placeholder="links.seusite.com.br">
-            </label>
-            <ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #C9C9D6; line-height: 1.5">
-              <li>Tenha um domínio comprado (por exemplo no Registro.br).</li>
-              <li>No painel onde comprou, crie um registro do tipo <strong style="color: #F3F3F7">CNAME</strong> com o nome <strong style="color: #F3F3F7">links</strong> apontando para <strong style="color: #F3F3F7">[endereço que o WhiteLink mostra aqui]</strong>.</li>
-              <li>Volte aqui e clique em Verificar. Pode levar algumas horas para funcionar.</li>
-            </ol>
-            <button onClick="{{verify}}" style="align-self: flex-start; height: 44px; padding: 0 16px; border-radius: 12px; border: none; background: #8FE3FF; color: #06222B; font-weight: 600; font-size: 14px; cursor: pointer">Verificar domínio</button>
-            <sc-if value="{{verified}}" hint-placeholder-val="{{ false }}">
-              <span style="font-size: 14px; color: #D4FF3A">(exemplo) Domínio conectado! Sua página também abre em {{domain}}.</span>
-            </sc-if>
+            <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Pixel da Meta, Google Analytics e domínio próprio (seusite.com.br) ficam liberados no Diamante.</span>
+            <a class="btn" href="/painel/plano" style="background: #8FE3FF">Conhecer o Diamante</a>
           </div>
         </sc-if>
-        <sc-if value="{{notDiamante}}" hint-placeholder-val="{{ false }}">
-          <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Use um endereço seu, como links.seusite.com.br, no lugar de whitelink.site. <a href="MeuPlano.dc.html">Disponível no Diamante</a></span>
-        </sc-if>
-      </section>
-
-      <section aria-label="Pixel e Analytics" style="padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-          <h2 style="margin: 0; font-size: 18px; font-weight: 600">Pixel da Meta e Google Analytics</h2>
-          <span style="font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid #8FE3FF; color: #8FE3FF">Diamante</span>
-        </div>
-        <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Para quem faz anúncios: cada visita e clique na sua página é enviado para as suas contas de anúncio.</span>
-        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">ID do Pixel da Meta
-          <input class="cf-in" disabled="{{notDiamante}}" inputmode="numeric" placeholder="Ex.: 123456789012345">
-        </label>
-        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #C9C9D6">ID do Google Analytics
-          <input class="cf-in" disabled="{{notDiamante}}" placeholder="Ex.: G-XXXXXXXXXX">
-        </label>
-        <button disabled="{{notDiamante}}" onClick="{{savePixel}}" style="{{pixelStyle}}">{{pixelLabel}}</button>
-      </section>
+      </div>
+      <sc-if value="{{warn}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: #2B2210; color: #F7DFA0; font-size: 14px">{{warn}}</div></sc-if>
+      <button class="btn full" onClick="{{save}}" style="margin-top: 16px">{{saveLabel}}</button>
     </div>
+    </sc-if>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
-  constructor(p) {
-    super(p);
-    this.state = { dlI: false, dlP: false, plan: 2, brand: false, domain: '', verified: false, pixelSaved: false,
-      pages: [{ name: '[Minha página principal]', handle: '[seuperfil]' }, { name: '[Página da loja]', handle: '[sualoja]' }] };
+  constructor(p) { super(p); this.state = { d: null, s: { seo: {} }, saved: false, warn: '' }; }
+  async componentDidMount() {
+    const d = await DC.api('settings');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d, s: Object.assign({ seo: {} }, d.settings) });
   }
+  set(patch) { this.setState({ s: Object.assign({}, this.state.s, patch), saved: false }); }
   renderVals() {
-    const s = this.state;
-    const T = ['Prata', 'Ouro', 'Diamante'], C = ['#C9CDD6', '#F2C14E', '#8FE3FF'];
-    const pill = (sel, col) => 'height: 36px; padding: 0 12px; border-radius: 8px; cursor: pointer; font-size: 13px; ' + (sel ? 'border: 1px solid ' + col + '; background: #22222B; color: ' + col + '; font-weight: 600' : 'border: 1px solid #2A2A34; background: transparent; color: #C9C9D6');
-    const limit = s.plan === 2 ? 3 : 1;
-    const pages = s.pages.slice(0, limit);
-    const canAdd = pages.length < limit;
-    const brandOn = s.plan === 0 ? true : s.brand;
-    const dia = s.plan === 2;
+    const d = this.state.d, s = this.state.s;
+    if (!d || !d.ok) return { loading: true };
+    const url = 'https://whitelink.site/' + d.handle;
     return {
-      dlImgLabel: this.state.dlI ? 'Imagem baixada ✓' : 'Baixar imagem', dlImg: () => this.setState({ dlI: true }),
-      dlPdfLabel: this.state.dlP ? 'PDF baixado ✓' : 'Baixar para imprimir (PDF)', dlPdf: () => this.setState({ dlP: true }),
-      asPlan: T.map((n, i) => ({ name: n, sel: s.plan === i, style: pill(s.plan === i, C[i]), pick: () => this.setState({ plan: i }) })),
-      isPrata: s.plan === 0, ouroUp: s.plan >= 1, isDiamante: dia, notDiamante: !dia,
-      pages: pages,
-      cantAdd: !canAdd,
-      addLabel: canAdd ? '+ Criar outra página' : (dia ? 'Você já tem 3 páginas' : 'Mais páginas só no Diamante'),
-      addStyle: 'height: 48px; border-radius: 12px; font-size: 14px; font-weight: 600; ' + (canAdd ? 'border: 1px dashed #8FE3FF; background: transparent; color: #8FE3FF; cursor: pointer' : 'border: 1px solid #26262F; background: transparent; color: #8A8A9A; cursor: not-allowed'),
-      addPage: () => { if (canAdd) this.setState({ pages: s.pages.concat([{ name: '[Nova página]', handle: '[novapagina]' }]) }); },
-      brand: brandOn,
-      toggleBrand: () => { if (s.plan > 0) this.setState({ brand: !s.brand }); },
-      brandHint: s.plan === 0 ? 'No Prata a marca sempre aparece. Do Ouro para cima você pode tirar.' : 'Você pode esconder a marca WhiteLink da sua página.',
-      brandSwitch: 'flex: none; width: 40px; height: 24px; border-radius: 999px; padding: 3px; box-sizing: border-box; display: flex; justify-content: ' + (brandOn ? 'flex-end' : 'flex-start') + '; background: ' + (brandOn ? '#D4FF3A' : '#33333E') + '; opacity: ' + (s.plan === 0 ? '.5' : '1'),
-      brandKnob: 'width: 18px; height: 18px; border-radius: 50%; background: ' + (brandOn ? '#0E0E14' : '#A7A7B8'),
-      domain: s.domain, setDomain: (e) => this.setState({ domain: e.target.value, verified: false }),
-      verify: () => this.setState({ verified: s.domain.trim().length > 3 }),
-      verified: s.verified,
-      pixelLabel: s.pixelSaved ? 'Salvo ✓' : 'Salvar',
-      savePixel: () => this.setState({ pixelSaved: true }),
-      pixelStyle: 'align-self: flex-start; height: 44px; padding: 0 16px; border-radius: 12px; border: none; font-weight: 600; font-size: 14px; ' + (dia ? 'background: #8FE3FF; color: #06222B; cursor: pointer' : 'background: #26262F; color: #8A8A9A; cursor: not-allowed')
+      loading: false, ready: true, handle: d.handle,
+      qr: 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=0&data=' + encodeURIComponent(url),
+      qrDownload: 'https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&margin=20&format=png&data=' + encodeURIComponent(url),
+      seoTitle: s.seo.title || '', seoDesc: s.seo.desc || '',
+      setSeoTitle: (e) => this.set({ seo: Object.assign({}, s.seo, { title: e.target.value }) }),
+      setSeoDesc: (e) => this.set({ seo: Object.assign({}, s.seo, { desc: e.target.value }) }),
+      dia: d.level === 2, notDia: d.level < 2,
+      pixel: s.pixel || '', ga: s.ga || '', domain: s.domain || '',
+      setPixel: (e) => this.set({ pixel: e.target.value }), setGa: (e) => this.set({ ga: e.target.value }), setDomain: (e) => this.set({ domain: e.target.value }),
+      warn: this.state.warn,
+      saveLabel: this.state.saved ? 'Salvo ✓' : 'Salvar',
+      save: async () => {
+        const r = await DC.api('settings', 'PUT', s);
+        this.setState({ saved: r.ok, warn: r.ok ? (r.warnings || []).join(' ') : r.error });
+      }
     };
   }
 }

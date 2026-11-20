@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Estatísticas — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kp .card{padding:14px;display:flex;flex-direction:column;gap:4px}
+.kp b{font:700 26px 'Space Grotesk',sans-serif}
+.kp span{font-size:12.5px;color:#9C9CAD}
+.chart{display:flex;align-items:flex-end;gap:3px;height:150px;padding:14px 14px 0}
+.chart div{flex:1;min-width:2px;border-radius:5px 5px 0 0;background:#D4FF3A}
+.bar{height:8px;border-radius:999px;background:#26262F;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;border-radius:999px}
+.chips{display:flex;gap:8px;margin-bottom:12px}
+.chips button{height:38px;padding:0 16px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.chips button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+.chips button[disabled]{opacity:.45}
+</style>
+</helmet>
+<div>
+  <div class="appbar"><h1>Estatísticas</h1><sc-if value="{{canExport}}" hint-placeholder-val="{{ false }}"><a class="icon-btn" href="/api/stats/csv" aria-label="Baixar planilha"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></a></sc-if></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div class="chips" role="group" aria-label="Período">
+        <sc-for list="{{periods}}" as="p" hint-placeholder-count="3"><button onClick="{{p.pick}}" aria-pressed="{{p.sel}}" disabled="{{p.locked}}">{{p.name}}</button></sc-for>
+      </div>
+      <div class="kp">
+        <sc-for list="{{kpis}}" as="k" hint-placeholder-count="3"><div class="card"><b>{{k.v}}</b><span>{{k.l}}</span></div></sc-for>
+      </div>
+      <div class="card" style="margin-top: 12px">
+        <div class="chart" aria-label="Visitas por dia"><sc-for list="{{bars}}" as="b" hint-placeholder-count="7"><div style="{{b}}"></div></sc-for></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 14px 12px; font-size: 12px; color: #9C9CAD"><span>{{firstDay}}</span><span>hoje</span></div>
+      </div>
+
+      <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="margin-top: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px; border-color: #4A3A14">
+          <b style="font-size: 16px">Veja de onde vêm suas visitas</b>
+          <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">No Ouro você vê os cliques de cada link, de onde veio cada visita, o aparelho e a cidade.</span>
+          <a class="btn" href="/painel/plano" style="background: #F2C14E">Conhecer o Ouro</a>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{full}}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div class="sec-t">Links mais clicados</div>
+        <div class="list">
+          <sc-for list="{{links}}" as="l" hint-placeholder-count="3">
+            <div class="row" style="cursor: default"><span class="row-tx"><b>{{l.title}}</b><sc-if value="{{l.ab}}" hint-placeholder-val="{{ false }}"><span>{{l.ab}}</span></sc-if></span><b style="font: 700 18px 'Space Grotesk'">{{l.clicks}}</b></div>
+          </sc-for>
+          <sc-if value="{{noLinks}}" hint-placeholder-val="{{ false }}"><div class="row" style="color: #9C9CAD; cursor: default">Ainda sem cliques neste período.</div></sc-if>
+        </div>
+        <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+          <div>
+            <div class="sec-t">{{g.title}}</div>
+            <div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
+              <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="3">
+                <div><div style="display: flex; justify-content: space-between; font-size: 14px"><span>{{r.k}}</span><b>{{r.pct}}</b></div><div class="bar"><i style="{{r.st}}"></i></div></div>
+              </sc-for>
+              <sc-if value="{{g.empty}}" hint-placeholder-val="{{ false }}"><span style="color: #9C9CAD; font-size: 14px">Sem visitas ainda.</span></sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, days: 7 }; }
+  componentDidMount() { this.load(7); }
+  async load(days) {
+    const d = await DC.api('stats?d=' + days);
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d.ok ? d : null, days: days });
+  }
+  renderVals() {
+    const d = this.state.d;
+    if (!d) return { loading: true, ready: false };
+    const fmt = (n) => Number(n || 0).toLocaleString('pt-BR');
+    const max = Math.max(1, ...d.series.map((x) => x.views));
+    const pct = (rows) => { const t = rows.reduce((a, r) => a + r.n, 0) || 1; return rows.map((r) => ({ k: r.k, pct: Math.round(r.n / t * 100) + '%', st: 'width: ' + Math.round(r.n / t * 100) + '%; background: ' + r.c })); };
+    const full = d.level >= 1;
+    const b = d.breakdown || { src: [], dev: [], city: [] };
+    return {
+      loading: false, ready: true, canExport: d.level === 2,
+      periods: [7, 30, 90].map((n, i) => ({ name: n + ' dias', sel: d.days === n, locked: i > d.level, pick: () => this.load(n) })),
+      kpis: full ? [{ v: fmt(d.visits), l: 'visitas' }, { v: fmt(d.clicks), l: 'cliques' }, { v: fmt(d.contacts), l: 'contatos' }] : [{ v: fmt(d.visits), l: 'visitas em 7 dias' }],
+      bars: d.series.map((x) => 'height: ' + Math.max(3, x.views / max * 100) + '%' + (x.views ? '' : '; background: #26262F')),
+      firstDay: new Date(d.series[0].day + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      locked: !full, full: full,
+      links: (d.links || []).filter((l) => l.clicks || l.clicksB).slice(0, 10).map((l) => ({ title: l.title, clicks: fmt(l.clicks + l.clicksB), ab: l.titleB ? 'Teste A/B · A: ' + fmt(l.clicks) + ' · B: ' + fmt(l.clicksB) : '' })),
+      noLinks: !(d.links || []).some((l) => l.clicks || l.clicksB),
+      groups: [['De onde vieram', b.src, '#D4FF3A'], ['Aparelho', b.dev, '#7CF5D0'], ['Cidade', b.city, '#B9A6FF']].map((g) => ({ title: g[0], rows: pct(g[1].map((r) => ({ k: r.k, n: r.n, c: g[2] }))), empty: !g[1].length }))
+    };
+  }
+}
+</script>
+</body>
+</html>

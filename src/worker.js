@@ -18,6 +18,13 @@ import * as appearance from '../functions/api/appearance.js';
 import * as billing from '../functions/api/billing.js';
 import * as ordersIndex from '../functions/api/orders/index.js';
 import * as orderOne from '../functions/api/orders/[code].js';
+import * as stats from '../functions/api/stats.js';
+import * as statsCsv from '../functions/api/stats-csv.js';
+import * as contacts from '../functions/api/contacts.js';
+import * as settingsApi from '../functions/api/settings.js';
+import * as account from '../functions/api/account/index.js';
+import * as accountPhone from '../functions/api/account/phone.js';
+import * as referrals from '../functions/api/referrals.js';
 import * as adminOrders from '../functions/api/admin/orders/index.js';
 import * as adminOrderOne from '../functions/api/admin/orders/[code].js';
 import * as profile from '../functions/[handle].js';
@@ -39,6 +46,13 @@ const ROUTES = [
   [/^\/api\/billing$/, billing],
   [/^\/api\/orders$/, ordersIndex],
   [/^\/api\/orders\/(?<code>[A-Za-z0-9]+)$/, orderOne],
+  [/^\/api\/stats$/, stats],
+  [/^\/api\/stats\/csv$/, statsCsv],
+  [/^\/api\/contacts$/, contacts],
+  [/^\/api\/settings$/, settingsApi],
+  [/^\/api\/account$/, account],
+  [/^\/api\/account\/phone$/, accountPhone],
+  [/^\/api\/referrals$/, referrals],
   [/^\/api\/admin\/orders$/, adminOrders],
   [/^\/api\/admin\/orders\/(?<code>[A-Za-z0-9]+)$/, adminOrderOne],
   [/^\/go\/(?<uid>\d+)\/(?<bid>\d+)$/, goBlock],

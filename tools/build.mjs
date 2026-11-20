@@ -9,9 +9,9 @@ const soon = (t) => '/painel/em-breve?t=' + encodeURIComponent(t);
 export const LINKS = {
   'Main.dc.html': '/', 'Entrar.dc.html': '/entrar', 'Teste.dc.html': '/entrar#cadastro',
   'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': soon('Criador de tema'),
-  'Agenda.dc.html': soon('Agendamentos'), 'Stats.dc.html': soon('Estatísticas'), 'Contatos.dc.html': '/painel/contatos',
-  'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': soon('Indique e ganhe'), 'MeuPlano.dc.html': '/painel/plano',
-  'Conta.dc.html': soon('Minha conta'), 'EditarLink.dc.html': '/painel/editar-link', 'Pagamento.dc.html': '/pagamento',
+  'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/contatos',
+  'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': '/painel/indique', 'MeuPlano.dc.html': '/painel/plano',
+  'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel/editar-link', 'Pagamento.dc.html': '/pagamento',
   'ConfirmarPagamento.dc.html': '/pagamento/confirmar', 'CentralAjuda.dc.html': '/ajuda', 'SuporteCliente.dc.html': '/ajuda',
   'Recibo.dc.html': '/painel/recibo', 'Termos.dc.html': '/termos', 'Privacidade.dc.html': '/privacidade',
   'Planos.dc.html': '/#precos', 'PaginaPublica.dc.html': '/', 'PaginaFechada.dc.html': '/'
@@ -24,8 +24,12 @@ const PAGES = {
   'Aparencia.dc.html': ['painel/aparencia.html', true, false, 'aparencia', null],
   'Mais.dc.html': ['painel/mais.html', true, false, 'mais', null],
   'Temas.dc.html': ['painel/temas.html', true, false, 'aparencia', null],
-  'Contatos.dc.html': ['painel/contatos.html', true, true, 'contatos', 'Contatos'],
-  'Configuracoes.dc.html': ['painel/configuracoes.html', true, true, 'mais', 'Configurações'],
+  'Contatos.dc.html': ['painel/contatos.html', true, false, 'contatos', null],
+  'Configuracoes.dc.html': ['painel/configuracoes.html', true, false, 'mais', null],
+  'Stats.dc.html': ['painel/estatisticas.html', true, false, 'stats', null],
+  'Agenda.dc.html': ['painel/agendamentos.html', true, false, 'mais', null],
+  'Indique.dc.html': ['painel/indique.html', true, false, 'mais', null],
+  'Conta.dc.html': ['painel/conta.html', true, false, 'mais', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
   'EditarLink.dc.html': ['painel/editar-link.html', true, true, 'pagina', 'Editar link'],
   'Recibo.dc.html': ['painel/recibo.html', true, false, 'mais', null],
@@ -44,7 +48,7 @@ const ICONS = {
   mais: '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>'
 };
 export const TABS = [
-  ['pagina', 'Página', '/painel'], ['aparencia', 'Aparência', '/painel/aparencia'], ['stats', 'Estatísticas', soon('Estatísticas')],
+  ['pagina', 'Página', '/painel'], ['aparencia', 'Aparência', '/painel/aparencia'], ['stats', 'Estatísticas', '/painel/estatisticas'],
   ['contatos', 'Contatos', '/painel/contatos'], ['mais', 'Mais', '/painel/mais']
 ];
 export function shellNav(active) {

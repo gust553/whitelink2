@@ -75,13 +75,13 @@ class Component extends DCLogic {
       planColor: ['#C9CDD6', '#F2C14E', '#8FE3FF'][lv],
       planLabel: u.trial ? 'Teste Diamante · ' + days + (days === 1 ? ' dia restante' : ' dias restantes') : ['Prata grátis', 'Plano Ouro', 'Plano Diamante'][lv],
       g1: [
-        { t: 'Agendamentos', d: 'Links que aparecem e somem sozinhos', href: '/painel/em-breve?t=Agendamentos', icon: I.cal, icStyle: ic('#7CF5D0') },
+        { t: 'Agendamentos', d: 'Links que aparecem e somem sozinhos', href: '/painel/agendamentos', icon: I.cal, icStyle: ic('#7CF5D0') },
         { t: 'Configurações', d: 'QR code, domínio e SEO', href: 'Configuracoes.dc.html', icon: I.gear, icStyle: ic('#C9C9D6') },
-        { t: 'Indique e ganhe', d: 'Ganhe dias grátis indicando amigos', href: '/painel/em-breve?t=Indique e ganhe', icon: I.gift, icStyle: ic('#FF8A9B') }
+        { t: 'Indique e ganhe', d: 'Ganhe dias grátis indicando amigos', href: '/painel/indique', icon: I.gift, icStyle: ic('#FF8A9B') }
       ],
       g2: [
         { t: 'Meu plano', d: 'Plano, renovação e pagamentos', href: 'MeuPlano.dc.html', icon: I.crown, icStyle: ic('#F2C14E') },
-        { t: 'Minha conta', d: 'E-mail, senha e celular', href: '/painel/em-breve?t=Minha conta', icon: I.user, icStyle: ic('#8FE3FF') }
+        { t: 'Minha conta', d: 'E-mail, senha e celular', href: '/painel/conta', icon: I.user, icStyle: ic('#8FE3FF') }
       ],
       g3: [
         { t: 'Central de ajuda', d: 'Respostas rápidas', href: 'CentralAjuda.dc.html', target: '_self', icon: I.help, icStyle: ic('#D4FF3A') },
