@@ -17,6 +17,7 @@
 .copybox{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;border-radius:14px;background:#0E0E14;border:1px solid #2A2A34}
 .copybox code{flex:1;min-width:0;font:500 13px 'Space Mono',monospace;color:#C9C9D6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .qr{width:220px;height:220px;border-radius:18px;background:#fff;padding:12px;margin:0 auto;display:block}
+.spin{flex:none;width:22px;height:22px;border-radius:50%;border:3px solid #26262F;border-top-color:#D4FF3A;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 .warn{padding:12px 14px;border-radius:14px;background:#2B2210;color:#F7DFA0;font-size:14px;line-height:1.5}
 </style>
 </helmet>
@@ -49,14 +50,19 @@
           <span style="font-size: 14px; color: #9C9CAD">Pague exatamente</span>
           <span class="val">{{o.value}}</span>
           <span style="font-size: 14px; color: #C9C9D6">Plano {{o.planName}} {{o.periodName}} · pedido <b>{{o.code}}</b></span>
-          <span style="font-size: 13px; color: #9C9CAD">Os centavos diferentes mostram que o Pix é seu</span>
+          <sc-if value="{{manual}}" hint-placeholder-val="{{ true }}"><span style="font-size: 13px; color: #9C9CAD">Os centavos diferentes mostram que o Pix é seu</span></sc-if>
         </div>
         <button class="btn full" onClick="{{copyPix}}">{{copyPixLabel}}</button>
         <img class="qr" src="{{qr}}" alt="QR code do Pix">
-        <div class="copybox"><code>{{o.pixKey}}</code><button class="chip" onClick="{{copyKey}}" style="border: none; background: rgba(212,255,58,.14); color: #D4FF3A; cursor: pointer">{{copyKeyLabel}}</button></div>
-        <span style="font-size: 14px; color: #C9C9D6; text-align: center">Recebedor: <b>{{o.pixName}}</b></span>
+        <sc-if value="{{manual}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div class="copybox"><code>{{o.pixKey}}</code><button class="chip" onClick="{{copyKey}}" style="border: none; background: rgba(212,255,58,.14); color: #D4FF3A; cursor: pointer">{{copyKeyLabel}}</button></div>
+            <span style="font-size: 14px; color: #C9C9D6; text-align: center">Recebedor: <b>{{o.pixName}}</b></span>
+          </div>
+        </sc-if>
         <div class="warn">Não use Pix agendado. Este pedido vale até {{expires}}.</div>
-        <a class="btn ghost full" href="{{confirmHref}}">Já paguei, enviar comprovante</a>
+        <sc-if value="{{manual}}" hint-placeholder-val="{{ true }}"><a class="btn ghost full" href="{{confirmHref}}">Já paguei, enviar comprovante</a></sc-if>
+        <sc-if value="{{o.auto}}" hint-placeholder-val="{{ false }}"><div class="card" role="status" style="padding: 16px; display: flex; gap: 12px; align-items: center; font-size: 14.5px; color: #C9C9D6"><span class="spin" aria-hidden="true"></span><span>Assim que o Pix cair, seu plano é liberado sozinho. Pode deixar esta tela aberta.</span></div></sc-if>
         <button onClick="{{restart}}" style="background: none; border: none; color: #9C9CAD; font-size: 14px; cursor: pointer; padding: 8px">Trocar de plano</button>
       </div>
     </sc-if>
@@ -79,6 +85,19 @@ class Component extends DCLogic {
     else if (d.open && d.open.status === 'aguardando') order = d.open;
     if (d.open && d.open.status === 'conferir') { location.href = '/painel/plano'; return; }
     this.setState({ loading: false, d: d, order: order });
+    this.watch();
+  }
+  // Pix automático (gateway): confere sozinho a cada 5 segundos
+  watch() {
+    clearInterval(this.w);
+    const o = this.state.order;
+    if (!o || !o.auto) return;
+    this.w = setInterval(async () => {
+      if (document.hidden) return;
+      const r = await DC.api('orders/' + o.code);
+      if (r.ok && r.order.status === 'liberado') { clearInterval(this.w); location.href = '/painel/plano?ok=1'; }
+      else if (r.ok && r.order.status !== 'aguardando') { clearInterval(this.w); this.setState({ order: null, err: 'Esse Pix venceu. Gere um novo.' }); }
+    }, 5000);
   }
   flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
   async copy(text, msg) { try { await navigator.clipboard.writeText(text); } catch (e) {} this.flash(msg); }
@@ -106,8 +125,9 @@ class Component extends DCLogic {
         if (!r.ok) { this.setState({ err: r.error }); return; }
         history.replaceState(null, '', '/pagamento?c=' + r.order.code);
         this.setState({ order: r.order });
+        this.watch();
       },
-      o: o || {},
+      o: o || {}, manual: !!o && !o.auto,
       qr: o ? 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=0&data=' + encodeURIComponent(o.pix) : '',
       copyPixLabel: 'Copiar Pix copia e cola',
       copyPix: () => this.copy(o.pix, 'Pix copiado! Cole no app do seu banco.'),

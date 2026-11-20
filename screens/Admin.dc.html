@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Admin — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.kp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:700px){.kp{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kp .card{padding:14px;display:flex;flex-direction:column;gap:4px}
+.kp b{font:700 24px 'Space Grotesk',sans-serif}
+.kp span{font-size:12.5px;color:#9C9CAD}
+.chart{display:flex;align-items:flex-end;gap:4px;height:110px;padding:14px 14px 0}
+.chart div{flex:1;border-radius:5px 5px 0 0;background:#D4FF3A}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;scrollbar-width:none}
+.chips button{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.chips button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+.badge{min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#FF5A5F;color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.alert{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#14141B;border:1px solid #22222B;color:#F3F3F7;font-size:15px;cursor:pointer;width:100%;text-align:left;font-family:inherit}
+.alert b{font:700 22px 'Space Grotesk'}
+.proof{width:100%;max-height:420px;object-fit:contain;border-radius:14px;background:#0E0E14;border:1px solid #22222B}
+.ck{display:flex;gap:10px;font-size:14px;line-height:1.4;padding:6px 0}
+.ck i{font-style:normal;flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #1C1C24;font-size:14px}
+.kv span{color:#9C9CAD}.kv b{text-align:right;word-break:break-all;font-weight:600}
+.msg{max-width:85%;padding:9px 13px;border-radius:18px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.msg small{display:block;font-size:11px;opacity:.6;margin-top:3px}
+.me{align-self:flex-end;background:#D4FF3A;color:#0E0E14}
+.them{align-self:flex-start;background:#1B1B24}
+.seg{display:flex;gap:4px;padding:4px;border-radius:999px;background:#14141B;margin-bottom:14px}
+.seg button{flex:1;height:42px;border-radius:999px;border:none;background:transparent;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.seg button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;font-weight:600}
+.btn.red{background:#FF5A5F;color:#fff}.btn.ok{background:#4ADE80;color:#0E0E14}
+select.inp{appearance:none}
+textarea.inp{height:auto;min-height:90px;padding:12px 14px;resize:vertical;font-family:inherit}
+.gate{max-width:400px;margin:60px auto;display:flex;flex-direction:column;gap:14px;text-align:center;align-items:stretch}
+.adm-logo{width:60px;height:60px;border-radius:20px;background:#D4FF3A;color:#0E0E14;display:flex;align-items:center;justify-content:center;font:700 28px 'Space Grotesk';margin:0 auto}
+</style>
+</helmet>
+<div>
+  <sc-if value="{{gate}}" hint-placeholder-val="{{ false }}">
+    <div class="app-main">
+      <div class="gate">
+        <div class="adm-logo">W</div>
+        <h1 style="font: 700 26px 'Space Grotesk'; margin: 4px 0 0">Painel do admin</h1>
+        <sc-if value="{{denied}}" hint-placeholder-val="{{ false }}"><div><p style="color: #C9C9D6">Esta conta não é de administrador.</p><a class="btn full" href="/painel">Ir para o meu painel</a></div></sc-if>
+        <sc-if value="{{needCode}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <p style="color: #C9C9D6; margin: 0; line-height: 1.5">{{gateText}}</p>
+            <sc-if value="{{g.testCode}}" hint-placeholder-val="{{ false }}"><div style="padding: 10px 12px; border-radius: 12px; background: #2B2210; color: #F7DFA0; font-size: 13.5px">Modo de teste: o código é <b>{{g.testCode}}</b></div></sc-if>
+            <sc-if value="{{g.codeId}}" hint-placeholder-val="{{ false }}"><input class="inp" style="text-align: center; font-size: 24px; letter-spacing: .4em" inputmode="numeric" maxlength="6" value="{{g.code}}" onInput="{{setGCode}}" autocomplete="one-time-code" aria-label="Código" placeholder="000000"></sc-if>
+            <sc-if value="{{g.err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="color: #FFB4B4; font-size: 14px">{{g.err}}</div></sc-if>
+            <button class="btn full" onClick="{{gateGo}}" disabled="{{g.busy}}">{{gateBtn}}</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{app}}" hint-placeholder-val="{{ true }}">
+  <div>
+    <nav class="rail" aria-label="Menu do admin"><a class="rail-logo" href="/admin" aria-label="Admin">W</a><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button class="rail-i {{t.on}}" onClick="{{t.go}}" style="background: none; border: none; font-family: inherit; cursor: pointer"><span class="pill" style="position: relative">{{t.icon}}<sc-if value="{{t.n}}" hint-placeholder-val="{{ false }}"><span class="badge" style="position: absolute; top: -6px; right: -10px">{{t.n}}</span></sc-if></span>{{t.name}}</button></sc-for></nav>
+    <nav class="tabbar" aria-label="Menu do admin"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button class="tab {{t.on}}" onClick="{{t.go}}" style="background: none; border: none; font-family: inherit; cursor: pointer"><span class="pill" style="position: relative">{{t.icon}}<sc-if value="{{t.n}}" hint-placeholder-val="{{ false }}"><span class="badge" style="position: absolute; top: -6px; right: -10px">{{t.n}}</span></sc-if></span>{{t.name}}</button></sc-for></nav>
+
+    <div class="appbar"><sc-if value="{{sub}}" hint-placeholder-val="{{ false }}"><button class="icon-btn" onClick="{{back}}" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button></sc-if><h1>{{title}}</h1><span style="font-size: 12px; color: #9C9CAD; padding-right: 8px">Admin</span></div>
+    <div class="app-main">
+      <sc-if value="{{busy}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 20px">Carregando…</div></sc-if>
+
+      <!-- INÍCIO -->
+      <sc-if value="{{home}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{alerts}}" as="a" hint-placeholder-count="2"><button class="alert" onClick="{{a.go}}" style="{{a.style}}"><b>{{a.n}}</b><span style="flex: 1">{{a.t}}</span><span class="chev">›</span></button></sc-for>
+          <div class="kp"><sc-for list="{{money}}" as="k" hint-placeholder-count="4"><div class="card"><b>{{k.v}}</b><span>{{k.l}}</span></div></sc-for></div>
+          <div class="kp"><sc-for list="{{kpis}}" as="k" hint-placeholder-count="4"><div class="card"><b>{{k.v}}</b><span>{{k.l}}</span></div></sc-for></div>
+          <div class="card"><div style="padding: 14px 14px 0; font-size: 14px; color: #C9C9D6">Cadastros nos últimos 14 dias</div><div class="chart"><sc-for list="{{bars}}" as="b" hint-placeholder-count="14"><div style="{{b}}"></div></sc-for></div><div style="height: 12px"></div></div>
+        </div>
+      </sc-if>
+
+      <!-- PAGAMENTOS -->
+      <sc-if value="{{pay}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="chips"><sc-for list="{{payTabs}}" as="t" hint-placeholder-count="4"><button onClick="{{t.go}}" aria-pressed="{{t.sel}}">{{t.name}}</button></sc-for></div>
+          <div style="font-size: 13.5px; color: #9C9CAD; margin: 0 4px 10px">{{payToday}}</div>
+          <div class="list">
+            <sc-for list="{{orders}}" as="o" hint-placeholder-count="3"><button class="row" onClick="{{o.open}}"><span class="row-tx"><b>{{o.name}} · {{o.value}}</b><span>{{o.sub}}</span></span><span class="chip" style="{{o.chip}}">{{o.st}}</span></button></sc-for>
+            <sc-if value="{{noOrders}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nada por aqui.</div></sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- CLIENTES -->
+      <sc-if value="{{cli}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <input class="inp" type="search" placeholder="Buscar por nome, e-mail, @ ou celular" value="{{q}}" onInput="{{setQ}}" aria-label="Buscar cliente" style="margin-bottom: 12px">
+          <div class="chips"><sc-for list="{{cliTabs}}" as="t" hint-placeholder-count="6"><button onClick="{{t.go}}" aria-pressed="{{t.sel}}">{{t.name}}</button></sc-for></div>
+          <div class="list">
+            <sc-for list="{{users}}" as="u" hint-placeholder-count="4"><button class="row" onClick="{{u.open}}"><span class="row-tx"><b>{{u.name}}</b><span>{{u.sub}}</span></span><span class="chip" style="{{u.chip}}">{{u.plan}}</span></button></sc-for>
+            <sc-if value="{{noUsers}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nenhum cliente encontrado.</div></sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- SUPORTE -->
+      <sc-if value="{{sup}}" hint-placeholder-val="{{ false }}">
+        <div class="list">
+          <sc-for list="{{threads}}" as="t" hint-placeholder-count="3"><button class="row" onClick="{{t.open}}"><span class="row-tx"><b>{{t.name}}</b><span>{{t.last}}</span></span><sc-if value="{{t.waiting}}" hint-placeholder-val="{{ false }}"><span class="badge">{{t.waiting}}</span></sc-if></button></sc-for>
+          <sc-if value="{{noThreads}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nenhuma conversa ainda.</div></sc-if>
+        </div>
+      </sc-if>
+
+      <!-- MAIS -->
+      <sc-if value="{{more}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="list"><sc-for list="{{moreRows}}" as="r" hint-placeholder-count="5"><button class="row" onClick="{{r.go}}"><span class="row-tx"><b>{{r.t}}</b><span>{{r.d}}</span></span><span class="chev">›</span></button></sc-for></div>
+          <div class="list" style="margin-top: 14px">
+            <a class="row" href="/painel"><span class="row-tx"><b>Meu painel de cliente</b></span><span class="chev">›</span></a>
+            <a class="row" href="/" target="_blank" rel="noopener"><span class="row-tx"><b>Ver o site</b></span><span class="chev">›</span></a>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- CONFIGURAÇÕES DE PAGAMENTO -->
+      <sc-if value="{{cfgPay}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="sec-t" style="margin-top: 4px">Como receber</div>
+          <div class="seg" role="group" aria-label="Forma de receber"><button onClick="{{modePix}}" aria-pressed="{{isPix}}">Pix direto</button><button onClick="{{modeGw}}" aria-pressed="{{isGw}}">Gateway</button></div>
+          <div class="card" style="padding: 14px 16px; font-size: 14px; color: #C9C9D6; line-height: 1.5; margin-bottom: 6px">{{modeText}}</div>
+          <div class="sec-t">Pix direto</div>
+          <div class="card" style="padding: 16px">
+            <label class="fld">Chave Pix<input class="inp" value="{{s.pix_key}}" onInput="{{set_pix_key}}"></label>
+            <label class="fld">Nome do recebedor<input class="inp" value="{{s.pix_name}}" onInput="{{set_pix_name}}" maxlength="25"></label>
+            <label class="fld">Cidade<input class="inp" value="{{s.pix_city}}" onInput="{{set_pix_city}}" maxlength="15"></label>
+            <label class="fld" style="margin: 0">Horas para pagar o pedido<input class="inp" inputmode="numeric" value="{{s.order_hours}}" onInput="{{set_order_hours}}"></label>
+          </div>
+          <div class="sec-t">Gateway (Mercado Pago)</div>
+          <div class="card" style="padding: 16px">
+            <label class="fld">Access Token de produção<input class="inp" value="{{s.gw_token}}" onInput="{{set_gw_token}}" placeholder="APP_USR-…" autocomplete="off"></label>
+            <p style="font-size: 13px; color: #9C9CAD; line-height: 1.5; margin: 0">Onde pegar: no Mercado Pago, entre em Seu negócio › Configurações › Credenciais › Credenciais de produção e copie o Access Token. Com o gateway ligado, o Pix é confirmado sozinho e o plano libera na hora.</p>
+          </div>
+          <div class="sec-t">Contato</div>
+          <div class="card" style="padding: 16px"><label class="fld" style="margin: 0">WhatsApp de suporte<input class="inp" inputmode="tel" value="{{s.whatsapp}}" onInput="{{set_whatsapp}}"></label></div>
+        </div>
+      </sc-if>
+
+      <!-- PLANOS E PREÇOS -->
+      <sc-if value="{{cfgPrice}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="sec-t" style="margin-top: 4px">Preços (R$)</div>
+          <div class="card" style="padding: 16px">
+            <div class="grid2"><label class="fld">Ouro mensal<input class="inp" inputmode="decimal" value="{{p.ouro_m}}" onInput="{{set_ouro_m}}"></label><label class="fld">Ouro anual<input class="inp" inputmode="decimal" value="{{p.ouro_y}}" onInput="{{set_ouro_y}}"></label></div>
+            <div class="grid2"><label class="fld" style="margin: 0">Diamante mensal<input class="inp" inputmode="decimal" value="{{p.diamante_m}}" onInput="{{set_diamante_m}}"></label><label class="fld" style="margin: 0">Diamante anual<input class="inp" inputmode="decimal" value="{{p.diamante_y}}" onInput="{{set_diamante_y}}"></label></div>
+          </div>
+          <div class="sec-t">Fidelidade</div>
+          <div class="card" style="padding: 16px"><div class="grid2"><label class="fld" style="margin: 0">A cada quantas renovações<input class="inp" inputmode="numeric" value="{{s.loyalty_every}}" onInput="{{set_loyalty_every}}"></label><label class="fld" style="margin: 0">Dias grátis<input class="inp" inputmode="numeric" value="{{s.loyalty_days}}" onInput="{{set_loyalty_days}}"></label></div></div>
+          <div class="sec-t">O que cada plano tem</div>
+          <div class="list"><sc-for list="{{planInfo}}" as="r" hint-placeholder-count="3"><div class="row" style="cursor: default"><span class="row-tx"><b>{{r.t}}</b><span>{{r.d}}</span></span></div></sc-for></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{cfgAny}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <sc-if value="{{cfgErr}}" hint-placeholder-val="{{ false }}"><div role="alert" style="margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: #3A1518; color: #FFB4B4; font-size: 14px">{{cfgErr}}</div></sc-if>
+          <button class="btn full" onClick="{{saveCfg}}" style="margin-top: 16px">{{saveLabel}}</button>
+        </div>
+      </sc-if>
+
+      <!-- INDICAÇÕES -->
+      <sc-if value="{{refs}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="kp" style="margin-top: 4px"><sc-for list="{{refKpis}}" as="k" hint-placeholder-count="2"><div class="card"><b>{{k.v}}</b><span>{{k.l}}</span></div></sc-for></div>
+          <div class="sec-t">Quem mais indica</div>
+          <div class="list"><sc-for list="{{refTop}}" as="r" hint-placeholder-count="3"><div class="row" style="cursor: default"><span class="row-tx"><b>{{r.name}}</b><span>{{r.sub}}</span></span></div></sc-for><sc-if value="{{noTop}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Ninguém ainda.</div></sc-if></div>
+          <div class="sec-t">Prêmios</div>
+          <div class="list"><sc-for list="{{rewards}}" as="r" hint-placeholder-count="3"><div class="row" style="cursor: default"><span class="row-tx"><b>{{r.t}}</b><span>{{r.sub}}</span></span><sc-if value="{{r.can}}" hint-placeholder-val="{{ false }}"><button class="btn ghost" onClick="{{r.cancel}}" style="height: 36px; padding: 0 12px; font-size: 13px">Cancelar</button></sc-if><sc-if value="{{r.st}}" hint-placeholder-val="{{ true }}"><span class="chip">{{r.st}}</span></sc-if></div></sc-for><sc-if value="{{noRewards}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nenhum prêmio ainda.</div></sc-if></div>
+        </div>
+      </sc-if>
+
+      <!-- ANTIFRAUDE -->
+      <sc-if value="{{fraud}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="kp" style="margin-top: 4px"><sc-for list="{{fraudKpis}}" as="k" hint-placeholder-count="3"><div class="card"><b>{{k.v}}</b><span>{{k.l}}</span></div></sc-for></div>
+          <sc-for list="{{fraudGroups}}" as="g" hint-placeholder-count="3">
+            <div>
+              <div class="sec-t">{{g.t}}</div>
+              <div class="list"><sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2"><button class="row" onClick="{{r.go}}"><span class="row-tx"><b>{{r.t}}</b><span>{{r.d}}</span></span></button></sc-for><sc-if value="{{g.empty}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">{{g.empty}}</div></sc-if></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- FOLHA: PEDIDO -->
+    <sc-if value="{{os}}" hint-placeholder-val="{{ false }}">
+      <div class="scrim" onClick="{{closeSheet}}"><div class="sheet" onClick="{{stop}}">
+        <div class="grab"></div>
+        <h2>{{od.title}}</h2>
+        <sc-if value="{{od.proof}}" hint-placeholder-val="{{ false }}"><a href="{{od.proof}}" target="_blank" rel="noopener"><img class="proof" src="{{od.proof}}" alt="Comprovante"></a></sc-if>
+        <sc-if value="{{od.noProof}}" hint-placeholder-val="{{ false }}"><div style="padding: 14px; border-radius: 14px; background: #1B1B24; color: #9C9CAD; font-size: 14px; text-align: center">{{od.noProof}}</div></sc-if>
+        <div style="margin: 12px 0"><sc-for list="{{od.checks}}" as="c" hint-placeholder-count="3"><div class="ck"><i style="{{c.st}}">{{c.ic}}</i><span>{{c.t}}</span></div></sc-for></div>
+        <sc-for list="{{od.kv}}" as="k" hint-placeholder-count="5"><div class="kv"><span>{{k.k}}</span><b>{{k.v}}</b></div></sc-for>
+        <sc-if value="{{od.canAct}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px">
+            <label class="fld" style="margin: 0">Motivo (se recusar ou bloquear)<input class="inp" value="{{od.note}}" onInput="{{od.setNote}}" placeholder="Ex.: Não encontrei esse Pix no extrato"></label>
+            <button class="btn ok full" onClick="{{od.approve}}">Liberar plano</button>
+            <button class="btn ghost full" onClick="{{od.reject}}">Recusar</button>
+            <button class="btn red full" onClick="{{od.block}}">Bloquear cliente (fraude)</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{od.msg}}" hint-placeholder-val="{{ false }}"><div role="status" style="margin-top: 12px; color: #D4FF3A; font-size: 14px">{{od.msg}}</div></sc-if>
+      </div></div>
+    </sc-if>
+
+    <!-- FOLHA: CLIENTE -->
+    <sc-if value="{{us}}" hint-placeholder-val="{{ false }}">
+      <div class="scrim" onClick="{{closeSheet}}"><div class="sheet" onClick="{{stop}}">
+        <div class="grab"></div>
+        <h2>{{ud.name}}</h2>
+        <sc-for list="{{ud.kv}}" as="k" hint-placeholder-count="6"><div class="kv"><span>{{k.k}}</span><b>{{k.v}}</b></div></sc-for>
+        <div class="sec-t">Mudar plano</div>
+        <div class="grid2">
+          <label class="fld"><span>Plano</span><select class="inp" onChange="{{ud.setPlan}}" aria-label="Plano"><sc-for list="{{ud.planOpts}}" as="p" hint-placeholder-count="3"><option value="{{p.v}}" selected="{{p.sel}}">{{p.n}}</option></sc-for></select></label>
+          <label class="fld"><span>Dias</span><input class="inp" inputmode="numeric" value="{{ud.days}}" onInput="{{ud.setDays}}"></label>
+        </div>
+        <button class="btn full" onClick="{{ud.applyPlan}}">Aplicar plano</button>
+        <div class="grid2" style="margin-top: 10px">
+          <button class="btn ghost" onClick="{{ud.add7}}">+7 dias</button>
+          <button class="btn ghost" onClick="{{ud.endTrial}}" disabled="{{ud.noTrial}}">Encerrar teste</button>
+        </div>
+        <sc-if value="{{ud.blocked}}" hint-placeholder-val="{{ false }}"><button class="btn ok full" onClick="{{ud.unblock}}" style="margin-top: 10px">Desbloquear</button></sc-if>
+        <sc-if value="{{ud.canBlock}}" hint-placeholder-val="{{ true }}"><button class="btn red full" onClick="{{ud.block}}" style="margin-top: 10px">Bloquear cliente</button></sc-if>
+        <sc-if value="{{ud.msg}}" hint-placeholder-val="{{ false }}"><div role="status" style="margin-top: 12px; color: #D4FF3A; font-size: 14px">{{ud.msg}}</div></sc-if>
+        <div class="grid2" style="margin-top: 10px">
+          <a class="btn ghost" href="{{ud.page}}" target="_blank" rel="noopener">Ver página</a>
+          <a class="btn ghost" href="{{ud.wa}}" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+        <button class="btn ghost full" onClick="{{ud.chat}}" style="margin-top: 10px">Abrir conversa de suporte</button>
+        <div class="sec-t">Pagamentos</div>
+        <sc-for list="{{ud.orders}}" as="o" hint-placeholder-count="2"><div class="kv"><span>{{o.k}}</span><b>{{o.v}}</b></div></sc-for>
+        <sc-if value="{{ud.noOrders}}" hint-placeholder-val="{{ false }}"><p style="color: #9C9CAD; font-size: 14px">Nenhum pagamento.</p></sc-if>
+      </div></div>
+    </sc-if>
+
+    <!-- FOLHA: CONVERSA -->
+    <sc-if value="{{cs}}" hint-placeholder-val="{{ false }}">
+      <div class="scrim" onClick="{{closeSheet}}"><div class="sheet" onClick="{{stop}}" style="display: flex; flex-direction: column">
+        <div class="grab"></div>
+        <h2>{{cd.title}}</h2>
+        <div style="font-size: 13px; color: #9C9CAD; margin: -6px 0 12px">{{cd.sub}}</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px"><sc-for list="{{cd.msgs}}" as="m" hint-placeholder-count="3"><div class="msg {{m.cls}}">{{m.text}}<small>{{m.at}}</small></div></sc-for></div>
+        <textarea class="inp" placeholder="Escreva a resposta…" value="{{cd.text}}" onInput="{{cd.setText}}" aria-label="Resposta"></textarea>
+        <button class="btn full" onClick="{{cd.send}}" disabled="{{cd.cant}}" style="margin-top: 10px">Responder</button>
+      </div></div>
+    </sc-if>
+
+    <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toast}}</div></sc-if>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const h = (location.hash || '').slice(1);
+    this.state = { phase: 'check', g: {}, sec: ['inicio', 'pagamentos', 'clientes', 'suporte', 'mais'].includes(h) ? h : 'inicio', sub: '', d: {}, payS: 'conferir', q: '', f: 'todos', sheet: null, cfg: null, cfgErr: '', saved: false, toast: '' };
+  }
+  async componentDidMount() {
+    const v = await DC.api('admin/verify');
+    if (v.status === 401) { location.href = '/entrar'; return; }
+    if (!v.ok) { this.setState({ phase: 'denied' }); return; }
+    if (!v.verified) { this.setState({ phase: 'code', g: { phoneEnd: v.phoneEnd } }); return; }
+    this.start();
+  }
+  start() { this.setState({ phase: 'app' }); this.go(this.state.sec); this.loadBadges(); }
+  async loadBadges() { const o = await DC.api('admin/overview'); if (o.ok) this.setState({ badges: o.alerts, ov: o }); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 2000); }
+  async go(sec, sub) {
+    history.replaceState(null, '', '#' + sec);
+    this.setState({ sec: sec, sub: sub || '', loading: true, sheet: null, cfgErr: '', saved: false });
+    window.scrollTo(0, 0);
+    const s = this.state;
+    let d = {};
+    if (sub === 'pagto' || sub === 'precos') { const r = await DC.api('admin/settings'); this.setState({ cfg: r.ok ? r.settings : null }); }
+    else if (sub === 'indicacoes') d = await DC.api('admin/referrals');
+    else if (sub === 'antifraude') d = await DC.api('admin/fraud');
+    else if (sec === 'inicio') { d = await DC.api('admin/overview'); if (d.ok) this.setState({ badges: d.alerts, ov: d }); }
+    else if (sec === 'pagamentos') d = await DC.api('admin/orders?s=' + s.payS);
+    else if (sec === 'clientes') d = await DC.api('admin/users?f=' + s.f + '&q=' + encodeURIComponent(s.q));
+    else if (sec === 'suporte') d = await DC.api('admin/support');
+    if (d && d.need2fa) { this.setState({ phase: 'code', g: {} }); return; }
+    this.setState({ d: d || {}, loading: false });
+  }
+  reload() { this.go(this.state.sec, this.state.sub); this.loadBadges(); }
+  async openOrder(code) {
+    const r = await DC.api('admin/orders/' + code);
+    if (r.ok) this.setState({ sheet: { kind: 'order', r: r, note: '', msg: '' } });
+  }
+  async orderAct(action) {
+    const sh = this.state.sheet;
+    const txt = { approve: 'Liberar o plano deste cliente?', reject: 'Recusar este pagamento?', block: 'Bloquear o cliente e o pagamento? Use só em caso de fraude.' }[action];
+    if (!confirm(txt)) return;
+    const r = await DC.api('admin/orders/' + sh.r.order.code, 'POST', { action: action, note: sh.note });
+    if (!r.ok) { this.setState({ sheet: Object.assign({}, sh, { msg: r.error }) }); return; }
+    this.flash({ approve: 'Plano liberado ✓', reject: 'Pagamento recusado', block: 'Cliente bloqueado' }[action]);
+    this.setState({ sheet: null }); this.reload();
+  }
+  async openUser(id) {
+    const r = await DC.api('admin/users/' + id);
+    if (r.ok) this.setState({ sheet: { kind: 'user', r: r, plan: r.user.plan === 'prata' ? 'ouro' : r.user.plan, days: 30, msg: '' } });
+  }
+  async userAct(body, ask) {
+    const sh = this.state.sheet;
+    if (ask && !confirm(ask)) return;
+    const r = await DC.api('admin/users/' + sh.r.user.id, 'POST', body);
+    if (!r.ok) { this.setState({ sheet: Object.assign({}, sh, { msg: r.error }) }); return; }
+    const fresh = await DC.api('admin/users/' + sh.r.user.id);
+    this.setState({ sheet: Object.assign({}, sh, { r: fresh, msg: 'Feito ✓' }) });
+    if (this.state.sec === 'clientes') { const d = await DC.api('admin/users?f=' + this.state.f + '&q=' + encodeURIComponent(this.state.q)); this.setState({ d: d }); }
+  }
+  async openChat(id) {
+    const r = await DC.api('admin/support/' + id);
+    if (r.ok) this.setState({ sheet: { kind: 'chat', r: r, text: '' } });
+  }
+  async sendChat() {
+    const sh = this.state.sheet;
+    const r = await DC.api('admin/support/' + sh.r.user.id, 'POST', { text: sh.text });
+    if (!r.ok) { this.flash(r.error); return; }
+    const fresh = await DC.api('admin/support/' + sh.r.user.id);
+    this.setState({ sheet: Object.assign({}, sh, { r: fresh, text: '' }) });
+    if (this.state.sec === 'suporte') { const d = await DC.api('admin/support'); this.setState({ d: d }); }
+    this.loadBadges();
+  }
+  async saveCfg() {
+    const c = this.state.cfg;
+    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'loyalty_every', 'loyalty_days'];
+    const body = {};
+    for (const k of keys) body[k] = k.startsWith('price_') ? (c['_' + k] !== undefined ? c['_' + k] : (c[k] / 100).toFixed(2).replace('.', ',')) : c[k];
+    const r = await DC.api('admin/settings', 'PUT', body);
+    if (!r.ok) { this.setState({ cfgErr: r.error, saved: false }); return; }
+    const fresh = await DC.api('admin/settings');
+    this.setState({ cfg: fresh.settings, cfgErr: '', saved: true });
+    this.flash('Salvo ✓');
+  }
+  setCfg(k, v) { this.setState({ cfg: Object.assign({}, this.state.cfg, { [k]: v }), saved: false }); }
+  async gateGo() {
+    const g = this.state.g;
+    this.setState({ g: Object.assign({}, g, { busy: true, err: '' }) });
+    if (!g.codeId) {
+      const r = await DC.api('admin/verify', 'POST', {});
+      this.setState({ g: r.ok ? Object.assign({}, g, { codeId: r.codeId, phoneEnd: r.phoneEnd, testCode: r.testCode || '', busy: false }) : Object.assign({}, g, { err: r.error, busy: false }) });
+      return;
+    }
+    const r = await DC.api('admin/verify', 'POST', { codeId: g.codeId, code: g.code });
+    if (!r.ok) { this.setState({ g: Object.assign({}, g, { err: r.error, busy: false }) }); return; }
+    this.start();
+  }
+  renderVals() {
+    const s = this.state, d = s.d || {};
+    const IC = {
+      inicio: '<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/>',
+      pagamentos: '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M7 15h4"/>',
+      clientes: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/>',
+      suporte: '<path d="M4 20l1.4-4A8 8 0 1 1 8 18.6z"/>',
+      mais: '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>'
+    };
+    if (s.phase !== 'app') {
+      const g = s.g || {};
+      return {
+        gate: s.phase !== 'check', app: false, denied: s.phase === 'denied', needCode: s.phase === 'code', g: g,
+        gateText: g.codeId ? 'Digite o código que mandamos por SMS para o celular final ' + g.phoneEnd + '.' : 'Por segurança, o painel do admin pede um código por SMS a cada 12 horas.',
+        gateBtn: g.busy ? 'Aguarde…' : g.codeId ? 'Entrar no painel' : 'Mandar código por SMS',
+        setGCode: (e) => this.setState({ g: Object.assign({}, s.g, { code: e.target.value }) }), gateGo: () => this.gateGo()
+      };
+    }
+    const b = s.badges || {};
+    const fmtD = (t) => t ? new Date(t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
+    const fmtDay = (t) => t ? new Date(t).toLocaleDateString('pt-BR') : '—';
+    const PN = { prata: 'Prata', ouro: 'Ouro', diamante: 'Diamante' };
+    const PC = { prata: 'background: #26262F; color: #C9C9D6', ouro: 'background: rgba(242,193,78,.16); color: #F2C14E', diamante: 'background: rgba(143,227,255,.14); color: #8FE3FF' };
+    const SUBT = { pagto: 'Formas de pagamento', precos: 'Planos e preços', indicacoes: 'Indicações', antifraude: 'Antifraude' };
+    const sec = s.sec, sub = s.sub, ready = !s.loading;
+    const v = {
+      gate: false, app: true, toast: s.toast, busy: s.loading, sub: !!sub, back: () => this.go(sec),
+      title: sub ? SUBT[sub] : { inicio: 'Início', pagamentos: 'Pagamentos', clientes: 'Clientes', suporte: 'Suporte', mais: 'Mais' }[sec],
+      tabs: [['inicio', 'Início', 0], ['pagamentos', 'Pagamentos', b.toCheck], ['clientes', 'Clientes', 0], ['suporte', 'Suporte', b.unread], ['mais', 'Mais', 0]].map((t) => ({
+        name: t[1], n: t[2] || '', on: sec === t[0] ? 'on' : '', go: () => this.go(t[0]),
+        icon: DC.html('<svg viewBox="0 0 24 24" aria-hidden="true">' + IC[t[0]] + '</svg>')
+      })),
+      home: ready && sec === 'inicio' && !sub && !!d.kpis, pay: ready && sec === 'pagamentos', cli: ready && sec === 'clientes', sup: ready && sec === 'suporte', more: ready && sec === 'mais' && !sub,
+      cfgPay: ready && sub === 'pagto' && !!s.cfg, cfgPrice: ready && sub === 'precos' && !!s.cfg, cfgAny: ready && (sub === 'pagto' || sub === 'precos') && !!s.cfg,
+      refs: ready && sub === 'indicacoes' && !!d.ok, fraud: ready && sub === 'antifraude' && !!d.ok,
+      closeSheet: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation(),
+      os: false, us: false, cs: false
+    };
+    if (v.home) {
+      const a = d.alerts;
+      v.alerts = [[a.toCheck, 'pagamentos para conferir', () => this.go('pagamentos'), '#F2C14E'], [a.unread, 'conversas esperando resposta', () => this.go('suporte'), '#B9A6FF'], [a.expiring, 'planos vencendo em 3 dias', () => { this.setState({ f: 'todos' }); this.go('clientes'); }, '#8FE3FF'], [a.blockedTrials, 'testes negados pelo antifraude (7 dias)', () => this.go('mais', 'antifraude'), '#FF8A9B']]
+        .filter((x) => x[0]).map((x) => ({ n: x[0], t: x[1], go: x[2], style: 'border-color: ' + x[3] + '55' }));
+      v.money = [{ v: d.money.mrr, l: 'receita por mês (MRR)' }, { v: d.money.rev30, l: d.money.rev30n + ' pagamentos em 30 dias' }, { v: d.money.today, l: d.money.todayN + ' pagamentos hoje' }, { v: d.kpis.conv + '%', l: 'clientes que pagam' }];
+      v.kpis = [{ v: d.kpis.users, l: 'clientes (' + d.kpis.newToday + ' hoje)' }, { v: d.kpis.trials, l: 'no teste grátis' }, { v: d.kpis.ouro, l: 'no Ouro' }, { v: d.kpis.diamante, l: 'no Diamante' }];
+      const mx = Math.max(1, ...d.series);
+      v.bars = d.series.map((n) => 'height: ' + Math.max(4, n / mx * 100) + '%' + (n ? '' : '; background: #26262F'));
+    }
+    if (v.pay) {
+      const c = d.counts || {};
+      v.payTabs = [['conferir', 'Conferir'], ['aguardando', 'Aguardando Pix'], ['liberado', 'Liberados'], ['recusado', 'Recusados']].map((t) => ({ name: t[1] + (t[0] === 'conferir' || t[0] === 'aguardando' ? ' · ' + (c[t[0]] || 0) : ''), sel: s.payS === t[0], go: () => { this.setState({ payS: t[0] }); setTimeout(() => this.go('pagamentos'), 0); } }));
+      v.payToday = d.today ? 'Hoje: ' + (d.today.n || 0) + ' liberados · R$ ' + ((d.today.cents || 0) / 100).toFixed(2).replace('.', ',') : '';
+      const ST = { conferir: ['Conferir', 'rgba(242,193,78,.16)', '#F2C14E'], aguardando: ['Aguardando', '#1B1B24', '#9C9CAD'], liberado: ['Liberado', 'rgba(74,222,128,.14)', '#4ADE80'], recusado: ['Recusado', 'rgba(255,90,95,.14)', '#FF8A8E'], bloqueado: ['Bloqueado', 'rgba(255,90,95,.14)', '#FF8A8E'], vencido: ['Vencido', '#1B1B24', '#9C9CAD'], cancelado: ['Cancelado', '#1B1B24', '#9C9CAD'] };
+      v.orders = (d.orders || []).map((o) => { const st = ST[o.status] || ST.aguardando; return { name: o.user.name, value: o.value, sub: o.planName + ' ' + o.periodName + ' · ' + o.code + ' · ' + (o.method === 'gateway' ? 'gateway · ' : '') + fmtD(o.sentAt || o.createdAt), st: st[0], chip: 'background: ' + st[1] + '; color: ' + st[2], open: () => this.openOrder(o.code) }; });
+      v.noOrders = !v.orders.length;
+    }
+    if (v.cli) {
+      v.q = s.q;
+      v.setQ = (e) => { this.setState({ q: e.target.value }); clearTimeout(this.qt); this.qt = setTimeout(() => this.go('clientes'), 350); };
+      v.cliTabs = [['todos', 'Todos'], ['teste', 'Em teste'], ['ouro', 'Ouro'], ['diamante', 'Diamante'], ['prata', 'Prata'], ['bloqueado', 'Bloqueados']].map((t) => ({ name: t[1], sel: s.f === t[0], go: () => { this.setState({ f: t[0] }); setTimeout(() => this.go('clientes'), 0); } }));
+      v.users = (d.users || []).map((u) => ({ name: u.name + (u.admin ? ' · admin' : ''), sub: '@' + u.handle + ' · ' + u.email + (u.status === 'bloqueado' ? ' · BLOQUEADO' : ''), plan: u.trial ? 'Teste' : PN[u.plan], chip: u.status === 'bloqueado' ? 'background: rgba(255,90,95,.14); color: #FF8A8E' : u.trial ? 'background: rgba(185,166,255,.16); color: #C8BCFF' : PC[u.plan], open: () => this.openUser(u.id) }));
+      v.noUsers = !v.users.length;
+    }
+    if (v.sup) {
+      v.threads = (d.threads || []).map((t) => ({ name: t.name + ' · ' + PN[t.plan], last: (t.fromAdmin ? 'Você: ' : '') + t.last, waiting: t.waiting || '', open: () => this.openChat(t.id) }));
+      v.noThreads = !v.threads.length;
+    }
+    if (v.more) {
+      v.moreRows = [['pagto', 'Formas de pagamento', 'Pix direto ou gateway, chave Pix, WhatsApp'], ['precos', 'Planos e preços', 'Valores, fidelidade'], ['indicacoes', 'Indicações', 'Quem indica e prêmios'], ['antifraude', 'Antifraude', 'Testes negados e bloqueios']]
+        .map((r) => ({ t: r[1], d: r[2], go: () => this.go('mais', r[0]) }));
+    }
+    if (v.cfgAny) {
+      const c = s.cfg;
+      v.s = c; v.cfgErr = s.cfgErr; v.saveLabel = s.saved ? 'Salvo ✓' : 'Salvar'; v.saveCfg = () => this.saveCfg();
+      for (const k of ['pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp', 'loyalty_every', 'loyalty_days']) v['set_' + k] = (e) => this.setCfg(k, e.target.value);
+      v.isPix = c.pay_mode !== 'gateway'; v.isGw = c.pay_mode === 'gateway';
+      v.modePix = () => this.setCfg('pay_mode', 'pix'); v.modeGw = () => this.setCfg('pay_mode', 'gateway');
+      v.modeText = c.pay_mode === 'gateway' ? 'Gateway ligado: o cliente paga o Pix gerado pelo Mercado Pago e o plano libera sozinho, sem comprovante.' : 'Pix direto: o cliente paga na sua chave Pix, envia o comprovante e você libera em Pagamentos.';
+      v.p = {};
+      for (const k of ['ouro_m', 'ouro_y', 'diamante_m', 'diamante_y']) {
+        v.p[k] = c['_price_' + k] !== undefined ? c['_price_' + k] : (c['price_' + k] / 100).toFixed(2).replace('.', ',');
+        v['set_' + k] = ((kk) => (e) => this.setCfg('_price_' + kk, e.target.value))(k);
+      }
+      v.planInfo = [['Prata (grátis)', '3 links, blocos de link e texto, 2 temas, visitas de 7 dias, marca WhiteLink'], ['Ouro', '10 links, todos os blocos, 13 temas, estatísticas de 30 dias, agendamento, efeitos, chat'], ['Diamante', 'Links ilimitados, 77 temas, teste A/B, 90 dias e exportar, domínio próprio, selo, Pixel e Analytics']].map((r) => ({ t: r[0], d: r[1] }));
+    }
+    if (v.refs) {
+      v.refKpis = [{ v: d.signups, l: 'cadastros por indicação' }, { v: (d.rewards || []).filter((r) => r.status === 'aguardando').length, l: 'prêmios aguardando' }];
+      v.refTop = (d.top || []).map((r) => ({ name: r.name + ' (@' + r.handle + ')', sub: r.friends + ' amigos pagantes · ' + (r.days || 0) + ' dias ganhos' }));
+      v.noTop = !v.refTop.length;
+      v.rewards = (d.rewards || []).map((r) => ({ t: r.rname + ' ← ' + r.fname, sub: r.days + ' dias · pedido ' + (r.code || '—') + ' · libera ' + fmtDay(r.release_at), can: r.status === 'aguardando', st: r.status === 'aguardando' ? '' : r.status, cancel: async () => { if (!confirm('Cancelar este prêmio?')) return; const x = await DC.api('admin/referrals', 'POST', { id: r.id }); this.flash(x.ok ? 'Prêmio cancelado' : x.error); this.reload(); } }));
+      v.noRewards = !v.rewards.length;
+    }
+    if (v.fraud) {
+      v.fraudKpis = [{ v: d.trialsGiven, l: 'testes grátis dados' }, { v: d.denied.length, l: 'testes negados' }, { v: d.blocked.length, l: 'clientes bloqueados' }];
+      v.fraudGroups = [
+        { t: 'Testes negados (repetiram dados)', rows: d.denied.map((x) => ({ t: (x.name || 'Conta apagada') + (x.handle ? ' (@' + x.handle + ')' : ''), d: x.why + ' · ' + fmtD(x.at), go: () => x.uid && this.openUser(x.uid) })), empty: d.denied.length ? '' : 'Nenhum.' },
+        { t: 'Mesmo endereço de internet em 3+ contas (7 dias)', rows: d.sameIp.map((x) => ({ t: x.ip, d: x.n + ' contas', go: () => {} })), empty: d.sameIp.length ? '' : 'Nenhum.' },
+        { t: 'Pagamentos bloqueados', rows: d.badOrders.map((x) => ({ t: x.name + ' · ' + x.code, d: (x.note || '') + ' · ' + fmtD(x.created_at), go: () => this.openOrder(x.code) })), empty: d.badOrders.length ? '' : 'Nenhum.' },
+        { t: 'Clientes bloqueados', rows: d.blocked.map((x) => ({ t: x.name + ' (@' + x.handle + ')', d: x.email, go: () => this.openUser(x.id) })), empty: d.blocked.length ? '' : 'Nenhum.' }
+      ];
+    }
+    const sh = s.sheet;
+    if (sh && sh.kind === 'order') {
+      const o = sh.r.order, u = sh.r.user;
+      v.os = true;
+      v.od = {
+        title: o.value + ' · ' + o.planName + ' ' + o.periodName,
+        proof: o.proof, noProof: o.proof ? '' : (o.method === 'gateway' ? 'Pago pelo gateway (confirmação automática)' : 'Sem comprovante ainda'),
+        checks: sh.r.checks.map((c) => ({ t: c.t, ic: c.ok ? '✓' : '!', st: c.ok ? 'background: rgba(74,222,128,.16); color: #4ADE80' : 'background: rgba(255,90,95,.16); color: #FF8A8E' })),
+        kv: [['Cliente', u.name], ['E-mail', u.email], ['Página', '@' + u.handle], ['Pedido', o.code], ['Quem pagou', o.payer || '—'], ['Banco', o.bank || '—'], ['ID da transação', o.e2e || '—'], ['Criado', fmtD(o.createdAt)], ['Comprovante', fmtD(o.sentAt)], ['Situação', o.status + (o.note ? ' · ' + o.note : '')]].map((x) => ({ k: x[0], v: x[1] })),
+        canAct: ['conferir', 'aguardando', 'recusado'].includes(o.status),
+        note: sh.note, setNote: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { note: e.target.value }) }),
+        approve: () => this.orderAct('approve'), reject: () => this.orderAct('reject'), block: () => this.orderAct('block'), msg: sh.msg
+      };
+    }
+    if (sh && sh.kind === 'user' && sh.r && sh.r.user) {
+      const u = sh.r.user;
+      v.us = true;
+      const planTxt = u.trial ? 'Teste Diamante até ' + fmtD(u.until) : u.plan === 'prata' ? 'Prata (grátis)' : PN[u.plan] + ' até ' + fmtDay(u.until);
+      v.ud = {
+        name: u.name,
+        kv: [['Plano', planTxt], ['E-mail', u.email], ['Celular', u.phone], ['Instagram', '@' + u.instagram], ['Página', 'whitelink.site/' + u.handle], ['Visitas', String(u.visits)], ['Cadastro', fmtD(u.createdAt)], ['Indicou', u.referrals + ' amigos'], ['Indicado por', u.referredBy || '—'], ['Situação', u.status]].map((x) => ({ k: x[0], v: x[1] })),
+        planOpts: [['ouro', 'Ouro'], ['diamante', 'Diamante'], ['prata', 'Prata']].map((p) => ({ v: p[0], n: p[1], sel: sh.plan === p[0] })),
+        setPlan: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { plan: e.target.value }) }),
+        days: sh.days, setDays: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { days: e.target.value }) }),
+        applyPlan: () => this.userAct({ action: 'plan', plan: sh.plan, days: sh.days }, sh.plan === 'prata' ? 'Passar para o Prata agora?' : 'Dar ' + PN[sh.plan] + ' por ' + sh.days + ' dias a partir de hoje?'),
+        add7: () => this.userAct({ action: 'addDays', days: 7 }), endTrial: () => this.userAct({ action: 'endTrial' }, 'Encerrar o teste grátis agora?'), noTrial: !u.trial,
+        blocked: u.status === 'bloqueado', canBlock: u.status !== 'bloqueado' && !u.admin,
+        block: () => this.userAct({ action: 'block' }, 'Bloquear este cliente? Ele sai de todos os aparelhos e a página sai do ar.'), unblock: () => this.userAct({ action: 'unblock' }),
+        page: '/' + u.handle, wa: 'https://wa.me/' + (String(u.phone).length <= 11 ? '55' : '') + u.phone,
+        chat: () => this.openChat(u.id), msg: sh.msg,
+        orders: sh.r.orders.map((o) => ({ k: fmtDay(o.createdAt) + ' · ' + o.planName + ' ' + o.periodName, v: o.value + ' · ' + o.status })), noOrders: !sh.r.orders.length
+      };
+    }
+    if (sh && sh.kind === 'chat') {
+      const u = sh.r.user;
+      v.cs = true;
+      v.cd = {
+        title: u.name, sub: PN[u.plan] + ' · @' + u.handle + ' · ' + u.email,
+        msgs: sh.r.msgs.map((m) => ({ cls: m.from_admin ? 'me' : 'them', text: m.text, at: fmtD(m.created_at) })),
+        text: sh.text, setText: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { text: e.target.value }) }),
+        cant: !String(sh.text || '').trim(), send: () => this.sendChat()
+      };
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

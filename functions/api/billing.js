@@ -18,9 +18,9 @@ export async function onRequestGet({ request, env }) {
   for (const p of ['ouro', 'diamante']) for (const per of ['m', 'y']) prices[p + '_' + per] = { cents: priceOf(s, p, per), label: brl(priceOf(s, p, per)) };
   return json({
     ok: true, user: publicUser(u), prices,
-    open: open ? orderView(open, s) : null,
+    open: open ? orderView(open, s, open.method === 'gateway' ? ((await env.DB.prepare('SELECT pix FROM order_gw WHERE order_id = ?').bind(open.id).first()) || {}).pix : '') : null,
     history: (hist.results || []).map((o) => orderView(o, s)),
-    loyalty: { every: +s.loyalty_every, days: +s.loyalty_days, count: paid % (+s.loyalty_every || 3) },
+    loyalty: { every: +s.loyalty_every, days: +s.loyalty_days, count: Math.max(0, paid - 1) % (+s.loyalty_every || 3) },
     whatsapp: s.whatsapp, payMode: s.pay_mode
   });
 }

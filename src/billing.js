@@ -9,7 +9,8 @@ export const DEFAULTS = {
   order_hours: '24',
   pay_mode: 'pix',
   price_ouro_m: '1990', price_ouro_y: '19990', price_diamante_m: '3990', price_diamante_y: '39990',
-  ref_bonus_days: '7', loyalty_every: '3', loyalty_days: '7'
+  ref_bonus_days: '7', loyalty_every: '3', loyalty_days: '7',
+  gw_provider: 'mercadopago', gw_token: ''
 };
 
 export async function getSettings(env) {
@@ -23,7 +24,7 @@ export async function getSettings(env) {
 export async function setSettings(env, patch) {
   for (const [k, v] of Object.entries(patch)) {
     if (!(k in DEFAULTS)) continue;
-    await env.DB.prepare('INSERT INTO app_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').bind(k, String(v).slice(0, 200)).run();
+    await env.DB.prepare('INSERT INTO app_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').bind(k, String(v).slice(0, 400)).run();
   }
 }
 
@@ -77,14 +78,15 @@ export async function uniqueCents(env, base) {
   return base - 1 - Math.floor(Math.random() * 99);
 }
 
-export function orderView(o, s) {
+export function orderView(o, s, gwPix) {
   const PN = { ouro: 'Ouro', diamante: 'Diamante' };
   return {
     code: o.code, plan: o.plan, planName: PN[o.plan] || o.plan, period: o.period, periodName: o.period === 'y' ? 'anual' : 'mensal',
     cents: o.cents, value: brl(o.cents), status: o.status, method: o.method,
     createdAt: o.created_at, expiresAt: o.expires_at, sentAt: o.sent_at, paidAt: o.paid_at,
     periodStart: o.period_start, periodEnd: o.period_end, note: o.note || '', payer: o.payer || '', e2e: o.e2e || '',
-    pix: o.status === 'aguardando' ? pixPayload({ key: s.pix_key, name: s.pix_name, city: s.pix_city, cents: o.cents, txid: o.code }) : '',
+    auto: o.method === 'gateway',
+    pix: o.status !== 'aguardando' ? '' : o.method === 'gateway' ? (gwPix || '') : pixPayload({ key: s.pix_key, name: s.pix_name, city: s.pix_city, cents: o.cents, txid: o.code }),
     pixKey: s.pix_key, pixName: s.pix_name, whatsapp: s.whatsapp
   };
 }
@@ -100,6 +102,14 @@ export async function releaseOrder(env, o) {
   await env.DB.prepare('UPDATE users SET plan = ?, plan_until = ?, trial_until = CASE WHEN trial_until > ? THEN ? ELSE trial_until END WHERE id = ?')
     .bind(o.plan, end, now, now, u.id).run();
   await env.DB.prepare("UPDATE orders SET status = 'liberado', paid_at = ?, period_start = ?, period_end = ? WHERE id = ?").bind(now, base, end, o.id).run();
+  // fidelidade: a cada N renovações (pagamentos depois do primeiro), ganha dias grátis
+  const st = await getSettings(env);
+  const every = parseInt(st.loyalty_every, 10) || 3, bonus = parseInt(st.loyalty_days, 10) || 0;
+  const paidN = (await env.DB.prepare("SELECT COUNT(*) AS n FROM orders WHERE user_id = ? AND status = 'liberado'").bind(u.id).first()).n;
+  if (bonus && paidN > 1 && (paidN - 1) % every === 0) {
+    await env.DB.prepare('UPDATE users SET plan_until = plan_until + ? WHERE id = ?').bind(bonus * DAY, u.id).run();
+    await env.DB.prepare('UPDATE orders SET period_end = period_end + ?, note = ? WHERE id = ?').bind(bonus * DAY, 'Fidelidade: +' + bonus + ' dias grátis', o.id).run();
+  }
   // prêmio de indicação (libera depois de 7 dias, prazo de reembolso)
   if (u.referred_by) {
     const paidBefore = await env.DB.prepare("SELECT COUNT(*) AS n FROM orders WHERE user_id = ? AND status = 'liberado' AND id <> ?").bind(u.id, o.id).first();

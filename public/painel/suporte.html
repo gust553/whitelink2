@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Suporte — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.chat{display:flex;flex-direction:column;gap:8px;padding-bottom:150px}
+.msg{max-width:82%;padding:10px 14px;border-radius:20px;font-size:15px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.msg small{display:block;font-size:11px;opacity:.6;margin-top:4px;text-align:right}
+.me{align-self:flex-end;background:#D4FF3A;color:#0E0E14;border-bottom-right-radius:6px}
+.them{align-self:flex-start;background:#1B1B24;color:#F3F3F7;border-bottom-left-radius:6px}
+.compose{position:fixed;left:0;right:0;bottom:calc(68px + env(safe-area-inset-bottom));padding:10px 12px;background:#0B0B10;border-top:1px solid #1C1C24;display:flex;flex-direction:column;gap:8px;z-index:20}
+@media (min-width:900px){.compose{left:96px;bottom:0}}
+.compose .bar{display:flex;gap:8px;align-items:flex-end;max-width:720px;width:100%;margin:0 auto}
+.compose textarea{flex:1;min-height:48px;max-height:130px;resize:none;border-radius:24px;border:1px solid #24242E;background:#14141B;color:#F3F3F7;padding:13px 16px;font:15px Inter,sans-serif}
+.send{width:48px;height:48px;border-radius:50%;border:none;background:#D4FF3A;color:#0E0E14;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.send[disabled]{background:#26262F;color:#6F6F80}
+.topics{display:flex;gap:6px;overflow-x:auto;max-width:720px;width:100%;margin:0 auto;scrollbar-width:none}
+.topics button{flex:none;height:34px;padding:0 13px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:13px;cursor:pointer;font-family:inherit}
+.topics button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+</style>
+<link rel="stylesheet" href="/assets/shell.css">
+</head>
+<body class="has-shell">
+
+<div id="root"></div>
+<nav class="rail" aria-label="Menu"><a class="rail-logo" href="/painel" aria-label="WhiteLink">W</a><a class="rail-i" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="rail-i" href="/painel/aparencia"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></span>Aparência</a><a class="rail-i" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Estatísticas</a><a class="rail-i" href="/painel/contatos"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Contatos</a><a class="rail-i on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<nav class="tabbar" aria-label="Menu"><a class="tab" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="tab" href="/painel/aparencia"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></span>Aparência</a><a class="tab" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Estatísticas</a><a class="tab" href="/painel/contatos"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Contatos</a><a class="tab on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Aparencia.dc.html":"/painel/aparencia","Temas.dc.html":"/painel/temas","CriadorTema.dc.html":"/painel/em-breve?t=Criador%20de%20tema","Agenda.dc.html":"/painel/agendamentos","Stats.dc.html":"/painel/estatisticas","Contatos.dc.html":"/painel/contatos","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/indique","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/conta","EditarLink.dc.html":"/painel/editar-link","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/painel/suporte","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
+<script src="/assets/dc.js"></script>
+<script src="/assets/temas-list.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, text: '', topic: '', err: '', busy: false }; }
+  componentDidMount() { this.load(true); this.t = setInterval(() => { if (!document.hidden) this.load(false); }, 15000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  async load(scroll) {
+    const d = await DC.api('support');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    const grew = !this.state.d || (d.msgs || []).length !== this.state.d.msgs.length;
+    this.setState({ d: d.ok ? d : null });
+    if (scroll || grew) setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 30);
+  }
+  async send() {
+    const s = this.state;
+    if (!s.text.trim() || s.busy) return;
+    this.setState({ busy: true, err: '' });
+    const r = await DC.api('support', 'POST', { text: s.text, topic: s.topic || undefined });
+    if (!r.ok) { this.setState({ busy: false, err: r.error }); return; }
+    this.setState({ busy: false, text: '', topic: '' });
+    this.load(true);
+  }
+  renderVals() {
+    const d = this.state.d;
+    if (!d) return { loading: true };
+    const T = d.level === 0 ? [['pagamento', 'Pagamento'], ['teste', 'Teste grátis']] : [['pagamento', 'Pagamento'], ['pagina', 'Minha página'], ['temas', 'Temas'], ['outro', 'Outro']];
+    const first = d.msgs.length === 0;
+    return {
+      loading: false, ready: true, name: d.name, prata: d.level === 0,
+      msgs: d.msgs.map((m) => ({ cls: m.from_admin ? 'them' : 'me', text: m.text, at: new Date(m.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) })),
+      showTopics: first,
+      topics: T.map((t) => ({ name: t[1], sel: this.state.topic === t[0], pick: () => this.setState({ topic: t[0], err: '' }) })),
+      text: this.state.text, setText: (e) => { this.setState({ text: e.target.value }); e.target.style.height = 'auto'; e.target.style.height = Math.min(130, e.target.scrollHeight) + 'px'; },
+      cantSend: this.state.busy || !this.state.text.trim() || (first && !this.state.topic),
+      send: () => this.send(), err: this.state.err
+    };
+  }
+}
+
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/mais\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Suporte</h1><a class=\"icon-btn\" href=\"/ajuda\" aria-label=\"Central de ajuda\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17.2v.1\"/></svg></a></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{ready}}\" hint-placeholder-val=\"{{ true }}\">\n      <div class=\"chat\" aria-live=\"polite\">\n        <div class=\"msg them\">Oi, {{name}}! Escreva sua dúvida que a equipe WhiteLink responde por aqui, em horário comercial.<sc-if value=\"{{prata}}\" hint-placeholder-val=\"{{ false }}\"> No Prata, o chat é para pagamento e teste grátis.</sc-if></div>\n        <sc-for list=\"{{msgs}}\" as=\"m\" hint-placeholder-count=\"3\"><div class=\"msg {{m.cls}}\">{{m.text}}<small>{{m.at}}</small></div></sc-for>\n      </div>\n    </sc-if>\n  </div>\n  <sc-if value=\"{{ready}}\" hint-placeholder-val=\"{{ true }}\">\n    <div class=\"compose\">\n      <sc-if value=\"{{showTopics}}\" hint-placeholder-val=\"{{ true }}\"><div class=\"topics\" role=\"group\" aria-label=\"Assunto\"><sc-for list=\"{{topics}}\" as=\"t\" hint-placeholder-count=\"4\"><button onClick=\"{{t.pick}}\" aria-pressed=\"{{t.sel}}\">{{t.name}}</button></sc-for></div></sc-if>\n      <sc-if value=\"{{err}}\" hint-placeholder-val=\"{{ false }}\"><div role=\"alert\" style=\"max-width: 720px; margin: 0 auto; width: 100%; font-size: 13.5px; color: #FFB4B4\">{{err}} <a href=\"https://wa.me/5511993931841\" target=\"_blank\" rel=\"noopener\">WhatsApp</a></div></sc-if>\n      <div class=\"bar\"><textarea rows=\"1\" placeholder=\"Escreva aqui…\" aria-label=\"Mensagem\" value=\"{{text}}\" onInput=\"{{setText}}\" maxlength=\"1500\"></textarea><button class=\"send\" onClick=\"{{send}}\" disabled=\"{{cantSend}}\" aria-label=\"Enviar\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h13M13 6l6 6-6 6\"/></svg></button></div>\n    </div>\n  </sc-if>\n</div>\n", Component, {});
+(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar';})();
+</script>
+</body>
+</html>

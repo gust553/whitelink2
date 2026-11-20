@@ -253,7 +253,12 @@ export async function ensureSchema(env) {
     'CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status, created_at)',
     'CREATE TABLE IF NOT EXISTS support_msgs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, from_admin INTEGER NOT NULL DEFAULT 0, text TEXT NOT NULL, created_at INTEGER NOT NULL, read_at INTEGER)',
     'CREATE INDEX IF NOT EXISTS idx_support_user ON support_msgs(user_id, created_at)',
-    'CREATE TABLE IF NOT EXISTS ref_rewards (id INTEGER PRIMARY KEY AUTOINCREMENT, referrer_id INTEGER NOT NULL, friend_id INTEGER NOT NULL, order_id INTEGER NOT NULL, days INTEGER NOT NULL, status TEXT NOT NULL, release_at INTEGER NOT NULL, created_at INTEGER NOT NULL)'
+    'CREATE TABLE IF NOT EXISTS ref_rewards (id INTEGER PRIMARY KEY AUTOINCREMENT, referrer_id INTEGER NOT NULL, friend_id INTEGER NOT NULL, order_id INTEGER NOT NULL, days INTEGER NOT NULL, status TEXT NOT NULL, release_at INTEGER NOT NULL, created_at INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS order_gw (order_id INTEGER PRIMARY KEY, gw_id TEXT NOT NULL, pix TEXT NOT NULL, created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_order_gw ON order_gw(gw_id)',
+    'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
   ];
   for (const q of S) await env.DB.prepare(q).run();
   schemaReady = true;
@@ -313,10 +318,18 @@ export function themeFor(a, lvl) {
 }
 
 // ---------- admin ----------
-export async function requireAdmin(env, request) {
+export async function requireAdmin(env, request, opts = {}) {
   await ensureSchema(env);
   const u = await currentUser(env, request);
   if (!u) return [null, fail('Entre na sua conta.', 401)];
   if (!u.is_admin) return [null, fail('Acesso só para o admin.', 403)];
+  if (!opts.skip2fa) {
+    const ok = await env.DB.prepare('SELECT until FROM admin_2fa WHERE token_hash = ? AND until > ?').bind(await sha256(getCookie(request, 'wl_s')), Date.now()).first();
+    if (!ok) return [null, fail('Confirme com o código por SMS.', 401, { need2fa: true })];
+  }
   return [u, null];
+}
+
+export async function adminLog(env, adminId, action, target) {
+  await env.DB.prepare('INSERT INTO admin_log (admin_id, action, target, created_at) VALUES (?, ?, ?, ?)').bind(adminId, action, String(target || ''), Date.now()).run();
 }

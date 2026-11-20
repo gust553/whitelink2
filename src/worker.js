@@ -25,6 +25,17 @@ import * as settingsApi from '../functions/api/settings.js';
 import * as account from '../functions/api/account/index.js';
 import * as accountPhone from '../functions/api/account/phone.js';
 import * as referrals from '../functions/api/referrals.js';
+import * as support from '../functions/api/support.js';
+import * as gwHook from '../functions/api/webhooks/gateway.js';
+import * as admVerify from '../functions/api/admin/verify.js';
+import * as admOverview from '../functions/api/admin/overview.js';
+import * as admUsers from '../functions/api/admin/users/index.js';
+import * as admUser from '../functions/api/admin/users/[id].js';
+import * as admSettings from '../functions/api/admin/settings.js';
+import * as admSupport from '../functions/api/admin/support/index.js';
+import * as admSupportOne from '../functions/api/admin/support/[id].js';
+import * as admRefs from '../functions/api/admin/referrals.js';
+import * as admFraud from '../functions/api/admin/fraud.js';
 import * as adminOrders from '../functions/api/admin/orders/index.js';
 import * as adminOrderOne from '../functions/api/admin/orders/[code].js';
 import * as profile from '../functions/[handle].js';
@@ -53,6 +64,17 @@ const ROUTES = [
   [/^\/api\/account$/, account],
   [/^\/api\/account\/phone$/, accountPhone],
   [/^\/api\/referrals$/, referrals],
+  [/^\/api\/support$/, support],
+  [/^\/api\/webhooks\/gateway$/, gwHook],
+  [/^\/api\/admin\/verify$/, admVerify],
+  [/^\/api\/admin\/overview$/, admOverview],
+  [/^\/api\/admin\/users$/, admUsers],
+  [/^\/api\/admin\/users\/(?<id>\d+)$/, admUser],
+  [/^\/api\/admin\/settings$/, admSettings],
+  [/^\/api\/admin\/support$/, admSupport],
+  [/^\/api\/admin\/support\/(?<id>\d+)$/, admSupportOne],
+  [/^\/api\/admin\/referrals$/, admRefs],
+  [/^\/api\/admin\/fraud$/, admFraud],
   [/^\/api\/admin\/orders$/, adminOrders],
   [/^\/api\/admin\/orders\/(?<code>[A-Za-z0-9]+)$/, adminOrderOne],
   [/^\/go\/(?<uid>\d+)\/(?<bid>\d+)$/, goBlock],

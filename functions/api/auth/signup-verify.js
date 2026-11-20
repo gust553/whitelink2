@@ -20,10 +20,10 @@ export async function onRequestPost({ request, env }) {
   const keys = [['email', p.email], ['phone', p.phone], ['instagram', p.instagram], ['device', device]];
   const hashes = [];
   for (const [k, v] of keys) hashes.push([k, await sha256(k + ':' + v)]);
-  let used = false;
+  let used = false, usedBy = '';
   for (const [k, h] of hashes) {
     const r = await env.DB.prepare('SELECT 1 AS x FROM trial_registry WHERE kind = ? AND value_hash = ?').bind(k, h).first();
-    if (r) { used = true; break; }
+    if (r) { used = true; usedBy = k; break; }
   }
   const now = Date.now();
   let trialUntil = used ? null : now + TRIAL_DAYS * DAY;
@@ -45,6 +45,10 @@ export async function onRequestPost({ request, env }) {
 
   await env.DB.prepare('INSERT INTO profiles (user_id, title, bio, theme, updated_at) VALUES (?, ?, ?, ?, ?)')
     .bind(userId, p.name, '', 'noite', now).run();
+  if (used) {
+    await env.DB.prepare('INSERT INTO fraud_log (kind, user_id, detail, ip, created_at) VALUES (?, ?, ?, ?, ?)')
+      .bind('trial_negado', userId, usedBy, clientIp(request), now).run();
+  }
   if (!used) {
     for (const [k, h] of hashes) {
       await env.DB.prepare('INSERT OR IGNORE INTO trial_registry (kind, value_hash, created_at) VALUES (?, ?, ?)').bind(k, h, now).run();

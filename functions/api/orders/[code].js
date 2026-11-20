@@ -1,5 +1,6 @@
 import { json, fail, readJson, currentUser, ensureSchema, cleanText, rateLimit } from '../../../src/lib.js';
 import { getSettings, orderView } from '../../../src/billing.js';
+import { gatewaySync } from '../../../src/gateway.js';
 
 async function mine(env, request, params) {
   await ensureSchema(env);
@@ -11,16 +12,23 @@ async function mine(env, request, params) {
 }
 
 export async function onRequestGet({ request, env, params }) {
-  const [, o, err] = await mine(env, request, params);
+  const [, o0, err] = await mine(env, request, params);
   if (err) return err;
   const s = await getSettings(env);
-  return json({ ok: true, order: orderView(o, s) });
+  let o = o0, gwPix = '';
+  if (o.method === 'gateway') {
+    if (o.status === 'aguardando' && (await gatewaySync(env, s, o))) o = await env.DB.prepare('SELECT * FROM orders WHERE id = ?').bind(o.id).first();
+    const g = await env.DB.prepare('SELECT pix FROM order_gw WHERE order_id = ?').bind(o.id).first();
+    gwPix = g ? g.pix : '';
+  }
+  return json({ ok: true, order: orderView(o, s, gwPix) });
 }
 
 // Envio do comprovante
 export async function onRequestPost({ request, env, params }) {
   const [u, o, err] = await mine(env, request, params);
   if (err) return err;
+  if (o.method === 'gateway') return fail('Este Pix é confirmado sozinho, não precisa de comprovante.');
   if (!['aguardando', 'recusado'].includes(o.status)) return fail('Este pedido não está esperando comprovante.');
   if (!(await rateLimit(env, 'proof:' + u.id, 8, 3600000))) return fail('Muitos envios. Tente mais tarde.', 429);
   const b = await readJson(request, 1000000);

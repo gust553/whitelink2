@@ -52,7 +52,7 @@
         return ' data-on-' + name.slice(2).toLowerCase() + '="' + (handlers.length - 1) + '"';
       });
       text = text.replace(BOOL, (_, a, e) => (ev(e.trim(), scope) ? ' ' + a : ''));
-      text = text.replace(HOLE, (_, e) => { const v = ev(e, scope); return v == null || typeof v === 'function' ? '' : esc(v); });
+      text = text.replace(HOLE, (_, e) => { const v = ev(e, scope); if (v && typeof v === 'object' && v.__html !== undefined) return v.__html; return v == null || typeof v === 'function' ? '' : esc(v); });
       text = text.replace(/href="([A-Za-z]+\.dc\.html)([^"]*)"/g, (_, f, rest) => 'href="' + (LINKS[f] || '#') + rest + '"');
       return text;
     }
@@ -119,6 +119,7 @@
 
   window.DC = {
     mount,
+    html: (s) => ({ __html: String(s) }), // HTML fixo do próprio código (ícones), nunca dados do usuário
     // chamadas para o servidor do WhiteLink
     async api(path, method, body) {
       try {

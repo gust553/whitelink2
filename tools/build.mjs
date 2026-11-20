@@ -12,7 +12,7 @@ export const LINKS = {
   'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/contatos',
   'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': '/painel/indique', 'MeuPlano.dc.html': '/painel/plano',
   'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel/editar-link', 'Pagamento.dc.html': '/pagamento',
-  'ConfirmarPagamento.dc.html': '/pagamento/confirmar', 'CentralAjuda.dc.html': '/ajuda', 'SuporteCliente.dc.html': '/ajuda',
+  'ConfirmarPagamento.dc.html': '/pagamento/confirmar', 'CentralAjuda.dc.html': '/ajuda', 'SuporteCliente.dc.html': '/painel/suporte',
   'Recibo.dc.html': '/painel/recibo', 'Termos.dc.html': '/termos', 'Privacidade.dc.html': '/privacidade',
   'Planos.dc.html': '/#precos', 'PaginaPublica.dc.html': '/', 'PaginaFechada.dc.html': '/'
 };
@@ -30,6 +30,8 @@ const PAGES = {
   'Agenda.dc.html': ['painel/agendamentos.html', true, false, 'mais', null],
   'Indique.dc.html': ['painel/indique.html', true, false, 'mais', null],
   'Conta.dc.html': ['painel/conta.html', true, false, 'mais', null],
+  'SuporteCliente.dc.html': ['painel/suporte.html', true, false, 'mais', null],
+  'Admin.dc.html': ['admin.html', true, false, 'admin', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
   'EditarLink.dc.html': ['painel/editar-link.html', true, true, 'pagina', 'Editar link'],
   'Recibo.dc.html': ['painel/recibo.html', true, false, 'mais', null],
@@ -83,7 +85,7 @@ ${tab ? '<link rel="stylesheet" href="/assets/shell.css">' : ''}
 <body${tab ? ' class="has-shell"' : ''}>
 ${preview ? PREVIEW_BAR : ''}
 <div id="root"></div>
-${tab ? shellNav(tab) : ''}
+${tab && tab !== 'admin' ? shellNav(tab) : ''}
 <script>window.DC_LINKS=${JSON.stringify(LINKS)};</script>
 <script src="/assets/dc.js"></script>
 ${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
