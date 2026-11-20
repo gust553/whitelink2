@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Criador de tema — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=Playfair+Display:wght@400;700&amp;family=DM+Serif+Display&amp;family=Syne:wght@500;700&amp;family=Caveat:wght@500;700&amp;family=Bebas+Neue&amp;family=Outfit:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/assets/temas.css">
+<style>
+.stage{display:flex;justify-content:center;padding:6px 0 4px}
+.stage .ph{width:260px;height:440px;border-radius:28px}
+.stage .ph .ph-in{padding:40px 18px 18px;gap:10px}
+.stage .ph-btn{font-size:14px;padding:13px 14px;text-align:center}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cbox{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;color:#9C9CAD}
+.cbox input{width:100%;height:50px;border:1px solid #24242E;border-radius:14px;background:#14141B;padding:4px;cursor:pointer}
+.opt{display:flex;gap:8px;flex-wrap:wrap}
+.opt button{height:44px;padding:0 15px;border-radius:14px;cursor:pointer;font-size:14px;font-family:inherit;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6}
+.opt button[aria-pressed="true"]{border-color:#D4FF3A;background:rgba(212,255,58,.12);color:#F3F3F7;font-weight:600}
+.presets{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.presets button{flex:none;width:58px;height:58px;border-radius:18px;border:2px solid #24242E;cursor:pointer}
+@media (min-width:900px){.cr{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}.stage{position:sticky;top:80px}}
+</style>
+</helmet>
+<div>
+  <div class="appbar"><a class="icon-btn" href="/painel/aparencia" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Criador de tema</h1><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="padding: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center; margin-top: 10px">
+        <b style="font-size: 18px">Crie um tema só seu</b>
+        <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Escolha cores, fundo, fonte e botões do jeito que quiser. O Criador de tema é do Diamante.</span>
+        <a class="btn full" href="/painel/plano" style="background: #8FE3FF">Conhecer o Diamante</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ok}}" hint-placeholder-val="{{ true }}">
+    <div class="cr">
+      <div>
+        <style>{{css}}</style>
+        <div class="stage"><div class="ph t-custom"><div class="ph-bg"></div><div class="ph-in"><div class="ph-head"><div class="ph-av">{{ini}}</div><div class="ph-name">{{name}}</div><div class="ph-bio">Sua página, do seu jeito</div></div><div class="ph-btn main">Meu link principal</div><div class="ph-btn">Instagram</div><div class="ph-btn">WhatsApp</div><div class="ph-card" style="padding: 12px; font-size: 13px">Bloco de texto</div></div></div></div>
+      </div>
+      <div>
+        <div class="sec-t" style="margin-top: 8px">Começar de um modelo</div>
+        <div class="presets"><sc-for list="{{presets}}" as="p" hint-placeholder-count="6"><button onClick="{{p.pick}}" style="{{p.st}}" aria-label="{{p.name}}"></button></sc-for></div>
+        <div class="sec-t">Fundo</div>
+        <div class="cols" style="grid-template-columns: repeat(2, minmax(0, 1fr))"><label class="cbox">Cor 1<input type="color" value="{{c.bg1}}" onInput="{{set_bg1}}"></label><label class="cbox">Cor 2<input type="color" value="{{c.bg2}}" onInput="{{set_bg2}}"></label></div>
+        <div class="opt" style="margin-top: 10px"><sc-for list="{{grads}}" as="o" hint-placeholder-count="4"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}">{{o.name}}</button></sc-for></div>
+        <div class="sec-t">Cores</div>
+        <div class="cols"><label class="cbox">Texto<input type="color" value="{{c.text}}" onInput="{{set_text}}"></label><label class="cbox">Botão<input type="color" value="{{c.btn}}" onInput="{{set_btn}}"></label><label class="cbox">Texto do botão<input type="color" value="{{c.btnText}}" onInput="{{set_btnText}}"></label></div>
+        <div class="sec-t">Botões</div>
+        <div class="opt"><sc-for list="{{styles}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}">{{o.name}}</button></sc-for></div>
+        <div class="opt" style="margin-top: 10px"><sc-for list="{{radii}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}" style="{{o.st}}">{{o.name}}</button></sc-for></div>
+        <div class="sec-t">Fonte</div>
+        <div class="opt"><sc-for list="{{fonts}}" as="o" hint-placeholder-count="8"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}" style="{{o.st}}">{{o.name}}</button></sc-for></div>
+        <button class="btn full" onClick="{{use}}" style="margin-top: 22px">{{useLabel}}</button>
+        <sc-if value="{{active}}" hint-placeholder-val="{{ false }}"><p style="text-align: center; font-size: 13px; color: #9C9CAD; margin-top: 10px">Para voltar a um tema pronto, escolha um em <a href="/painel/temas">Temas</a>.</p></sc-if>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, c: null, saved: '' }; }
+  async componentDidMount() {
+    const d = await DC.api('editor');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    const a = d.appearance || {};
+    this.setState({ d: d, c: Object.assign({ bg1: '#1b1035', bg2: '#0b0b10', grad: 1, text: '#f3f3f7', btn: '#d4ff3a', btnText: '#0e0e14', style: 0, radius: 1, font: 0 }, a.custom || {}) });
+  }
+  set(p) {
+    this.setState({ c: Object.assign({}, this.state.c, p), saved: '' });
+    if (this.state.d.appearance.useCustom) { clearTimeout(this.t); this.t = setTimeout(() => this.save(true), 600); }
+  }
+  async save(on) {
+    const d = this.state.d;
+    d.appearance = Object.assign({}, d.appearance, { custom: this.state.c, useCustom: on });
+    const r = await DC.api('appearance', 'PUT', { appearance: d.appearance });
+    this.setState({ d: d, saved: r.ok ? 'Salvo ✓' : 'Não salvou' });
+  }
+  css(c) {
+    const F = ['Space Grotesk', 'Inter', 'Playfair Display', 'DM Serif Display', 'Syne', 'Caveat', 'Bebas Neue', 'Outfit'];
+    const g = [c.bg1, 'linear-gradient(180deg,' + c.bg1 + ',' + c.bg2 + ')', 'linear-gradient(135deg,' + c.bg1 + ',' + c.bg2 + ')', 'radial-gradient(circle at 50% 0%,' + c.bg1 + ',' + c.bg2 + ' 70%)'][c.grad];
+    const r = ['6px', '16px', '999px'][c.radius];
+    const btn = ['background:' + c.btn + ';color:' + c.btnText + ';border:1px solid ' + c.btn, 'background:transparent;color:' + c.text + ';border:2px solid ' + c.btn, 'background:rgba(255,255,255,.12);color:' + c.text + ';border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px)'][c.style];
+    return '.t-custom{color:' + c.text + ";font-family:'" + F[c.font] + "',sans-serif}.t-custom .ph-bg{background:" + g + '}.t-custom .ph-bg::before,.t-custom .ph-bg::after{display:none}.t-custom .ph-av{background:rgba(255,255,255,.12);border:2px solid ' + c.btn + ';color:' + c.text + '}.t-custom .ph-btn{' + btn + ';border-radius:' + r + '}.t-custom .ph-btn.main{background:' + c.btn + ';color:' + c.btnText + ';border:1px solid ' + c.btn + '}.t-custom .ph-card{background:rgba(255,255,255,.1);border-radius:' + r + ';color:' + c.text + '}.t-custom .ph-orn,.t-custom .ph-tag{display:none}';
+  }
+  renderVals() {
+    const s = this.state, d = s.d, c = s.c;
+    if (!d) return { loading: true };
+    const lvl = { prata: 0, ouro: 1, diamante: 2 }[d.user.plan] || 0;
+    if (lvl < 2) return { loading: false, locked: true };
+    const F = ['Space Grotesk', 'Inter', 'Playfair Display', 'DM Serif Display', 'Syne', 'Caveat', 'Bebas Neue', 'Outfit'];
+    const P = [
+      ['Uva', { bg1: '#3b1a6e', bg2: '#0b0b10', grad: 1, text: '#f3f3f7', btn: '#d4ff3a', btnText: '#0e0e14', style: 0 }],
+      ['Pêssego', { bg1: '#ffd6c2', bg2: '#ff9a8b', grad: 2, text: '#3a1a14', btn: '#3a1a14', btnText: '#ffe9df', style: 0 }],
+      ['Menta', { bg1: '#e6fff5', bg2: '#b5f2dc', grad: 1, text: '#0c3a2c', btn: '#0c3a2c', btnText: '#e6fff5', style: 1 }],
+      ['Oceano', { bg1: '#1d6fa3', bg2: '#06222b', grad: 3, text: '#eaf7ff', btn: '#ffffff', btnText: '#06222b', style: 2 }],
+      ['Ouro', { bg1: '#1a1408', bg2: '#000000', grad: 1, text: '#f6e7c1', btn: '#d9b45a', btnText: '#1a1408', style: 1 }],
+      ['Chiclete', { bg1: '#ff5fa2', bg2: '#7a3cff', grad: 2, text: '#ffffff', btn: '#ffffff', btnText: '#7a3cff', style: 0 }]
+    ];
+    const setter = (k) => (e) => this.set({ [k]: e.target.value });
+    const active = !!d.appearance.useCustom;
+    return {
+      loading: false, ok: true, saved: s.saved, css: this.css(c), c: c, active: active,
+      name: d.profile.title, ini: (d.profile.title || 'W').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase(),
+      presets: P.map((p) => ({ name: p[0], st: 'background: linear-gradient(135deg,' + p[1].bg1 + ',' + p[1].bg2 + '); border-color: ' + p[1].btn, pick: () => this.set(p[1]) })),
+      set_bg1: setter('bg1'), set_bg2: setter('bg2'), set_text: setter('text'), set_btn: setter('btn'), set_btnText: setter('btnText'),
+      grads: ['Liso', 'Vertical', 'Diagonal', 'Brilho'].map((n, i) => ({ name: n, sel: c.grad === i, pick: () => this.set({ grad: i }) })),
+      styles: ['Cheio', 'Contorno', 'Vidro'].map((n, i) => ({ name: n, sel: c.style === i, pick: () => this.set({ style: i }) })),
+      radii: [['Reto', '6px'], ['Suave', '16px'], ['Pílula', '999px']].map((x, i) => ({ name: x[0], sel: c.radius === i, st: 'border-radius: ' + x[1], pick: () => this.set({ radius: i }) })),
+      fonts: F.map((f, i) => ({ name: f, sel: c.font === i, st: "font-family: '" + f + "'", pick: () => this.set({ font: i }) })),
+      useLabel: active ? 'Salvar alterações' : 'Usar este tema na minha página',
+      use: () => this.save(true)
+    };
+  }
+}
+</script>
+</body>
+</html>

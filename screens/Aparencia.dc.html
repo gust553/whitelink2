@@ -31,6 +31,10 @@
       <div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><b style="font-size: 17px">{{themeName}}</b><span style="font-size: 14px; color: #9C9CAD">{{moreThemes}}</span></div>
       <span class="btn ghost" style="height: 42px; padding: 0 16px; font-size: 14px">Trocar</span>
     </a>
+    <a class="row card" href="/painel/criador-tema" style="margin-top: 10px; text-decoration: none; color: inherit; padding: 14px 16px">
+      <span class="row-tx"><b>Criador de tema</b><span>{{creatorText}}</span></span>
+      <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF">Diamante</span>
+    </a>
 
     <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
       <div class="card" style="margin-top: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; border-color: #4A3A14">
@@ -64,10 +68,10 @@ class Component extends DCLogic {
     if (d.status === 401) { location.href = '/entrar'; return; }
     const a = d.appearance || {};
     this.setState({ loading: false, plan: { prata: 0, ouro: 1, diamante: 2 }[d.user && d.user.plan] || 0,
-      theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '' });
+      theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '', useCustom: !!a.useCustom });
   }
   set(patch) {
-    this.setState(Object.assign({ saved: 'saving' }, patch));
+    this.setState(Object.assign({ saved: 'saving', useCustom: false }, patch));
     clearTimeout(this.t);
     this.t = setTimeout(async () => {
       const s = this.state;
@@ -92,7 +96,8 @@ class Component extends DCLogic {
     const eff = row[2] <= s.plan ? row : TT[0] || row;
     const basic = ['noite', 'papel', 'oceano', 'brasa'].indexOf(eff[1]) >= 0;
     return {
-      tcls: 't-' + eff[1], themeName: eff[0], basic: basic,
+      tcls: 't-' + eff[1], themeName: s.useCustom && s.plan === 2 ? 'Tema criado por você' : eff[0], basic: basic,
+      creatorText: s.useCustom && s.plan === 2 ? 'Em uso na sua página' : 'Monte um tema com suas cores e fonte',
       loading: s.loading, ready: !s.loading,
       saveText: SM[s.saved][0], saveColor: SM[s.saved][1],
       themes: T.map((t, i) => {

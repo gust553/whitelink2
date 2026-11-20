@@ -8,7 +8,10 @@ export async function onRequestPut({ request, env }) {
   const b = await readJson(request);
   if (!b) return fail('Dados inválidos.');
   const page = await loadPage(env, u.id);
-  const appearance = cleanAppearance(b.appearance);
+  const inA = b.appearance || {};
+  // telas de Aparência/Temas não mandam o tema criado: guardamos o que já existia
+  if (inA.custom === undefined) { inA.custom = page.appearance && page.appearance.custom; if (inA.useCustom === undefined) inA.useCustom = false; }
+  const appearance = cleanAppearance(inA);
   await env.DB.prepare(
     `INSERT INTO page_data (user_id, blocks, appearance, updated_at) VALUES (?, ?, ?, ?)
      ON CONFLICT(user_id) DO UPDATE SET appearance = excluded.appearance, updated_at = excluded.updated_at`

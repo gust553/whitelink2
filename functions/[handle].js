@@ -1,4 +1,4 @@
-import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, BLOCK_NEED, PLAN_LEVEL, themeFor } from '../src/lib.js';
+import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, BLOCK_NEED, PLAN_LEVEL, themeFor, customCss, cleanCustom, CUSTOM_FONTS } from '../src/lib.js';
 import { TEMA_FONTS } from '../src/temas.js';
 
 const BASIC = ['noite', 'papel', 'oceano', 'brasa'];
@@ -37,7 +37,8 @@ export async function onRequestGet(context) {
   const ep = effectivePlan(u);
   const lvl = PLAN_LEVEL[ep.plan];
   const { blocks, appearance: a } = await loadPage(env, u.id);
-  const tk = themeFor(a, lvl);
+  const useC = lvl === 2 && a.useCustom && a.custom;
+  const tk = useC ? 'custom' : themeFor(a, lvl);
   const now = Date.now();
 
   let shown = blocks.filter((b) => b.on && BLOCK_NEED[b.kind] <= lvl && (lvl === 0 || scheduledOk(b, now)));
@@ -85,9 +86,10 @@ export async function onRequestGet(context) {
 
   const title = prof.title || u.name;
   const initials = title.split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase();
-  let custom = '';
-  if (lvl >= 1 && a.acc) custom += `.pub .ph-btn.main{background:${a.acc};border-color:${a.acc}}.pub .ph-av{border-color:${a.acc}}`;
-  if (lvl >= 1 && BASIC.includes(tk)) custom += `.pub{font-family:${FONTS[a.font || 0]}}.pub .ph-btn{border-radius:${RADII[a.shape == null ? 1 : a.shape]}}`;
+  let custom = useC ? customCss(cleanCustom(a.custom)) : '';
+  const cfont = useC ? CUSTOM_FONTS[cleanCustom(a.custom).font] : '';
+  if (!useC && lvl >= 1 && a.acc) custom += `.pub .ph-btn.main{background:${a.acc};border-color:${a.acc}}.pub .ph-av{border-color:${a.acc}}`;
+  if (!useC && lvl >= 1 && BASIC.includes(tk)) custom += `.pub{font-family:${FONTS[a.font || 0]}}.pub .ph-btn{border-radius:${RADII[a.shape == null ? 1 : a.shape]}}`;
   const verified = lvl === 2 && !ep.trial ? ' <span class="ver" title="Verificado">✓</span>' : '';
   const body = `
 <div class="ph t-${tk} pub">
@@ -115,7 +117,7 @@ export async function onRequestGet(context) {
 </script>`;
   const cfgRow = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(u.id).first();
   let cfg = {}; try { cfg = JSON.parse((cfgRow && cfgRow.data) || '{}'); } catch (e) {}
-  return html(title + ' | WhiteLink', body, tk, custom, 200, cfg, lvl);
+  return html(title + ' | WhiteLink', body, tk, custom, 200, cfg, lvl, cfont);
 }
 
 async function trackMeta(env, request, userId) {
@@ -143,8 +145,8 @@ async function notFound({ env, request }, h) {
   }
 }
 
-function html(title, body, tk, custom, status, a, lvl) {
-  const fams = ['Inter:wght@400;500;600;700', 'Space+Grotesk:wght@500;700'].concat((TEMA_FONTS[tk] || []).map((f) => f.replace(/ /g, '+') + ':ital,wght@0,400;0,700;1,400'));
+function html(title, body, tk, custom, status, a, lvl, cfont) {
+  const fams = ['Inter:wght@400;500;600;700', 'Space+Grotesk:wght@500;700'].concat((cfont && !/^(Inter|Space Grotesk)$/.test(cfont) ? [cfont] : []).concat(TEMA_FONTS[tk] || []).map((f) => f.replace(/ /g, '+') + ':ital,wght@0,400;0,700;1,400'));
   const fontUrl = 'https://fonts.googleapis.com/css2?' + fams.map((f) => 'family=' + f).join('&') + '&display=swap';
   const seo = (a && a.seo) || {};
   const px = lvl === 2 && a && a.pixel ? a.pixel : '';

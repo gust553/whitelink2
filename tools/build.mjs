@@ -8,7 +8,7 @@ const soon = (t) => '/painel/em-breve?t=' + encodeURIComponent(t);
 
 export const LINKS = {
   'Main.dc.html': '/', 'Entrar.dc.html': '/entrar', 'Teste.dc.html': '/entrar#cadastro',
-  'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': soon('Criador de tema'),
+  'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': '/painel/criador-tema',
   'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/contatos',
   'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': '/painel/indique', 'MeuPlano.dc.html': '/painel/plano',
   'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel/editar-link', 'Pagamento.dc.html': '/pagamento',
@@ -31,6 +31,7 @@ const PAGES = {
   'Indique.dc.html': ['painel/indique.html', true, false, 'mais', null],
   'Conta.dc.html': ['painel/conta.html', true, false, 'mais', null],
   'SuporteCliente.dc.html': ['painel/suporte.html', true, false, 'mais', null],
+  'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'aparencia', null],
   'Admin.dc.html': ['admin.html', true, false, 'admin', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
   'EditarLink.dc.html': ['painel/editar-link.html', true, true, 'pagina', 'Editar link'],

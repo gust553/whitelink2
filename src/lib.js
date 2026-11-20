@@ -307,7 +307,37 @@ export function cleanAppearance(a) {
   const n = (v, max) => Math.max(0, Math.min(max, parseInt(v, 10) || 0));
   const theme = n(a.theme, 3);
   const tk = TEMA_TIER[a.tk] !== undefined ? a.tk : ['noite', 'papel', 'oceano', 'brasa'][theme];
-  return { tk, theme, font: n(a.font, 2), shape: a.shape == null ? 1 : n(a.shape, 2), acc: /^#[0-9a-f]{6}$/i.test(a.acc || '') ? a.acc : '' };
+  return { tk, theme, font: n(a.font, 2), shape: a.shape == null ? 1 : n(a.shape, 2), acc: /^#[0-9a-f]{6}$/i.test(a.acc || '') ? a.acc : '',
+    custom: cleanCustom(a.custom), useCustom: !!a.useCustom };
+}
+
+// Tema criado pelo cliente (Diamante)
+export const CUSTOM_FONTS = ['Space Grotesk', 'Inter', 'Playfair Display', 'DM Serif Display', 'Syne', 'Caveat', 'Bebas Neue', 'Outfit'];
+export function cleanCustom(c) {
+  c = c || {};
+  const col = (v, d) => (/^#[0-9a-f]{6}$/i.test(v || '') ? v.toLowerCase() : d);
+  const n = (v, max, d) => { const x = parseInt(v, 10); return x >= 0 && x <= max ? x : d; };
+  return {
+    bg1: col(c.bg1, '#1b1035'), bg2: col(c.bg2, '#0b0b10'), grad: n(c.grad, 3, 1),
+    text: col(c.text, '#f3f3f7'), btn: col(c.btn, '#d4ff3a'), btnText: col(c.btnText, '#0e0e14'),
+    style: n(c.style, 2, 0), radius: n(c.radius, 2, 1), font: n(c.font, CUSTOM_FONTS.length - 1, 0)
+  };
+}
+export function customCss(c) {
+  const g = [c.bg1, 'linear-gradient(180deg,' + c.bg1 + ',' + c.bg2 + ')', 'linear-gradient(135deg,' + c.bg1 + ',' + c.bg2 + ')', 'radial-gradient(circle at 50% 0%,' + c.bg1 + ',' + c.bg2 + ' 70%)'][c.grad];
+  const r = ['6px', '16px', '999px'][c.radius];
+  const btn = [
+    'background:' + c.btn + ';color:' + c.btnText + ';border:1px solid ' + c.btn,
+    'background:transparent;color:' + c.text + ';border:2px solid ' + c.btn,
+    'background:rgba(255,255,255,.12);color:' + c.text + ';border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px)'
+  ][c.style];
+  return '.t-custom{color:' + c.text + ";font-family:'" + CUSTOM_FONTS[c.font] + "',sans-serif}" +
+    '.t-custom .ph-bg{background:' + g + '}.t-custom .ph-bg::before,.t-custom .ph-bg::after{display:none}' +
+    '.t-custom .ph-av{background:rgba(255,255,255,.12);border:2px solid ' + c.btn + ';color:' + c.text + '}' +
+    '.t-custom .ph-btn{' + btn + ';border-radius:' + r + '}' +
+    '.t-custom .ph-btn.main{background:' + c.btn + ';color:' + c.btnText + ';border:1px solid ' + c.btn + '}' +
+    '.t-custom .ph-card{background:rgba(255,255,255,.1);border-radius:' + r + ';color:' + c.text + '}' +
+    '.t-custom .ph-thumb{background:rgba(255,255,255,.16)}.t-custom .ph-orn,.t-custom .ph-tag{display:none}';
 }
 
 // tema que vale de verdade, respeitando o plano
