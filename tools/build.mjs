@@ -8,7 +8,7 @@ const soon = (t) => '/painel/em-breve?t=' + encodeURIComponent(t);
 
 export const LINKS = {
   'Main.dc.html': '/', 'Entrar.dc.html': '/entrar', 'Teste.dc.html': '/entrar#cadastro',
-  'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/aparencia', 'CriadorTema.dc.html': soon('Criador de tema'),
+  'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': soon('Criador de tema'),
   'Agenda.dc.html': soon('Agendamentos'), 'Stats.dc.html': soon('Estatísticas'), 'Contatos.dc.html': '/painel/contatos',
   'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': soon('Indique e ganhe'), 'MeuPlano.dc.html': '/painel/plano',
   'Conta.dc.html': soon('Minha conta'), 'EditarLink.dc.html': '/painel/editar-link', 'Pagamento.dc.html': '/pagamento',
@@ -23,6 +23,7 @@ const PAGES = {
   'Editor.dc.html': ['painel.html', true, false, 'pagina', null],
   'Aparencia.dc.html': ['painel/aparencia.html', true, false, 'aparencia', null],
   'Mais.dc.html': ['painel/mais.html', true, false, 'mais', null],
+  'Temas.dc.html': ['painel/temas.html', true, false, 'aparencia', null],
   'Contatos.dc.html': ['painel/contatos.html', true, true, 'contatos', 'Contatos'],
   'Configuracoes.dc.html': ['painel/configuracoes.html', true, true, 'mais', 'Configurações'],
   'MeuPlano.dc.html': ['painel/plano.html', true, true, 'mais', 'Meu plano'],
@@ -81,6 +82,7 @@ ${preview ? PREVIEW_BAR : ''}
 ${tab ? shellNav(tab) : ''}
 <script>window.DC_LINKS=${JSON.stringify(LINKS)};</script>
 <script src="/assets/dc.js"></script>
+${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
 <script>
 ${code.replace(/<\/script/gi, '<\\/script')}
 DC.mount(document.getElementById('root'), ${JSON.stringify(tpl).replace(/<\/script/gi, '<\\/script')}, Component, ${JSON.stringify(props)});
@@ -95,6 +97,10 @@ ${guard}
   console.log('ok', file, '→', out);
 }
 
+if (process.argv[1] && process.argv[1].endsWith('build.mjs')) {
+  const { TEMAS } = await import(path.join(ROOT, 'src/temas.js'));
+  fs.writeFileSync(path.join(ROOT, 'public/assets/temas-list.js'), 'window.WL_TEMAS=' + JSON.stringify(TEMAS) + ';\n');
+}
 if (process.argv[1] && process.argv[1].endsWith('build.mjs')) for (const [f, cfg] of Object.entries(PAGES)) {
   if (fs.existsSync(path.join(ROOT, 'screens', f))) build(f, cfg);
   else console.log('falta', f);

@@ -1,3 +1,4 @@
+import { TEMA_TIER } from './temas.js';
 // Funções comuns do WhiteLink (rodam nas Cloudflare Functions)
 
 export const DAY = 86400000;
@@ -243,7 +244,16 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS page_data (user_id INTEGER PRIMARY KEY, blocks TEXT NOT NULL, appearance TEXT, updated_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, name TEXT, phone TEXT, email TEXT, source TEXT, created_at INTEGER NOT NULL)',
     'CREATE INDEX IF NOT EXISTS idx_contacts_user ON contacts(user_id, created_at)',
-    'CREATE TABLE IF NOT EXISTS clicks (user_id INTEGER NOT NULL, block_id INTEGER NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, block_id, day))'
+    'CREATE TABLE IF NOT EXISTS clicks (user_id INTEGER NOT NULL, block_id INTEGER NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, block_id, day))',
+    'CREATE TABLE IF NOT EXISTS visit_meta (user_id INTEGER NOT NULL, day TEXT NOT NULL, kind TEXT NOT NULL, key TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, day, kind, key))',
+    'CREATE TABLE IF NOT EXISTS user_settings (user_id INTEGER PRIMARY KEY, data TEXT NOT NULL, updated_at INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS app_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL UNIQUE, user_id INTEGER NOT NULL, plan TEXT NOT NULL, period TEXT NOT NULL, cents INTEGER NOT NULL, method TEXT NOT NULL DEFAULT \'pix\', status TEXT NOT NULL, payer TEXT, bank TEXT, e2e TEXT, proof TEXT, note TEXT, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL, sent_at INTEGER, paid_at INTEGER, period_start INTEGER, period_end INTEGER)',
+    'CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id, created_at)',
+    'CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status, created_at)',
+    'CREATE TABLE IF NOT EXISTS support_msgs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, from_admin INTEGER NOT NULL DEFAULT 0, text TEXT NOT NULL, created_at INTEGER NOT NULL, read_at INTEGER)',
+    'CREATE INDEX IF NOT EXISTS idx_support_user ON support_msgs(user_id, created_at)',
+    'CREATE TABLE IF NOT EXISTS ref_rewards (id INTEGER PRIMARY KEY AUTOINCREMENT, referrer_id INTEGER NOT NULL, friend_id INTEGER NOT NULL, order_id INTEGER NOT NULL, days INTEGER NOT NULL, status TEXT NOT NULL, release_at INTEGER NOT NULL, created_at INTEGER NOT NULL)'
   ];
   for (const q of S) await env.DB.prepare(q).run();
   schemaReady = true;
@@ -279,7 +289,10 @@ export function cleanBlocks(list) {
     let url = String(b.url || '').trim();
     if (['link', 'video', 'gallery', 'shop'].includes(b.kind)) url = url ? (cleanUrl(url) || url.slice(0, 600)) : '';
     else url = cleanText(url, 160);
-    out.push({ id, kind: b.kind, title: cleanText(b.title, b.kind === 'text' ? 300 : 80), url, on: !!b.on, featured: b.kind === 'link' && !!b.featured });
+    const dt = (v) => (/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}$/.test(String(v || '')) ? String(v).replace(' ', 'T') : '');
+    out.push({ id, kind: b.kind, title: cleanText(b.title, b.kind === 'text' ? 300 : 80), url, on: !!b.on, featured: b.kind === 'link' && !!b.featured,
+      start: dt(b.start), end: dt(b.end), effect: ['pulse', 'shake', 'glow'].includes(b.effect) ? b.effect : '', pin: !!b.pin,
+      titleB: cleanText(b.titleB, 80), split: Math.max(10, Math.min(90, parseInt(b.split, 10) || 50)) });
   }
   return out;
 }
@@ -287,5 +300,14 @@ export function cleanBlocks(list) {
 export function cleanAppearance(a) {
   a = a || {};
   const n = (v, max) => Math.max(0, Math.min(max, parseInt(v, 10) || 0));
-  return { theme: n(a.theme, 3), font: n(a.font, 2), shape: a.shape == null ? 1 : n(a.shape, 2), acc: /^#[0-9a-f]{6}$/i.test(a.acc || '') ? a.acc : '' };
+  const theme = n(a.theme, 3);
+  const tk = TEMA_TIER[a.tk] !== undefined ? a.tk : ['noite', 'papel', 'oceano', 'brasa'][theme];
+  return { tk, theme, font: n(a.font, 2), shape: a.shape == null ? 1 : n(a.shape, 2), acc: /^#[0-9a-f]{6}$/i.test(a.acc || '') ? a.acc : '' };
+}
+
+// tema que vale de verdade, respeitando o plano
+export function themeFor(a, lvl) {
+  a = a || {};
+  const tk = TEMA_TIER[a.tk] !== undefined ? a.tk : ['noite', 'papel', 'oceano', 'brasa'][a.theme || 0] || 'noite';
+  return TEMA_TIER[tk] <= lvl ? tk : 'noite';
 }

@@ -7,7 +7,8 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,700&amp;family=Space+Mono:wght@400;700&amp;family=Pacifico&amp;family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&amp;family=Cinzel:wght@500;700&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&amp;family=DM+Serif+Display:ital@0;1&amp;family=Syne:wght@600;800&amp;family=Fraunces:ital,wght@0,500;0,600;1,600&amp;family=Unbounded:wght@600;800&amp;family=Bebas+Neue&amp;family=Righteous&amp;family=Press+Start+2P&amp;family=Abril+Fatface&amp;family=Great+Vibes&amp;family=Bungee&amp;family=Caveat:wght@500;700&amp;family=Italiana&amp;family=Limelight&amp;family=Marcellus&amp;family=Amatic+SC:wght@400;700&amp;family=Comfortaa:wght@500;700&amp;family=Lobster&amp;family=Yeseva+One&amp;family=IM+Fell+English&amp;family=Orbitron:wght@500;800&amp;family=Monoton&amp;family=UnifrakturMaguntia&amp;family=Cinzel+Decorative:wght@700&amp;family=Josefin+Sans:wght@400;700&amp;family=Shrikhand&amp;family=Bangers&amp;family=Special+Elite&amp;display=swap">
+<link rel="stylesheet" href="/assets/temas.css">
 <style>
 .ed-wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;max-width:1180px;margin:0 auto}
 .ed-side{display:none}
@@ -17,8 +18,9 @@
   .ed-side .phone{position:sticky;top:84px}
   .only-mobile{display:none !important}
 }
-.phone{width:300px;height:600px;margin:0 auto;border-radius:44px;border:9px solid #23232C;overflow:hidden;display:flex;flex-direction:column}
-.phone-in{flex:1;overflow-y:auto;padding:28px 14px 18px;display:flex;flex-direction:column;gap:9px}
+.phone{width:299px;height:616px;margin:0 auto;border-radius:40px;overflow:hidden;pointer-events:none}
+.phone .ph{transform:scale(.88);transform-origin:top left}
+.phone .ph-in{overflow:hidden}
 .prof{display:flex;align-items:center;gap:14px;padding:16px}
 .av{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 20px 'Space Grotesk';flex:none}
 .handle{display:flex;align-items:center;gap:8px;padding:0 16px 16px}
@@ -77,17 +79,12 @@
     </div>
 
     <aside class="ed-side">
-      <div class="phone" style="background: {{bg}}">
-        <div class="phone-in" style="font-family: {{fontStack}}; color: {{fg}}">
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 6px; text-align: center">
-            <div class="av" style="width: 64px; height: 64px; border: 2px solid {{accent}}; background: {{card}}; color: {{fg}}">{{initials}}</div>
-            <b style="font-size: 16px">{{pageTitle}}</b>
-            <span style="font-size: 11.5px; color: {{muted}}">@{{instagram}}</span>
-            <span style="font-size: 12px; color: {{muted}}; line-height: 1.4">{{bio}}</span>
-          </div>
-          <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div style="{{v.pStyle}}">{{v.title}}</div></sc-for>
-          <sc-if value="{{showBrand}}" hint-placeholder-val="{{ true }}"><span style="margin-top: auto; text-align: center; font-size: 10px; color: {{muted}}">Crie a sua com WhiteLink</span></sc-if>
-        </div>
+      <div class="phone">
+        <div class="ph {{tcls}}" style="{{phStyle}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in">
+          <div class="ph-head"><div class="ph-av">{{initials}}</div><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
+          <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div class="{{v.cls}}" style="{{v.pStyle}}">{{v.title}}</div></sc-for>
+          <sc-if value="{{showBrand}}" hint-placeholder-val="{{ true }}"><div class="ph-foot">Crie a sua com WhiteLink</div></sc-if>
+        </div></div>
       </div>
     </aside>
   </div>
@@ -155,16 +152,13 @@
     <div class="scrim" onClick="{{closeSheet}}">
       <div class="sheet" onClick="{{stop}}" style="background: #0E0E14">
         <div class="grab"></div>
-        <div class="phone" style="background: {{bg}}; height: 560px; width: 280px">
-          <div class="phone-in" style="font-family: {{fontStack}}; color: {{fg}}">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 6px; text-align: center">
-              <div class="av" style="width: 64px; height: 64px; border: 2px solid {{accent}}; background: {{card}}; color: {{fg}}">{{initials}}</div>
-              <b style="font-size: 16px">{{pageTitle}}</b>
-              <span style="font-size: 11.5px; color: {{muted}}">@{{instagram}}</span>
-            </div>
-            <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div style="{{v.pStyle}}">{{v.title}}</div></sc-for>
-          </div>
-        </div>
+        <div class="phone">
+        <div class="ph {{tcls}}" style="{{phStyle}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in">
+          <div class="ph-head"><div class="ph-av">{{initials}}</div><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
+          <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div class="{{v.cls}}" style="{{v.pStyle}}">{{v.title}}</div></sc-for>
+          <sc-if value="{{showBrand}}" hint-placeholder-val="{{ true }}"><div class="ph-foot">Crie a sua com WhiteLink</div></sc-if>
+        </div></div>
+      </div>
         <a class="btn full" href="{{pageUrl}}" target="_blank" rel="noopener" style="margin-top: 16px">Abrir minha página</a>
       </div>
     </div>
@@ -188,7 +182,7 @@ class Component extends DCLogic {
     const a = d.appearance || {};
     this.uid = d.blocks.reduce((m, b) => Math.max(m, b.id || 0), 0) + 1;
     this.setState({ loading: false, user: d.user, blocks: d.blocks, title: d.profile.title || '', bio: d.profile.bio || '',
-      theme: a.theme || 0, font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '' });
+      theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '' });
   }
   flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
   change(patch) {
@@ -201,7 +195,7 @@ class Component extends DCLogic {
     const s = this.state;
     this.setState({ saved: 'saving' });
     const d = await DC.api('editor', 'PUT', { blocks: s.blocks, title: s.title, bio: s.bio,
-      appearance: { theme: s.theme, font: s.font, shape: s.shape, acc: s.acc } });
+      appearance: { theme: s.theme, tk: s.tk, font: s.font, shape: s.shape, acc: s.acc } });
     if (d.status === 401) { location.href = '/entrar'; return; }
     this.setState({ saved: d.ok ? 'saved' : 'error', err: d.error });
   }
@@ -283,11 +277,15 @@ class Component extends DCLogic {
     } : {};
     let shown = list.filter((b) => b.on && NEED[b.kind] <= plan);
     shown = shown.filter((b) => b.featured).concat(shown.filter((b) => !b.featured));
+    const TT = window.WL_TEMAS || [];
+    const tkRaw = s.tk || ['noite', 'papel', 'oceano', 'brasa'][s.theme] || 'noite';
+    const trow = TT.find((t) => t[1] === tkRaw) || ['Noite', 'noite', 0];
+    const tk = trow[2] <= plan ? trow[1] : 'noite';
+    const basic = ['noite', 'papel', 'oceano', 'brasa'].indexOf(tk) >= 0;
     const visible = shown.map((b) => ({
       title: b.title,
-      pStyle: 'padding: 12px; font-size: 12.5px; font-weight: 600; text-align: center; border-radius: ' + radius + '; ' +
-        (b.kind === 'text' ? 'background: transparent; color: ' + th.fg + '; font-weight: 400' :
-          (b.featured ? 'background: ' + th.accent + '; color: ' + th.ink : 'background: ' + th.card + '; color: ' + th.fg))
+      cls: b.kind === 'text' ? 'ph-bio' : (b.kind === 'shop' || b.kind === 'lead' || b.kind === 'timer' || b.kind === 'video' ? 'ph-card' : 'ph-btn' + (b.featured ? ' main' : '')),
+      pStyle: (b.kind === 'text' ? 'text-align: center; max-width: none' : '') + (plan >= 1 && basic && b.kind !== 'text' ? '; border-radius: ' + radius : '') + (plan >= 1 && s.acc && b.featured ? '; background: ' + s.acc + '; border-color: ' + s.acc : '')
     }));
     const saveMap = { idle: ['Tudo salvo', '#6F6F80'], dirty: ['Salvando em instantes…', '#F2C14E'], saving: ['Salvando…', '#9C9CAD'], saved: ['Tudo salvo ✓', '#D4FF3A'], error: [s.err || 'Não salvou. Confira a internet.', '#FF8A6B'] };
     const days = u.until ? Math.max(0, Math.ceil((u.until - Date.now()) / 86400000)) : 0;
@@ -316,6 +314,7 @@ class Component extends DCLogic {
       setPageTitle: (e) => this.change({ title: e.target.value.slice(0, 60) }),
       setBio: (e) => this.change({ bio: e.target.value.slice(0, 160) }),
       bg: th.bg, fg: th.fg, card: th.card, muted: th.muted, accent: th.accent,
+      tcls: 't-' + tk, phStyle: plan >= 1 && basic ? 'font-family: ' + fonts[s.font] : '',
       fontStack: fonts[plan >= 1 ? s.font : 0],
       sheetAdd: s.sheet === 'add', sheetEdit: s.sheet === 'edit' && !!eb, sheetProfile: s.sheet === 'profile', sheetPreview: s.sheet === 'preview',
       openAdd: () => this.setState({ sheet: 'add' }),

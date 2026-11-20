@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Temas — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,700&amp;family=Space+Mono:wght@400;700&amp;family=Pacifico&amp;family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&amp;family=Cinzel:wght@500;700&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&amp;family=DM+Serif+Display:ital@0;1&amp;family=Syne:wght@600;800&amp;family=Fraunces:ital,wght@0,500;0,600;1,600&amp;family=Unbounded:wght@600;800&amp;family=Bebas+Neue&amp;family=Righteous&amp;family=Press+Start+2P&amp;family=Abril+Fatface&amp;family=Great+Vibes&amp;family=Bungee&amp;family=Caveat:wght@500;700&amp;family=Italiana&amp;family=Limelight&amp;family=Marcellus&amp;family=Amatic+SC:wght@400;700&amp;family=Comfortaa:wght@500;700&amp;family=Lobster&amp;family=Yeseva+One&amp;family=IM+Fell+English&amp;family=Orbitron:wght@500;800&amp;family=Monoton&amp;family=UnifrakturMaguntia&amp;family=Cinzel+Decorative:wght@700&amp;family=Josefin+Sans:wght@400;700&amp;family=Shrikhand&amp;family=Bangers&amp;family=Special+Elite&amp;display=swap">
+<link rel="stylesheet" href="/assets/temas.css">
+<style>
+.tg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:640px){.tg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1000px){.tg{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.tc{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 8px 12px;border-radius:20px;background:#14141B;border:2px solid #24242E;cursor:pointer;font-family:inherit;color:#F3F3F7}
+.tc.on{border-color:#D4FF3A}
+.mini{width:146px;height:300px;overflow:hidden;border-radius:22px;position:relative;pointer-events:none}
+.mini .ph{transform:scale(.43);transform-origin:top left}
+.big{width:272px;height:560px;overflow:hidden;border-radius:38px;margin:0 auto;pointer-events:none}
+.big .ph{transform:scale(.8);transform-origin:top left}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;height:38px;padding:0 16px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.chips button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+.tier{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.lockb{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(14,14,20,.85);display:flex;align-items:center;justify-content:center}
+</style>
+</helmet>
+<div>
+  <div class="appbar">
+    <a class="icon-btn" href="/painel/aparencia" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <h1>Temas</h1>
+  </div>
+  <div class="app-main" style="max-width: 1100px">
+    <div class="chips" role="group" aria-label="Filtrar">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" aria-pressed="{{f.sel}}">{{f.name}}</button></sc-for>
+    </div>
+    <div class="tg">
+      <sc-for list="{{themes}}" as="t" hint-placeholder-count="12">
+        <button class="{{t.cls}}" onClick="{{t.open}}" aria-label="Tema {{t.name}}">
+          <div class="mini">
+            <div class="ph {{t.tcls}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in"><div class="ph-head"><div class="ph-av">{{ini}}</div><div class="ph-name">{{name}}</div><div class="ph-handle">@{{ig}}</div><div class="ph-orn"></div></div><div class="ph-btn main">Meu link principal</div><div class="ph-btn">Minha loja</div><div class="ph-btn">Fale comigo</div><div class="ph-card"><div class="ph-thumb"></div><div class="ph-ct"><b>Produto</b><span>R$ 99</span></div></div></div></div>
+          </div>
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600">{{t.name}}</span>
+          <sc-if value="{{t.locked}}" hint-placeholder-val="{{ false }}"><span class="lockb"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#F3F3F7" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></sc-if>
+          <sc-if value="{{t.inUse}}" hint-placeholder-val="{{ false }}"><span class="chip" style="position: absolute; top: 10px; left: 10px; height: 24px; font-size: 11px; background: #D4FF3A; color: #0E0E14">Em uso</span></sc-if>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{sheet}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{close}}">
+      <div class="sheet" onClick="{{stop}}">
+        <div class="grab"></div>
+        <div class="big">
+          <div class="ph {{cur.tcls}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in"><div class="ph-head"><div class="ph-av">{{ini}}</div><div class="ph-name">{{name}}</div><div class="ph-handle">@{{ig}}</div><div class="ph-bio">Sua bio aparece aqui</div><div class="ph-orn"></div></div><div class="ph-btn main">Meu link principal</div><div class="ph-btn">Minha loja</div><div class="ph-btn">Fale comigo</div><div class="ph-card"><div class="ph-thumb"></div><div class="ph-ct"><b>Produto</b><span>R$ 99</span></div></div><div class="ph-foot">WhiteLink</div></div></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 16px">
+          <h2 style="margin: 0; flex: 1">{{cur.name}}</h2>
+          <span class="tier" style="{{cur.tierStyle}}">{{cur.tier}}</span>
+        </div>
+        <p style="margin: 6px 0 16px; color: #9C9CAD; font-size: 15px">{{cur.desc}}</p>
+        <sc-if value="{{cur.canUse}}" hint-placeholder-val="{{ true }}">
+          <button class="btn full" onClick="{{use}}">{{cur.useLabel}}</button>
+        </sc-if>
+        <sc-if value="{{cur.locked}}" hint-placeholder-val="{{ false }}">
+          <a class="btn full" href="MeuPlano.dc.html" style="{{cur.lockStyle}}">Liberar no {{cur.tier}}</a>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toast}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { f: 0, sel: null, ap: {}, user: null, toast: '' }; }
+  async componentDidMount() {
+    const d = await DC.api('editor');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    if (d.ok) this.setState({ user: d.user, ap: d.appearance || {}, title: d.profile.title });
+  }
+  async use(key) {
+    const ap = Object.assign({}, this.state.ap, { tk: key });
+    this.setState({ ap: ap, sel: null, toast: 'Tema aplicado na sua página!' });
+    await DC.api('appearance', 'PUT', { appearance: ap });
+    clearTimeout(this.t); this.t = setTimeout(() => this.setState({ toast: '' }), 2000);
+  }
+  renderVals() {
+    const s = this.state;
+    const T = window.WL_TEMAS || [];
+    const u = s.user || { plan: 'prata', instagram: 'seuperfil', name: 'Seu Nome' };
+    const lvl = { prata: 0, ouro: 1, diamante: 2 }[u.plan] || 0;
+    const tierN = ['Prata', 'Ouro', 'Diamante'], tierC = ['#C9CDD6', '#F2C14E', '#8FE3FF'];
+    const curKey = s.ap.tk || ['noite', 'papel', 'oceano', 'brasa'][s.ap.theme || 0] || 'noite';
+    const F = ['Todos', 'Liberados para mim', 'Ouro', 'Diamante'];
+    const list = T.filter((t) => s.f === 0 || (s.f === 1 ? t[2] <= lvl : t[2] === s.f - 1));
+    const c = T.find((t) => t[1] === s.sel);
+    const title = s.title || u.name || 'Seu Nome';
+    return {
+      name: title, ig: u.instagram, ini: title.split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2).toUpperCase(),
+      filters: F.map((n, i) => ({ name: n, sel: s.f === i, pick: () => this.setState({ f: i }) })),
+      themes: list.map((t) => ({
+        name: t[0], tcls: 't-' + t[1], locked: t[2] > lvl, inUse: t[1] === curKey,
+        cls: 'tc' + (t[1] === curKey ? ' on' : ''),
+        open: () => this.setState({ sel: t[1] })
+      })),
+      sheet: !!c,
+      cur: c ? {
+        name: c[0], desc: c[3], tcls: 't-' + c[1], tier: tierN[c[2]],
+        tierStyle: 'border: 1px solid ' + tierC[c[2]] + '; color: ' + tierC[c[2]],
+        canUse: c[2] <= lvl, locked: c[2] > lvl,
+        useLabel: c[1] === curKey ? 'Tema em uso ✓' : 'Usar este tema',
+        lockStyle: 'background: ' + tierC[c[2]] + '; color: #0E0E14'
+      } : {},
+      use: () => { if (c && c[2] <= lvl) this.use(c[1]); },
+      close: () => this.setState({ sel: null }),
+      stop: (e) => e.stopPropagation(),
+      toast: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
