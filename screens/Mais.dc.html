@@ -21,29 +21,29 @@
       <svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
     </a>
 
-    <div class="sec-t">Minha página</div>
+    <div class="sec-t" style="margin-top: 14px"></div>
     <div class="list">
       <sc-for list="{{g1}}" as="r" hint-placeholder-count="3">
-        <a class="row" href="{{r.href}}"><span class="row-ic" style="{{r.icStyle}}"><svg viewBox="0 0 24 24"><path d="{{r.icon}}"/></svg></span><span class="row-tx"><b>{{r.t}}</b><span>{{r.d}}</span></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
+        <a class="row" href="{{r.href}}"><span class="row-ic" style="{{r.icStyle}}"><svg viewBox="0 0 24 24"><path d="{{r.icon}}"/></svg></span><span class="row-tx"><b>{{r.t}}</b></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
       </sc-for>
     </div>
 
-    <div class="sec-t">Conta</div>
+    <div style="height: 12px"></div>
     <div class="list">
       <sc-for list="{{g2}}" as="r" hint-placeholder-count="3">
-        <a class="row" href="{{r.href}}"><span class="row-ic" style="{{r.icStyle}}"><svg viewBox="0 0 24 24"><path d="{{r.icon}}"/></svg></span><span class="row-tx"><b>{{r.t}}</b><span>{{r.d}}</span></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
+        <a class="row" href="{{r.href}}"><span class="row-ic" style="{{r.icStyle}}"><svg viewBox="0 0 24 24"><path d="{{r.icon}}"/></svg></span><span class="row-tx"><b>{{r.t}}</b></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
       </sc-for>
     </div>
 
-    <div class="sec-t">Ajuda</div>
+    <div style="height: 12px"></div>
     <div class="list">
       <sc-for list="{{g3}}" as="r" hint-placeholder-count="3">
-        <a class="row" href="{{r.href}}" target="{{r.target}}"><span class="row-ic" style="{{r.icStyle}}"><svg viewBox="0 0 24 24"><path d="{{r.icon}}"/></svg></span><span class="row-tx"><b>{{r.t}}</b><span>{{r.d}}</span></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
+        <a class="row" href="{{r.href}}" target="{{r.target}}"><span class="row-ic" style="{{r.icStyle}}"><svg viewBox="0 0 24 24"><path d="{{r.icon}}"/></svg></span><span class="row-tx"><b>{{r.t}}</b></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
       </sc-for>
     </div>
 
     <button class="btn danger full" onClick="{{logout}}" style="margin-top: 24px">Sair da conta</button>
-    <p style="text-align: center; font-size: 12px; color: #6F6F80; margin: 18px 0 0">WhiteLink · whitelink.site</p>
+    
   </div>
 </div>
 </x-dc>
@@ -86,7 +86,7 @@ class Component extends DCLogic {
       g3: [
         { t: 'Central de ajuda', d: 'Respostas rápidas', href: 'CentralAjuda.dc.html', target: '_self', icon: I.help, icStyle: ic('#D4FF3A') },
         { t: 'Falar no WhatsApp', d: '(11) 99393-1841', href: 'https://wa.me/5511993931841?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20o%20WhiteLink', target: '_blank', icon: I.chat, icStyle: ic('#4ADE80') },
-        { t: 'Termos e privacidade', d: 'Regras de uso e seus dados', href: 'Termos.dc.html', target: '_self', icon: I.doc, icStyle: ic('#9C9CAD') }
+        { t: 'Termos de uso', d: 'Regras de uso e seus dados', href: 'Termos.dc.html', target: '_self', icon: I.doc, icStyle: ic('#9C9CAD') }
       ],
       logout: async () => { await DC.api('auth/logout', 'POST', {}); location.href = '/'; }
     };

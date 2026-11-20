@@ -38,26 +38,25 @@
       </sc-for>
     </div>
     <div class="list" style="margin-top: 12px">
-      <a class="row" href="/painel/em-breve?t=Temas"><span class="row-ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span><span class="row-tx"><b>Ver os 77 temas</b><span>{{moreThemes}}</span></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
+      <a class="row" href="/painel/em-breve?t=Temas"><span class="row-ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span><span class="row-tx"><b>Ver mais temas</b></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
     </div>
 
     <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
       <div class="card" style="margin-top: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; border-color: #4A3A14">
-        <b style="font-size: 16px">Cor, fonte e formato dos botões</b>
-        <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">No Ouro você escolhe a cor de destaque, a fonte e o formato dos botões da sua página.</span>
+        <b style="font-size: 16px">Mudar cor, fonte e botões</b>
         <a class="btn" href="MeuPlano.dc.html" style="background: #F2C14E">Conhecer o Ouro</a>
       </div>
     </sc-if>
     <sc-if value="{{canStyle}}" hint-placeholder-val="{{ true }}">
-      <div class="sec-t">Cor de destaque</div>
+      <div class="sec-t">Cor</div>
       <div class="card" style="padding: 14px 16px; display: flex; align-items: center; gap: 14px">
         <input type="color" value="{{acc}}" onChange="{{setAcc}}" aria-label="Cor de destaque" style="width: 52px; height: 52px; border: none; border-radius: 14px; background: transparent; padding: 0; cursor: pointer">
-        <span style="flex: 1; font-size: 14px; color: #C9C9D6">Usada no botão em destaque e na borda da foto</span>
+        <span style="flex: 1"></span>
         <button class="chip" onClick="{{resetAcc}}" style="border: none; background: #1B1B24; color: #C9C9D6; cursor: pointer">Padrão</button>
       </div>
       <div class="sec-t">Fonte</div>
       <div class="opt"><sc-for list="{{fonts}}" as="f" hint-placeholder-count="3"><button onClick="{{f.pick}}" aria-pressed="{{f.sel}}" style="{{f.style}}">{{f.name}}</button></sc-for></div>
-      <div class="sec-t">Formato dos botões</div>
+      <div class="sec-t">Botões</div>
       <div class="opt"><sc-for list="{{shapes}}" as="x" hint-placeholder-count="3"><button onClick="{{x.pick}}" aria-pressed="{{x.sel}}" style="{{x.style}}">{{x.name}}</button></sc-for></div>
     </sc-if>
   </div>

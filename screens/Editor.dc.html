@@ -49,25 +49,16 @@
           <div class="av" style="background: #1B1B24; border: 2px solid {{accent}}; color: #F3F3F7">{{initials}}</div>
           <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
             <b style="font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{pageTitle}}</b>
-            <span style="font-size: 13px; color: #9C9CAD; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{bioLine}}</span>
+            <span style="font-size: 14px; color: #9C9CAD">whitelink.site/{{handle}}</span>
           </div>
           <svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
         </button>
-        <div class="handle">
-          <code>whitelink.site/<b style="color: #F3F3F7">{{handle}}</b></code>
-          <button class="chip" onClick="{{copyLink}}" style="border: none; cursor: pointer; background: rgba(212,255,58,.14); color: #D4FF3A">{{copyLabel}}</button>
-        </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 16px; align-items: center">
-          <a class="chip" href="MeuPlano.dc.html" style="text-decoration: none; background: {{planBg}}; color: {{planColor}}">{{planLabel}}</a>
-          <span class="chip" style="background: #1B1B24; color: {{limitColor}}">{{limitText}}</span>
-          <span style="flex: 1"></span>
-          <span role="status" style="font-size: 12.5px; color: {{saveColor}}">{{saveText}}</span>
-        </div>
       </div>
+      <sc-if value="{{saveError}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: #2A1512; color: #FFB4A3; font-size: 14px">{{saveText}}</div></sc-if>
 
-      <div class="sec-t">Blocos da página · {{count}}</div>
+      <div class="sec-t">Seus links</div>
       <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
-        <div class="card" style="padding: 28px 20px; text-align: center; color: #9C9CAD; font-size: 15px; line-height: 1.5">Sua página ainda está vazia.<br>Toque em <b style="color: #D4FF3A">Adicionar</b> para colocar o primeiro link.</div>
+        <div class="card" style="padding: 28px 20px; text-align: center; color: #9C9CAD; font-size: 15px">Toque em <b style="color: #D4FF3A">Adicionar</b> para criar seu primeiro link.</div>
       </sc-if>
       <sc-if value="{{hasBlocks}}" hint-placeholder-val="{{ true }}">
       <div class="list">
@@ -76,15 +67,13 @@
             <span class="drag" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></span>
             <button onClick="{{k.edit}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; background: transparent; border: none; color: inherit; text-align: left; cursor: pointer; padding: 0">
               <span class="row-ic"><svg viewBox="0 0 24 24"><path d="{{k.svg}}"/></svg></span>
-              <span class="row-tx"><b>{{k.title}}</b><span>{{k.sub}}</span></span>
+              <span class="row-tx"><b>{{k.title}}</b><sc-if value="{{k.sub}}" hint-placeholder-val="{{ false }}"><span>{{k.sub}}</span></sc-if></span>
             </button>
-            <sc-if value="{{k.featured}}" hint-placeholder-val="{{ false }}"><span class="chip" style="background: rgba(212,255,58,.14); color: #D4FF3A; height: 24px; font-size: 11px">Destaque</span></sc-if>
-            <button class="sw" onClick="{{k.toggle}}" aria-label="{{k.toggleLabel}}" aria-pressed="{{k.on}}" style="{{k.swStyle}}"><span style="{{k.knobStyle}}"></span></button>
+                        <button class="sw" onClick="{{k.toggle}}" aria-label="{{k.toggleLabel}}" aria-pressed="{{k.on}}" style="{{k.swStyle}}"><span style="{{k.knobStyle}}"></span></button>
           </div>
         </sc-for>
       </div>
       </sc-if>
-      <div style="padding: 14px 4px 0; font-size: 12.5px; color: #6F6F80">Toque num bloco para editar. No computador, arraste pela alça para mudar a ordem.</div>
     </div>
 
     <aside class="ed-side">
@@ -111,19 +100,16 @@
     <div class="scrim" onClick="{{closeSheet}}">
       <div class="sheet" onClick="{{stop}}">
         <div class="grab"></div>
-        <h2>Adicionar bloco</h2>
+        <h2>O que você quer adicionar?</h2>
         <div class="grid2">
           <sc-for list="{{library}}" as="b" hint-placeholder-count="8">
             <button class="tile" onClick="{{b.add}}" disabled="{{b.locked}}">
               <span class="row-ic"><svg viewBox="0 0 24 24"><path d="{{b.svg}}"/></svg></span>
-              <span style="display: flex; flex-direction: column; gap: 2px"><b style="font-weight: 600">{{b.label}}</b><small>{{b.hint}}</small></span>
+              <b style="font-weight: 600">{{b.label}}</b>
               <sc-if value="{{b.locked}}" hint-placeholder-val="{{ false }}"><span class="lock">{{b.need}}</span></sc-if>
             </button>
           </sc-for>
         </div>
-        <sc-if value="{{isPrata}}" hint-placeholder-val="{{ false }}">
-          <a class="btn ghost full" href="MeuPlano.dc.html" style="margin-top: 14px">Liberar todos os blocos no Ouro</a>
-        </sc-if>
       </div>
     </div>
   </sc-if>
@@ -139,16 +125,16 @@
         </sc-if>
         <sc-if value="{{ed.canFeature}}" hint-placeholder-val="{{ false }}">
           <div class="row" style="padding: 8px 2px; border: none; min-height: 56px; cursor: default">
-            <span class="row-tx"><b>Destacar este link</b><span>Fica em cima, com a cor de destaque</span></span>
+            <span class="row-tx"><b>Destacar</b></span>
             <button class="sw" onClick="{{ed.toggleFeatured}}" aria-pressed="{{ed.featured}}" style="{{ed.featSw}}"><span style="{{ed.featKnob}}"></span></button>
           </div>
         </sc-if>
-        <div style="display: flex; gap: 10px; margin-top: 8px">
-          <button class="btn ghost" onClick="{{ed.up}}" disabled="{{ed.first}}" style="flex: 1">↑ Subir</button>
-          <button class="btn ghost" onClick="{{ed.down}}" disabled="{{ed.last}}" style="flex: 1">↓ Descer</button>
+        <button class="btn full" onClick="{{closeSheet}}" style="margin-top: 6px">Salvar</button>
+        <div style="display: flex; gap: 8px; margin-top: 10px">
+          <button class="btn ghost" onClick="{{ed.up}}" disabled="{{ed.first}}" aria-label="Subir" style="flex: 1">↑</button>
+          <button class="btn ghost" onClick="{{ed.down}}" disabled="{{ed.last}}" aria-label="Descer" style="flex: 1">↓</button>
+          <button class="btn danger" onClick="{{ed.remove}}" style="flex: 2">Apagar</button>
         </div>
-        <button class="btn full" onClick="{{closeSheet}}" style="margin-top: 10px">Pronto</button>
-        <button class="btn danger full" onClick="{{ed.remove}}" style="margin-top: 10px">Remover bloco</button>
       </div>
     </div>
   </sc-if>
@@ -157,10 +143,10 @@
     <div class="scrim" onClick="{{closeSheet}}">
       <div class="sheet" onClick="{{stop}}">
         <div class="grab"></div>
-        <h2>Perfil da página</h2>
-        <label class="fld">Nome que aparece<input class="inp" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60"></label>
-        <label class="fld">Bio (até 160 letras)<input class="inp" value="{{bio}}" onInput="{{setBio}}" maxlength="160" placeholder="Conte em uma linha o que você faz"></label>
-        <button class="btn full" onClick="{{closeSheet}}">Pronto</button>
+        <h2>Seu perfil</h2>
+        <label class="fld">Nome<input class="inp" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60"></label>
+        <label class="fld">Bio<input class="inp" value="{{bio}}" onInput="{{setBio}}" maxlength="160" placeholder="Ex.: Moda feminina com entrega para todo o Brasil"></label>
+        <button class="btn full" onClick="{{closeSheet}}">Salvar</button>
       </div>
     </div>
   </sc-if>
@@ -221,14 +207,14 @@ class Component extends DCLogic {
   }
   kinds() {
     return {
-      link: { svg: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2', label: 'Link', ic: 'Ln', hint: 'Botão com destino', t: 'Título do botão', u: 'Para onde o botão leva', uh: 'minhaloja.com.br' },
+      link: { svg: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2', label: 'Link', ic: 'Ln', hint: 'Botão com destino', t: 'Nome do botão', u: 'Link', uh: 'minhaloja.com.br' },
       text: { svg: 'M5 6h14M5 11h14M5 16h9', label: 'Texto', ic: 'Tx', hint: 'Título ou recado', t: 'Texto', u: '', uh: '' },
-      video: { svg: 'M4 6h11v12H4zM15 10l5-3v10l-5-3', label: 'Vídeo', ic: 'Vd', hint: 'YouTube, TikTok, Reels', t: 'Título do vídeo', u: 'Link do vídeo', uh: 'https://youtube.com/watch?v=...' },
-      shop: { svg: 'M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2', label: 'Produto', ic: 'Pr', hint: 'Vitrine com preço', t: 'Nome e preço (ex.: Camiseta · R$ 59)', u: 'Link para comprar', uh: 'minhaloja.com.br/produto' },
-      timer: { svg: 'M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 9v4l2.5 2M9 2h6', label: 'Contagem', ic: 'Ct', hint: 'Urgência para ofertas', t: 'Texto (ex.: Promoção termina em)', u: 'Fim (AAAA-MM-DD HH:MM)', uh: '2026-12-31 23:59' },
-      lead: { svg: 'M4 20l1.4-4A8 8 0 1 1 8 18.6zM9 11h6M9 14h4', label: 'Captura', ic: 'Cc', hint: 'Pegue o WhatsApp', t: 'Chamada (ex.: Receba novidades)', u: '', uh: '' },
-      pix: { svg: 'M12 3l9 9-9 9-9-9z', label: 'Pix', ic: 'Px', hint: 'Doação ou pagamento', t: 'Texto do botão', u: 'Sua chave Pix', uh: 'e-mail, celular ou chave aleatória' },
-      gallery: { svg: 'M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M15 9h.01', label: 'Galeria', ic: 'Gl', hint: 'Link para álbum', t: 'Título da galeria', u: 'Link do álbum', uh: '' }
+      video: { svg: 'M4 6h11v12H4zM15 10l5-3v10l-5-3', label: 'Vídeo', ic: 'Vd', hint: 'YouTube, TikTok, Reels', t: 'Título', u: 'Link do vídeo', uh: 'https://youtube.com/watch?v=...' },
+      shop: { svg: 'M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2', label: 'Produto', ic: 'Pr', hint: 'Vitrine com preço', t: 'Produto e preço', u: 'Link para comprar', uh: 'minhaloja.com.br/produto' },
+      timer: { svg: 'M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 9v4l2.5 2M9 2h6', label: 'Contagem', ic: 'Ct', hint: 'Urgência para ofertas', t: 'Texto', u: 'Termina em (AAAA-MM-DD HH:MM)', uh: '2026-12-31 23:59' },
+      lead: { svg: 'M4 20l1.4-4A8 8 0 1 1 8 18.6zM9 11h6M9 14h4', label: 'Captura', ic: 'Cc', hint: 'Pegue o WhatsApp', t: 'Texto', u: '', uh: '' },
+      pix: { svg: 'M12 3l9 9-9 9-9-9z', label: 'Pix', ic: 'Px', hint: 'Doação ou pagamento', t: 'Nome do botão', u: 'Sua chave Pix', uh: 'e-mail, celular ou chave aleatória' },
+      gallery: { svg: 'M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M15 9h.01', label: 'Galeria', ic: 'Gl', hint: 'Link para álbum', t: 'Título', u: 'Link do álbum', uh: '' }
     };
   }
   move(from, to) {
@@ -269,7 +255,7 @@ class Component extends DCLogic {
       const hidden = NEED[b.kind] > plan;
       return {
         title: b.title, ic: k.ic, svg: k.svg, featured: !!b.featured, on: b.on,
-        sub: hidden ? k.label + ' · só no Ouro (escondido)' : (b.url ? k.label + ' · ' + b.url : k.label),
+        sub: hidden ? 'Só no Ouro' : (b.on ? '' : 'Escondido'),
         cls: 'row' + (s.over === i && s.drag !== null && s.drag !== i ? ' over' : ''),
         rowStyle: 'padding-left: 6px; opacity: ' + (b.on ? (s.drag === i ? '.5' : '1') : '.5'),
         toggleLabel: b.on ? 'Esconder bloco' : 'Mostrar bloco',
@@ -279,7 +265,7 @@ class Component extends DCLogic {
         drop: (e) => { e.preventDefault(); const from = this.state.drag; this.setState({ drag: null, over: null }); if (from !== null) this.move(from, i); },
         dragEnd: () => this.setState({ drag: null, over: null }),
         edit: () => this.setState({ sheet: 'edit', editing: b.id }),
-        toggle: () => { this.update(b.id, { on: !b.on }); this.flash(b.on ? 'Bloco escondido' : 'Bloco visível'); }
+        toggle: () => { this.update(b.id, { on: !b.on });  }
       };
     });
     const idx = list.findIndex((b) => b.id === s.editing);
@@ -293,7 +279,7 @@ class Component extends DCLogic {
       setUrl: (e) => this.update(eb.id, { url: e.target.value.slice(0, 600) }),
       toggleFeatured: () => this.update(eb.id, { featured: !eb.featured }),
       up: () => this.move(idx, idx - 1), down: () => this.move(idx, idx + 1),
-      remove: () => { if (confirm('Remover o bloco "' + eb.title + '"?')) { this.change({ blocks: list.filter((x) => x.id !== eb.id), sheet: null, editing: null }); this.flash('Bloco removido'); } }
+      remove: () => { if (confirm('Remover o bloco "' + eb.title + '"?')) { this.change({ blocks: list.filter((x) => x.id !== eb.id), sheet: null, editing: null });  } }
     } : {};
     let shown = list.filter((b) => b.on && NEED[b.kind] <= plan);
     shown = shown.filter((b) => b.featured).concat(shown.filter((b) => !b.featured));
@@ -314,7 +300,7 @@ class Component extends DCLogic {
       planColor: tierC[plan], planBg: ['rgba(201,205,214,.12)', 'rgba(242,193,78,.14)', 'rgba(143,227,255,.14)'][plan],
       limitText: limit ? links + ' de ' + limit + ' links' : links + (links === 1 ? ' link' : ' links') + ' · ilimitados',
       limitColor: full ? '#F2C14E' : '#C9C9D6',
-      saveText: saveMap[s.saved][0], saveColor: saveMap[s.saved][1],
+      saveText: saveMap[s.saved][0], saveColor: saveMap[s.saved][1], saveError: s.saved === 'error',
       copyLabel: 'Copiar',
       copyLink: async () => { try { await navigator.clipboard.writeText('https://whitelink.site/' + u.handle); } catch (e) {} this.flash('Link copiado!'); },
       share: async () => {
