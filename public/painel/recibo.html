@@ -5,44 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Recibo — WhiteLink</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=Space+Mono:wght@700&amp;display=swap">
 <style>
-body{margin:0;background:#0B0B10}
-a{color:#D4FF3A}a:hover{color:#E6FF8A}
-button,input{font-family:Inter,system-ui,sans-serif}
-
-@media (max-width: 600px){
-[style*="font-size: 60px"]{font-size:36px !important}
-[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
-[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
-[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
-[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
-[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
-[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
-[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
-[style*="font-size: 16px"]{font-size:15px !important}
-h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
-p{line-height:1.5 !important}
-[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
-[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
-[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
-[style*="padding: 56px 32px"]{padding:32px 20px !important}
-[style*="padding: 36px"]{padding:22px !important}
-[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
-[style*="padding: 48px 24px"]{padding:24px 14px !important}
-[style*="padding: 48px;"]{padding:24px 18px !important}
-[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
-[style*="padding: 22px"]{padding:16px !important}
-[style*="gap: 48px"]{gap:28px !important}
-[style*="gap: 36px"]{gap:22px !important}
-[style*="height: 56px"]{height:50px !important}
-}
-
+.rc{background:#F6F5F0;color:#16161A;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.rc .k{font-size:12px;color:#5C5C66}.rc .v{font-size:15px;font-weight:600}
+.rc .g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media print{.appbar,.tabbar,.rail,.no-print{display:none!important}body{background:#fff}.app-main{padding:0}.rc{border-radius:0}}
 </style>
 <link rel="stylesheet" href="/assets/shell.css">
 </head>
 <body class="has-shell">
-<div style="position:sticky;top:0;z-index:50;background:#2B2210;border-bottom:1px solid #4A3A14;color:#F7DFA0;font:500 13px Inter,sans-serif;padding:8px 16px;text-align:center">Prévia: esta tela ainda mostra dados de exemplo. Ela será ligada à sua conta nas próximas atualizações. <a href="/painel" style="color:#D4FF3A">Voltar ao editor</a></div>
+
 <div id="root"></div>
 <nav class="rail" aria-label="Menu"><a class="rail-logo" href="/painel" aria-label="WhiteLink">W</a><a class="rail-i" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="rail-i" href="/painel/aparencia"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></span>Aparência</a><a class="rail-i" href="/painel/em-breve?t=Estat%C3%ADsticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Estatísticas</a><a class="rail-i" href="/painel/contatos"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Contatos</a><a class="rail-i on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
 <nav class="tabbar" aria-label="Menu"><a class="tab" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="tab" href="/painel/aparencia"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></span>Aparência</a><a class="tab" href="/painel/em-breve?t=Estat%C3%ADsticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Estatísticas</a><a class="tab" href="/painel/contatos"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Contatos</a><a class="tab on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
@@ -51,23 +24,29 @@ p{line-height:1.5 !important}
 <script src="/assets/temas-list.js"></script>
 <script>
 class Component extends DCLogic {
-  constructor(p) { super(p); this.state = { dl: false, mail: false }; }
+  constructor(p) { super(p); this.state = { loading: true, o: null, u: null }; }
+  async componentDidMount() {
+    const code = new URLSearchParams(location.search).get('c') || '';
+    const [r, m] = await Promise.all([DC.api('orders/' + encodeURIComponent(code)), DC.api('me')]);
+    if (r.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ loading: false, o: r.ok && r.order.status === 'liberado' ? r.order : null, u: m.ok ? m.user : null });
+  }
   renderVals() {
-    const s = this.state;
+    const s = this.state, o = s.o, u = s.u || {};
+    const d = (t) => (t ? new Date(t).toLocaleDateString('pt-BR') : '—');
     return {
-      rows: [
-        { k: 'Cliente', v: '[Nome do cliente]' }, { k: 'E-mail', v: '[e-mail do cliente]' },
-        { k: 'Plano', v: 'Diamante anual' }, { k: 'Período', v: '[DATA] a [DATA]' },
-        { k: 'Forma de pagamento', v: 'Pix direto' }, { k: 'Data do pagamento', v: '[DATA] às [HORA]' },
-        { k: 'ID da transação Pix', v: 'E9876...543' }, { k: 'Recebedor', v: 'GM DIGITAL' }
-      ],
-      dlLabel: s.dl ? 'PDF baixado ✓' : 'Baixar em PDF', dl: () => this.setState({ dl: true }),
-      mailLabel: s.mail ? 'Enviado para o seu e-mail ✓' : 'Enviar por e-mail', mail: () => this.setState({ mail: true })
+      loading: s.loading, missing: !s.loading && !o, ok: !!o, o: o || {},
+      rows: o ? [
+        { k: 'Cliente', v: u.name || '—' }, { k: 'E-mail', v: u.email || '—' },
+        { k: 'Plano', v: o.planName + ' ' + o.periodName }, { k: 'Período', v: d(o.periodStart) + ' a ' + d(o.periodEnd) },
+        { k: 'Forma de pagamento', v: 'Pix' }, { k: 'Pago em', v: d(o.paidAt) }
+      ] : [],
+      print: () => window.print()
     };
   }
 }
 
-DC.mount(document.getElementById('root'), "\n<div style=\"min-height: 1000px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif\">\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/mais\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Recibo</h1></div>\n  <div style=\"max-width: 720px; margin: 0 auto; padding: 48px 24px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px\">\n    <a href=\"MeuPlano.dc.html\" style=\"font-size: 14px; color: #A7A7B8\">← Voltar para Meu plano</a>\n    <section aria-label=\"Recibo\" style=\"padding: 28px; border-radius: 20px; background: #F6F5F0; color: #16161A; display: flex; flex-direction: column; gap: 18px\">\n      <div style=\"display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap\">\n        <div style=\"display: flex; flex-direction: column; gap: 4px\">\n          <span style=\"font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px\">WhiteLink</span>\n          <span style=\"font-size: 13px; color: #5C5C66\">GM DIGITAL · WhatsApp (11) 99393-1841</span>\n        </div>\n        <div style=\"display: flex; flex-direction: column; gap: 4px; text-align: right\">\n          <span style=\"font-size: 12px; color: #5C5C66; text-transform: uppercase; letter-spacing: .06em\">Recibo</span>\n          <span style=\"font-family: 'Space Mono', monospace; font-weight: 700; font-size: 18px\">WL-4801</span>\n        </div>\n      </div>\n      <div style=\"height: 1px; background: #DDDAD0\"></div>\n      <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px\">\n        <sc-for list=\"{{rows}}\" as=\"r\" hint-placeholder-count=\"8\">\n          <div style=\"display: flex; flex-direction: column; gap: 3px\">\n            <span style=\"font-size: 12px; color: #5C5C66\">{{r.k}}</span>\n            <span style=\"font-size: 15px; font-weight: 600\">{{r.v}}</span>\n          </div>\n        </sc-for>\n      </div>\n      <div style=\"height: 1px; background: #DDDAD0\"></div>\n      <div style=\"display: flex; justify-content: space-between; align-items: baseline; gap: 12px\">\n        <span style=\"font-size: 16px; font-weight: 600\">Total pago</span>\n        <span style=\"font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700\">R$ 399,86</span>\n      </div>\n      <span style=\"font-size: 12px; color: #5C5C66; line-height: 1.5\">Este recibo comprova o pagamento do plano. Não substitui nota fiscal. [Se emitir nota fiscal, ela chega por e-mail.]</span>\n    </section>\n    <div style=\"display: flex; flex-wrap: wrap; gap: 10px; align-items: center\">\n      <button onClick=\"{{dl}}\" style=\"height: 48px; padding: 0 18px; border-radius: 12px; border: none; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 15px; cursor: pointer\">{{dlLabel}}</button>\n      <button onClick=\"{{mail}}\" style=\"height: 48px; padding: 0 18px; border-radius: 12px; border: 1px solid #33333E; background: transparent; color: #F3F3F7; font-size: 15px; cursor: pointer\">{{mailLabel}}</button>\n    </div>\n  </div>\n</div>\n", Component, {});
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/plano\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Recibo</h1></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{missing}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"card\" style=\"padding: 20px; color: #C9C9D6\">Recibo não encontrado.</div></sc-if>\n    <sc-if value=\"{{ok}}\" hint-placeholder-val=\"{{ true }}\">\n      <div class=\"rc\">\n        <div style=\"display: flex; justify-content: space-between; align-items: flex-start; gap: 10px\">\n          <div><b style=\"font: 700 22px 'Space Grotesk'\">WhiteLink</b><div class=\"k\">GM DIGITAL · WhatsApp (11) 99393-1841</div></div>\n          <div style=\"text-align: right\"><div class=\"k\">RECIBO</div><b style=\"font: 700 17px 'Space Mono'\">{{o.code}}</b></div>\n        </div>\n        <div style=\"height: 1px; background: #DDDAD0\"></div>\n        <div class=\"g\">\n          <sc-for list=\"{{rows}}\" as=\"r\" hint-placeholder-count=\"6\"><div><div class=\"k\">{{r.k}}</div><div class=\"v\">{{r.v}}</div></div></sc-for>\n        </div>\n        <div style=\"height: 1px; background: #DDDAD0\"></div>\n        <div style=\"display: flex; justify-content: space-between; align-items: baseline\"><b>Total pago</b><b style=\"font: 700 28px 'Space Grotesk'\">{{o.value}}</b></div>\n        <span class=\"k\">Este recibo comprova o pagamento do plano. Não substitui nota fiscal.</span>\n      </div>\n      <button class=\"btn full no-print\" onClick=\"{{print}}\" style=\"margin-top: 14px\">Salvar em PDF ou imprimir</button>\n    </sc-if>\n  </div>\n</div>\n", Component, {});
 (async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar';})();
 </script>
 </body>

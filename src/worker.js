@@ -15,6 +15,11 @@ import * as goBlock from '../functions/go/[uid]/[bid].js';
 import * as editor from '../functions/api/editor.js';
 import * as lead from '../functions/api/lead.js';
 import * as appearance from '../functions/api/appearance.js';
+import * as billing from '../functions/api/billing.js';
+import * as ordersIndex from '../functions/api/orders/index.js';
+import * as orderOne from '../functions/api/orders/[code].js';
+import * as adminOrders from '../functions/api/admin/orders/index.js';
+import * as adminOrderOne from '../functions/api/admin/orders/[code].js';
 import * as profile from '../functions/[handle].js';
 
 const ROUTES = [
@@ -31,6 +36,11 @@ const ROUTES = [
   [/^\/api\/editor$/, editor],
   [/^\/api\/lead$/, lead],
   [/^\/api\/appearance$/, appearance],
+  [/^\/api\/billing$/, billing],
+  [/^\/api\/orders$/, ordersIndex],
+  [/^\/api\/orders\/(?<code>[A-Za-z0-9]+)$/, orderOne],
+  [/^\/api\/admin\/orders$/, adminOrders],
+  [/^\/api\/admin\/orders\/(?<code>[A-Za-z0-9]+)$/, adminOrderOne],
   [/^\/go\/(?<uid>\d+)\/(?<bid>\d+)$/, goBlock],
   [/^\/go\/(?<id>\d+)$/, go],
   [/^\/(?<handle>[^/]+)$/, profile]

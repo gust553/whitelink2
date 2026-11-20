@@ -5,56 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Meu plano — WhiteLink</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
 <style>
-body{margin:0;background:#0B0B10}
-a{color:#D4FF3A}a:hover{color:#E6FF8A}
-button{font-family:Inter,system-ui,sans-serif}
-@media (max-width: 600px){
-[style*="font-size: 60px"]{font-size:36px !important}
-[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
-[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
-[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
-[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
-[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
-[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
-[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
-[style*="font-size: 16px"]{font-size:15px !important}
-h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
-p{line-height:1.5 !important}
-[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
-[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
-[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
-[style*="padding: 56px 32px"]{padding:32px 20px !important}
-[style*="padding: 36px"]{padding:22px !important}
-[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
-[style*="padding: 48px 24px"]{padding:24px 14px !important}
-[style*="padding: 48px;"]{padding:24px 18px !important}
-[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
-[style*="padding: 22px"]{padding:16px !important}
-[style*="gap: 48px"]{gap:28px !important}
-[style*="gap: 36px"]{gap:22px !important}
-[style*="height: 56px"]{height:50px !important}
-}
-header nav a{text-decoration:none !important}
-header nav a:hover{color:#F3F3F7 !important}
-header > a,header > button{text-decoration:none !important}
-@media (max-width: 600px){
-header{gap:10px !important;padding:12px 14px !important;align-items:center !important}
-header > div[style*="flex: 1"]{flex:1 1 0 !important}
-header nav{order:5;flex:0 0 calc(100% + 28px) !important;flex-wrap:nowrap !important;overflow-x:auto;gap:6px !important;margin:2px -14px 0 !important;padding:2px 14px 4px !important;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%)}
-header nav::-webkit-scrollbar{display:none}
-header nav a{flex:none;white-space:nowrap;height:36px;box-sizing:border-box;display:inline-flex !important;align-items:center;padding:0 14px !important;border-radius:999px !important;background:#16161D !important;border:1px solid #24242E;color:#C9C9D6 !important;font-size:13px !important;font-weight:500 !important}
-header nav a[aria-current="page"]{background:#D4FF3A !important;border-color:#D4FF3A;color:#0E0E14 !important;font-weight:600 !important}
-header > span:not(:first-child){display:none !important}
-header > a[href="Configuracoes.dc.html"]{display:none !important}
-header > a,header > button{height:38px !important;padding:0 14px !important;font-size:13px !important;border-radius:10px !important}
-}
+.pc{padding:20px;display:flex;flex-direction:column;gap:6px}
+.big{font:700 30px 'Space Grotesk',sans-serif;letter-spacing:-.01em}
+.dots{display:flex;gap:8px;margin-top:8px}.dots span{flex:1;height:8px;border-radius:999px;background:#26262F}
+.plan-opt{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:#14141B;border:1px solid #24242E;text-decoration:none;color:inherit}
 </style>
 <link rel="stylesheet" href="/assets/shell.css">
 </head>
 <body class="has-shell">
-<div style="position:sticky;top:0;z-index:50;background:#2B2210;border-bottom:1px solid #4A3A14;color:#F7DFA0;font:500 13px Inter,sans-serif;padding:8px 16px;text-align:center">Prévia: esta tela ainda mostra dados de exemplo. Ela será ligada à sua conta nas próximas atualizações. <a href="/painel" style="color:#D4FF3A">Voltar ao editor</a></div>
+
 <div id="root"></div>
 <nav class="rail" aria-label="Menu"><a class="rail-logo" href="/painel" aria-label="WhiteLink">W</a><a class="rail-i" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="rail-i" href="/painel/aparencia"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></span>Aparência</a><a class="rail-i" href="/painel/em-breve?t=Estat%C3%ADsticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Estatísticas</a><a class="rail-i" href="/painel/contatos"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Contatos</a><a class="rail-i on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
 <nav class="tabbar" aria-label="Menu"><a class="tab" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="tab" href="/painel/aparencia"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></span>Aparência</a><a class="tab" href="/painel/em-breve?t=Estat%C3%ADsticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Estatísticas</a><a class="tab" href="/painel/contatos"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Contatos</a><a class="tab on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
@@ -63,70 +24,51 @@ header > a,header > button{height:38px !important;padding:0 14px !important;font
 <script src="/assets/temas-list.js"></script>
 <script>
 class Component extends DCLogic {
-  constructor(p) { super(p); this.state = { plan: 2, yearly: false, confirming: false, canceled: false }; }
+  constructor(p) { super(p); this.state = { d: null }; }
+  async componentDidMount() {
+    const d = await DC.api('billing');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d.ok ? d : null });
+  }
   renderVals() {
-    const s = this.state;
-    const P = [
-      { name: 'Teste Diamante', color: '#8FE3FF', m: 0, y: 0, links: 0, themes: 77, pages: 3, stats: '90 dias' },
-      { name: 'Prata', color: '#C9CDD6', m: 0, y: 0, links: 3, themes: 2, pages: 1, stats: '7 dias' },
-      { name: 'Ouro', color: '#F2C14E', m: 19.9, y: 199.9, links: 10, themes: 13, pages: 1, stats: '30 dias' },
-      { name: 'Diamante', color: '#8FE3FF', m: 39.9, y: 399.9, links: 0, themes: 77, pages: 3, stats: '90 dias' }
-    ];
-    const brl = (n) => 'R$ ' + n.toFixed(2).replace('.', ',');
-    const c = P[s.plan];
-    const trial = s.plan === 0, free = s.plan === 1, paid = s.plan > 1;
-    const pill = (sel, col) => 'height: 36px; padding: 0 12px; border-radius: 8px; cursor: pointer; font-size: 13px; ' + (sel ? 'border: 1px solid ' + col + '; background: #22222B; color: ' + col + '; font-weight: 600' : 'border: 1px solid #2A2A34; background: transparent; color: #C9C9D6');
-    const used = free ? 3 : 6;
-    const bar = (frac, col) => 'height: 100%; border-radius: 999px; background: ' + col + '; width: ' + Math.round(Math.min(1, frac) * 100) + '%';
-    const linkFull = c.links && used >= c.links;
-    const streak = 2;
+    const d = this.state.d;
+    if (!d) return { loading: true, ready: false };
+    const u = d.user;
+    const lv = { prata: 0, ouro: 1, diamante: 2 }[u.plan] || 0;
+    const C = ['#C9CDD6', '#F2C14E', '#8FE3FF'];
+    const date = (t) => new Date(t).toLocaleDateString('pt-BR');
+    const days = u.until ? Math.max(0, Math.ceil((u.until - Date.now()) / 86400000)) : 0;
+    const o = d.open;
+    let openTitle = '', openText = '', openBtn = '', openHref = '', openColor = '#24242E';
+    if (o && o.status === 'aguardando') { openTitle = 'Pix aguardando pagamento'; openText = 'Pedido ' + o.code + ' · ' + o.value + ' · plano ' + o.planName + ' ' + o.periodName + '.'; openBtn = 'Pagar ou enviar comprovante'; openHref = '/pagamento?c=' + o.code; openColor = '#F2C14E'; }
+    if (o && o.status === 'conferir') { openTitle = 'Comprovante em conferência'; openText = 'Recebemos o comprovante do pedido ' + o.code + '. Assim que conferirmos, seu plano é liberado.'; openBtn = 'Falar no WhatsApp'; openHref = 'https://wa.me/' + d.whatsapp + '?text=' + encodeURIComponent('Olá! Enviei o comprovante do pedido ' + o.code); openColor = '#8FE3FF'; }
+    if (o && o.status === 'recusado') { openTitle = 'Comprovante recusado'; openText = (o.note || 'Não encontramos o Pix desse comprovante.') + ' Envie outro comprovante ou fale com a gente.'; openBtn = 'Enviar outro comprovante'; openHref = '/pagamento/confirmar?c=' + o.code; openColor = '#FF8A6B'; }
+    const isPaid = lv > 0 && !u.trial;
+    const every = d.loyalty.every || 3;
     return {
-      asPlan: P.map((p, i) => ({ name: p.name, sel: s.plan === i, style: pill(s.plan === i, p.color), pick: () => this.setState({ plan: i, canceled: false, confirming: false }) })),
-      cur: {
-        color: c.color,
-        title: trial ? 'Teste Diamante' : (free ? 'Prata grátis' : c.name + ' mensal'),
-        status: trial ? 'Com tudo do Diamante · termina em [DATA DE FIM DO TESTE]. Depois você continua no Prata grátis.' : (free ? 'Grátis para sempre. O que passa do limite do Prata está guardado e volta quando você assinar.' : (s.canceled ? 'Renovação cancelada · fica ativo até [DATA] e depois vai para o Prata grátis' : 'Ativo · próximo Pix de ' + brl(c.m) + ' em [DATA]')),
-        payLabel: trial ? 'Assinar agora e manter o Diamante' : (free ? 'Assinar o Ouro ou o Diamante com Pix' : 'Pagar a renovação agora com Pix'),
-        payHint: trial ? 'Assinando antes do fim do teste, você continua com tudo do Diamante sem passar pelo Prata.' : (free ? 'Oferta de volta: 20% de desconto no primeiro Pix se assinar nos próximos 7 dias.' : '3 dias antes de vencer mandamos um lembrete por e-mail e SMS. É só gerar o Pix e pagar. No Pix automático renova na hora; no Pix direto, envie o comprovante. Se vencer sem pagamento, sua conta volta para o Prata grátis e tudo volta quando o pagamento for confirmado.'),
-        until: '[DATA]'
-      },
-      hasRefDays: paid,
-      isPaid: paid,
-      streakText: streak + ' de 3 renovações seguidas',
-      streakBar: bar(streak / 3, '#D4FF3A'),
-      streakNote: 'Na próxima renovação você ganha 7 dias grátis.',
-      hiddenNote: free,
-      usage: [
-        { label: 'Links', value: c.links ? used + ' de ' + c.links : used + ' · ilimitados', bar: bar(c.links ? used / c.links : 0.1, linkFull ? '#F2C14E' : '#D4FF3A'), note: free ? '3 links a mais estão guardados e escondidos' : (linkFull ? 'Limite atingido. Suba de plano para mais links.' : 'Tudo certo'), noteColor: (free || linkFull) ? '#F2C14E' : '#A7A7B8' },
-        { label: 'Páginas', value: '1 de ' + c.pages, bar: bar(1 / c.pages, '#D4FF3A'), note: c.pages > 1 ? 'Crie outras em Configurações' : 'Até 3 páginas no Diamante', noteColor: '#A7A7B8' },
-        { label: 'Temas liberados', value: String(c.themes) + (c.themes === 77 ? ' + tema próprio' : ''), bar: bar(c.themes / 77, '#D4FF3A'), note: c.themes === 77 ? 'Todos os temas, inclusive os novos' : 'Mais temas nos planos acima', noteColor: '#A7A7B8' },
-        { label: 'Estatísticas', value: c.stats, bar: bar(c.themes === 77 ? 1 : s.plan === 2 ? 0.5 : 0.15, '#D4FF3A'), note: c.themes === 77 ? 'Com exportação em planilha' : (free ? 'Só o total de visitas' : 'Por link, origem, aparelho e cidade'), noteColor: '#A7A7B8' }
-      ],
-      others: P.slice(1).map((p, j) => {
-        const i = j + 1;
-        const isFreeCard = i === 1;
-        return { name: p.name, color: p.color, price: isFreeCard ? 'Grátis para sempre' : brl(p.m) + '/mês ou ' + brl(p.y) + '/ano', isCurrent: i === s.plan, notCurrent: i !== s.plan,
-          cta: isFreeCard ? 'Voltar para o Prata grátis' : ((trial || free) ? 'Assinar ' + p.name : (i > s.plan ? 'Subir para ' + p.name : 'Mudar para ' + p.name)),
-          hint: i === 1 ? 'Até 3 links, 2 temas e total de visitas da semana.' : i === 2 ? 'Até 10 links, todos os blocos, 13 temas, vídeos e estatísticas de 30 dias.' : 'Tudo liberado: links ilimitados, 77 temas, tema próprio, 3 páginas e domínio próprio.' };
-      }),
-      history: paid ? [
-        { d: '[DATA]', t: 'Plano ' + c.name + ' mensal', v: brl(c.m) },
-        { d: '[DATA]', t: 'Plano ' + c.name + ' mensal', v: brl(c.m) },
-        { d: '[DATA]', t: 'Plano ' + c.name + ' mensal', v: brl(c.m) }
-      ] : [],
-      noHistory: !paid,
-      noHistoryText: trial ? 'Nenhum pagamento ainda. Você está no teste do Diamante.' : 'Nenhum pagamento ainda. Você está no Prata grátis.',
-      notCanceled: !s.canceled && paid, canceled: s.canceled && paid,
-      confirming: s.confirming, notConfirming: !s.confirming,
-      askCancel: () => this.setState({ confirming: true }),
-      keep: () => this.setState({ confirming: false }),
-      doCancel: () => this.setState({ canceled: true, confirming: false }),
-      undo: () => this.setState({ canceled: false })
+      loading: false, ready: true,
+      planName: u.trial ? 'Teste Diamante' : ['Prata', 'Ouro', 'Diamante'][lv],
+      planColor: C[lv],
+      planSub: u.trial ? 'Faltam ' + days + (days === 1 ? ' dia' : ' dias') + '. Depois sua conta continua no Prata grátis.' : (lv === 0 ? 'Grátis para sempre' : 'Válido até ' + date(u.until)),
+      hasOpen: !!o, openTitle, openText, openBtn, openHref, openColor,
+      choiceTitle: isPaid ? 'Renovar ou mudar de plano' : 'Assinar',
+      plans: [['ouro', 'Ouro', 1], ['diamante', 'Diamante', 2]].map((p) => ({
+        name: p[1], color: C[p[2]], bg: p[2] === 1 ? 'rgba(242,193,78,.14)' : 'rgba(143,227,255,.14)',
+        price: d.prices[p[0] + '_m'].label + '/mês ou ' + d.prices[p[0] + '_y'].label + '/ano',
+        cta: lv === p[2] && !u.trial ? 'Renovar' : 'Assinar',
+        href: '/pagamento?p=' + p[0],
+        style: lv === p[2] && !u.trial ? 'border-color: ' + C[p[2]] : ''
+      })),
+      isPaid: isPaid,
+      loyaltyText: 'A cada ' + every + ' renovações seguidas, você ganha ' + d.loyalty.days + ' dias grátis. ' + d.loyalty.count + ' de ' + every + '.',
+      dots: Array.from({ length: every }, (_, i) => i < d.loyalty.count ? 'background: #D4FF3A' : ''),
+      hasHist: d.history.length > 0,
+      hist: d.history.map((h) => ({ title: 'Plano ' + h.planName + ' ' + h.periodName + ' · ' + h.value, sub: 'Pago em ' + date(h.paidAt) + ' · pedido ' + h.code, href: '/painel/recibo?c=' + h.code }))
     };
   }
 }
 
-DC.mount(document.getElementById('root'), "\n<div style=\"min-height: 1250px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column\">\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/mais\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Meu plano</h1></div>\n\n  <div style=\"max-width: 1160px; width: 100%; box-sizing: border-box; margin: 0 auto; padding: 28px 24px 56px; display: flex; flex-direction: column; gap: 20px\">\n    <div style=\"display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px\">\n      <div style=\"display: flex; flex-direction: column; gap: 4px\">\n        <h1 style=\"margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700\">Meu plano</h1>\n        <span style=\"font-size: 13px; color: #A7A7B8\">Datas e valores de exemplo</span>\n      </div>\n      <div role=\"group\" aria-label=\"Ver como cliente do plano\" style=\"display: flex; gap: 6px; align-items: center; flex-wrap: wrap\">\n        <span style=\"font-size: 12px; color: #A7A7B8\">Ver como:</span>\n        <sc-for list=\"{{asPlan}}\" as=\"p\" hint-placeholder-count=\"4\">\n          <button onClick=\"{{p.pick}}\" aria-pressed=\"{{p.sel}}\" style=\"{{p.style}}\">{{p.name}}</button>\n        </sc-for>\n      </div>\n    </div>\n\n    <section aria-label=\"Plano atual\" style=\"padding: 24px; border-radius: 20px; background: #14141B; border: 1px solid {{cur.color}}; display: flex; flex-wrap: wrap; gap: 24px; align-items: center\">\n      <div style=\"flex: 1 1 320px; display: flex; flex-direction: column; gap: 8px\">\n        <span style=\"font-size: 13px; color: #A7A7B8\">Seu plano</span>\n        <span style=\"font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: {{cur.color}}\">{{cur.title}}</span>\n        <span style=\"font-size: 15px; color: #C9C9D6\">{{cur.status}}</span>\n        <sc-if value=\"{{hasRefDays}}\" hint-placeholder-val=\"{{ true }}\">\n          <span style=\"font-size: 14px; color: #D4FF3A\">+15 dias de indicação já somados ao vencimento</span>\n        </sc-if>\n      </div>\n      <div style=\"flex: 1 1 280px; display: flex; flex-direction: column; gap: 10px\">\n        <a href=\"Pagamento.dc.html\" style=\"height: 52px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; text-decoration: none\">{{cur.payLabel}}</a>\n        <span style=\"font-size: 13px; color: #A7A7B8; line-height: 1.5\">{{cur.payHint}}</span>\n      </div>\n    </section>\n\n    <section aria-label=\"Uso do plano\" style=\"padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px\">\n      <h2 style=\"margin: 0; font-size: 18px; font-weight: 600\">O que você está usando</h2>\n      <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px\">\n        <sc-for list=\"{{usage}}\" as=\"u\" hint-placeholder-count=\"4\">\n          <div style=\"padding: 16px; border-radius: 14px; background: #0E0E14; display: flex; flex-direction: column; gap: 8px\">\n            <div style=\"display: flex; justify-content: space-between; font-size: 14px\"><span style=\"color: #C9C9D6\">{{u.label}}</span><span style=\"font-weight: 600\">{{u.value}}</span></div>\n            <div style=\"height: 8px; border-radius: 999px; background: #26262F\"><div style=\"{{u.bar}}\"></div></div>\n            <span style=\"font-size: 12px; color: {{u.noteColor}}\">{{u.note}}</span>\n          </div>\n        </sc-for>\n      </div>\n    </section>\n\n    <sc-if value=\"{{isPaid}}\" hint-placeholder-val=\"{{ true }}\">\n    <section aria-label=\"Fidelidade\" style=\"padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #3A4714; display: flex; flex-direction: column; gap: 10px\">\n      <div style=\"display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; align-items: baseline\">\n        <h2 style=\"margin: 0; font-size: 18px; font-weight: 600\">Prêmio de fidelidade</h2>\n        <span style=\"font-size: 14px; color: #D4FF3A\">{{streakText}}</span>\n      </div>\n      <div style=\"height: 10px; border-radius: 999px; background: #26262F\"><div style=\"{{streakBar}}\"></div></div>\n      <span style=\"font-size: 13px; color: #C9C9D6\">{{streakNote}} Continue renovando sem atrasar para ganhar de novo a cada 3 renovações.</span>\n    </section>\n    </sc-if>\n\n    <section aria-label=\"Trocar de plano\" style=\"padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 14px\">\n      <div style=\"display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; align-items: baseline\">\n        <h2 style=\"margin: 0; font-size: 18px; font-weight: 600\">Trocar de plano</h2>\n        <a href=\"Planos.dc.html\" style=\"font-size: 13px\">Comparar planos</a>\n      </div>\n      <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px\">\n        <sc-for list=\"{{others}}\" as=\"o\" hint-placeholder-count=\"3\">\n          <div style=\"padding: 18px; border-radius: 16px; background: #0E0E14; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 8px\">\n            <span style=\"font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: {{o.color}}\">{{o.name}}</span>\n            <span style=\"font-size: 14px; color: #C9C9D6\">{{o.price}}</span>\n            <span style=\"font-size: 13px; color: #A7A7B8; line-height: 1.5; min-height: 38px\">{{o.hint}}</span>\n            <sc-if value=\"{{o.isCurrent}}\" hint-placeholder-val=\"{{ false }}\">\n              <span style=\"height: 44px; border-radius: 12px; background: #1A1A22; color: #A7A7B8; font-size: 14px; display: flex; align-items: center; justify-content: center\">Seu plano atual</span>\n            </sc-if>\n            <sc-if value=\"{{o.notCurrent}}\" hint-placeholder-val=\"{{ true }}\">\n              <a href=\"Pagamento.dc.html\" style=\"height: 44px; border-radius: 12px; border: 1px solid {{o.color}}; color: #F3F3F7; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none\">{{o.cta}}</a>\n            </sc-if>\n          </div>\n        </sc-for>\n      </div>\n      <span style=\"font-size: 12px; color: #A7A7B8; line-height: 1.5\">Subir de plano: você paga só a diferença dos dias que faltam e o plano novo libera assim que conferirmos o Pix. Descer de plano: vale a partir do próximo vencimento.</span>\n    </section>\n\n    <section aria-label=\"Pagamentos\" style=\"padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 12px\">\n      <h2 style=\"margin: 0; font-size: 18px; font-weight: 600\">Histórico de pagamentos</h2>\n      <div style=\"overflow-x: auto\">\n        <table style=\"width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px\">\n          <thead>\n            <tr style=\"text-align: left; color: #A7A7B8; font-size: 12px; text-transform: uppercase; letter-spacing: .05em\">\n              <th style=\"padding: 10px 8px; font-weight: 600\">Data</th>\n              <th style=\"padding: 10px 8px; font-weight: 600\">Descrição</th>\n              <th style=\"padding: 10px 8px; font-weight: 600\">Valor</th>\n              <th style=\"padding: 10px 8px; font-weight: 600\">Forma</th>\n              <th style=\"padding: 10px 8px; font-weight: 600\"><span style=\"position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)\">Recibo</span></th>\n            </tr>\n          </thead>\n          <tbody>\n            <sc-for list=\"{{history}}\" as=\"h\" hint-placeholder-count=\"3\">\n              <tr style=\"border-top: 1px solid #22222B\">\n                <td style=\"padding: 12px 8px; color: #C9C9D6\">{{h.d}}</td>\n                <td style=\"padding: 12px 8px\">{{h.t}}</td>\n                <td style=\"padding: 12px 8px; font-weight: 600\">{{h.v}}</td>\n                <td style=\"padding: 12px 8px; color: #C9C9D6\">Pix</td>\n                <td style=\"padding: 12px 8px; text-align: right\"><a href=\"Recibo.dc.html\" style=\"font-size: 13px\">Recibo</a></td>\n              </tr>\n            </sc-for>\n          </tbody>\n        </table>\n      </div>\n      <sc-if value=\"{{noHistory}}\" hint-placeholder-val=\"{{ false }}\">\n        <span style=\"font-size: 14px; color: #A7A7B8\">{{noHistoryText}}</span>\n      </sc-if>\n    </section>\n\n    <section aria-label=\"Cancelar\" style=\"padding: 22px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 12px\">\n      <h2 style=\"margin: 0; font-size: 18px; font-weight: 600\">Cancelar</h2>\n      <sc-if value=\"{{notCanceled}}\" hint-placeholder-val=\"{{ true }}\">\n        <div style=\"display: flex; flex-direction: column; gap: 12px\">\n          <span style=\"font-size: 14px; color: #C9C9D6; line-height: 1.5\">Se cancelar, paramos de mandar o lembrete de renovação. Você usa o plano até {{cur.until}} e depois continua no Prata grátis. O que passar do limite do Prata fica guardado caso volte.</span>\n          <sc-if value=\"{{confirming}}\" hint-placeholder-val=\"{{ false }}\">\n            <div style=\"padding: 14px; border-radius: 12px; background: #2B1610; display: flex; flex-wrap: wrap; gap: 10px; align-items: center\">\n              <span style=\"flex: 1 1 260px; font-size: 14px; color: #FFB49E\">Tem certeza? Você pode voltar quando quiser.</span>\n              <button onClick=\"{{doCancel}}\" style=\"height: 44px; padding: 0 16px; border-radius: 12px; border: none; background: #FF8A6B; color: #0E0E14; font-weight: 600; font-size: 14px; cursor: pointer\">Sim, cancelar</button>\n              <button onClick=\"{{keep}}\" style=\"height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #33333E; background: transparent; color: #F3F3F7; font-size: 14px; cursor: pointer\">Manter meu plano</button>\n            </div>\n          </sc-if>\n          <sc-if value=\"{{notConfirming}}\" hint-placeholder-val=\"{{ true }}\">\n            <button onClick=\"{{askCancel}}\" style=\"align-self: flex-start; height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #33333E; background: transparent; color: #FF8A6B; font-size: 14px; cursor: pointer\">Cancelar renovação</button>\n          </sc-if>\n        </div>\n      </sc-if>\n      <sc-if value=\"{{canceled}}\" hint-placeholder-val=\"{{ false }}\">\n        <div style=\"display: flex; flex-wrap: wrap; gap: 12px; align-items: center\">\n          <span style=\"flex: 1 1 280px; font-size: 14px; color: #C9C9D6\">Renovação cancelada. Você usa o plano até {{cur.until}} e depois vai para o Prata grátis.</span>\n          <button onClick=\"{{undo}}\" style=\"height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #D4FF3A; background: transparent; color: #D4FF3A; font-size: 14px; cursor: pointer\">Voltar a renovar</button>\n        </div>\n      </sc-if>\n    </section>\n  </div>\n</div>\n", Component, {});
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/mais\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Meu plano</h1></div>\n  <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"app-main\" style=\"color: #9C9CAD; padding-top: 40px\">Carregando…</div></sc-if>\n  <sc-if value=\"{{ready}}\" hint-placeholder-val=\"{{ true }}\">\n  <div class=\"app-main\">\n    <div class=\"card pc\" style=\"border-color: {{planColor}}\">\n      <span style=\"font-size: 13px; color: #9C9CAD\">Seu plano</span>\n      <span class=\"big\" style=\"color: {{planColor}}\">{{planName}}</span>\n      <span style=\"font-size: 15px; color: #C9C9D6\">{{planSub}}</span>\n    </div>\n\n    <sc-if value=\"{{hasOpen}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"card\" style=\"margin-top: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; border-color: {{openColor}}\">\n        <b style=\"font-size: 16px\">{{openTitle}}</b>\n        <span style=\"font-size: 14px; color: #C9C9D6; line-height: 1.5\">{{openText}}</span>\n        <a class=\"btn\" href=\"{{openHref}}\">{{openBtn}}</a>\n      </div>\n    </sc-if>\n\n    <div class=\"sec-t\">{{choiceTitle}}</div>\n    <div style=\"display: flex; flex-direction: column; gap: 10px\">\n      <sc-for list=\"{{plans}}\" as=\"p\" hint-placeholder-count=\"2\">\n        <a class=\"plan-opt\" href=\"{{p.href}}\" style=\"{{p.style}}\">\n          <span style=\"width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: {{p.bg}}; color: {{p.color}}; flex: none\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linejoin=\"round\"><path d=\"M3 8l4 4 5-7 5 7 4-4-2 11H5z\"/></svg></span>\n          <span style=\"flex: 1; display: flex; flex-direction: column; gap: 3px\"><b style=\"font-size: 17px; color: {{p.color}}\">{{p.name}}</b><span style=\"font-size: 14px; color: #9C9CAD\">{{p.price}}</span></span>\n          <span class=\"btn\" style=\"height: 40px; padding: 0 16px; font-size: 14px; background: {{p.color}}\">{{p.cta}}</span>\n        </a>\n      </sc-for>\n    </div>\n    <a href=\"/#precos\" style=\"display: block; text-align: center; margin-top: 12px; font-size: 14px\">Comparar os planos</a>\n\n    <sc-if value=\"{{isPaid}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"sec-t\">Prêmio de fidelidade</div>\n      <div class=\"card\" style=\"padding: 16px\">\n        <span style=\"font-size: 15px; color: #C9C9D6\">{{loyaltyText}}</span>\n        <div class=\"dots\"><sc-for list=\"{{dots}}\" as=\"d\" hint-placeholder-count=\"3\"><span style=\"{{d}}\"></span></sc-for></div>\n      </div>\n    </sc-if>\n\n    <sc-if value=\"{{hasHist}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"sec-t\">Pagamentos</div>\n      <div class=\"list\">\n        <sc-for list=\"{{hist}}\" as=\"h\" hint-placeholder-count=\"2\">\n          <a class=\"row\" href=\"{{h.href}}\"><span class=\"row-tx\"><b>{{h.title}}</b><span>{{h.sub}}</span></span><span style=\"font-size: 13px; color: #D4FF3A\">Recibo</span></a>\n        </sc-for>\n      </div>\n    </sc-if>\n  </div>\n  </sc-if>\n</div>\n", Component, {});
 (async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar';})();
 </script>
 </body>

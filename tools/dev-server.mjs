@@ -22,6 +22,7 @@ const env = { DB, ASSETS };
 const port = Number(process.argv[2] || 8787);
 http.createServer(async (req, res) => {
   const chunks = []; for await (const c of req) chunks.push(c);
+  if (req.url === '/__dev/sql') { try { db.exec(Buffer.concat(chunks).toString()); res.end('ok'); } catch (e) { res.end(String(e)); } return; }
   const headers = new Headers(); for (const [k, v] of Object.entries(req.headers)) headers.set(k, Array.isArray(v) ? v.join(', ') : v);
   headers.set('cf-connecting-ip', '127.0.0.1');
   const url = 'http://' + req.headers.host + req.url;

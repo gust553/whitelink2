@@ -23,10 +23,10 @@ export function fail(message, status = 400, extra = {}) {
   return json({ ok: false, error: message, ...extra }, status);
 }
 
-export async function readJson(request) {
+export async function readJson(request, max = 20000) {
   try {
     const t = await request.text();
-    if (t.length > 20000) return null;
+    if (t.length > max) return null;
     return JSON.parse(t || '{}');
   } catch (e) {
     return null;
@@ -310,4 +310,13 @@ export function themeFor(a, lvl) {
   a = a || {};
   const tk = TEMA_TIER[a.tk] !== undefined ? a.tk : ['noite', 'papel', 'oceano', 'brasa'][a.theme || 0] || 'noite';
   return TEMA_TIER[tk] <= lvl ? tk : 'noite';
+}
+
+// ---------- admin ----------
+export async function requireAdmin(env, request) {
+  await ensureSchema(env);
+  const u = await currentUser(env, request);
+  if (!u) return [null, fail('Entre na sua conta.', 401)];
+  if (!u.is_admin) return [null, fail('Acesso só para o admin.', 403)];
+  return [u, null];
 }
