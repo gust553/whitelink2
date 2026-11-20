@@ -60,6 +60,7 @@ header > a,header > button{height:38px !important;padding:0 14px !important;font
 <script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Aparencia.dc.html":"/painel/aparencia","Temas.dc.html":"/painel/temas","CriadorTema.dc.html":"/painel/criador-tema","Agenda.dc.html":"/painel/agendamentos","Stats.dc.html":"/painel/estatisticas","Contatos.dc.html":"/painel/contatos","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/indique","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/conta","EditarLink.dc.html":"/painel","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/painel/suporte","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
 <script src="/assets/dc.js"></script>
 
+<script src="/assets/planos.js"></script>
 <script>
 class Component extends DCLogic {
   constructor(p) { super(p); this.state = { handle: '', yearly: false, open: 0 }; }
@@ -75,9 +76,9 @@ class Component extends DCLogic {
     const yr = s.yearly;
     const tog = (sel) => 'height: 44px; padding: 0 18px; border-radius: 10px; border: none; cursor: pointer; font-size: 14px; ' + (sel ? 'background: #F3F3F7; color: #0E0E14; font-weight: 600' : 'background: transparent; color: #C9C9D6');
     const P = [
-      { name: 'Prata', color: '#C9CDD6', free: true, items: ['Grátis para sempre', 'Até 3 links', 'Blocos de link e texto', '2 temas prontos', 'Total de visitas dos últimos 7 dias'] },
-      { name: 'Ouro', color: '#F2C14E', m: 'R$ 19,90', y: 'R$ 199,90', items: ['Até 10 links', 'Produtos, contagem, captura e Pix', '13 temas e editor de aparência', 'Vídeos, estatísticas de 30 dias e links agendados', 'Sem a marca WhiteLink e chat de suporte'], hi: true },
-      { name: 'Diamante', color: '#8FE3FF', m: 'R$ 39,90', y: 'R$ 399,90', items: ['Links ilimitados', '77 temas (64 exclusivos, com movimento) + crie o seu', 'Teste A/B e estatísticas de 90 dias', 'Domínio próprio, até 3 páginas e selo de verificado', 'Suporte prioritário'] }
+      { name: 'Prata', color: '#C9CDD6', free: true, items: (window.WL_PLANOS || {}).prata || [] },
+      { name: 'Ouro', color: '#F2C14E', m: 'R$ 19,90', y: 'R$ 199,90', items: (window.WL_PLANOS || {}).ouro || [], hi: true },
+      { name: 'Diamante', color: '#8FE3FF', m: 'R$ 39,90', y: 'R$ 399,90', items: (window.WL_PLANOS || {}).diamante || [] }
     ];
     const F = [
       { t: 'Editor arrastável', d: 'Arraste os blocos para a ordem que quiser e veja a página mudando na hora, no celular ou no computador.', plan: 'Todos os planos', icon: 'M5 9h14M5 15h14M9 5l-4 4 4 4' },

@@ -89,6 +89,7 @@ ${tab && tab !== 'admin' ? shellNav(tab) : ''}
 <script>window.DC_LINKS=${JSON.stringify(LINKS)};</script>
 <script src="/assets/dc.js"></script>
 ${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
+<script src="/assets/planos.js"></script>
 <script>
 ${code.replace(/<\/script/gi, '<\\/script')}
 DC.mount(document.getElementById('root'), ${JSON.stringify(tpl).replace(/<\/script/gi, '<\\/script')}, Component, ${JSON.stringify(props)});

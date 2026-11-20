@@ -47,6 +47,7 @@ textarea.inp{height:auto;min-height:90px;padding:12px 14px;resize:vertical;font-
 <script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Aparencia.dc.html":"/painel/aparencia","Temas.dc.html":"/painel/temas","CriadorTema.dc.html":"/painel/criador-tema","Agenda.dc.html":"/painel/agendamentos","Stats.dc.html":"/painel/estatisticas","Contatos.dc.html":"/painel/contatos","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/indique","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/conta","EditarLink.dc.html":"/painel","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/painel/suporte","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
 <script src="/assets/dc.js"></script>
 <script src="/assets/temas-list.js"></script>
+<script src="/assets/planos.js"></script>
 <script>
 class Component extends DCLogic {
   constructor(p) {
@@ -226,7 +227,8 @@ class Component extends DCLogic {
         v.p[k] = c['_price_' + k] !== undefined ? c['_price_' + k] : (c['price_' + k] / 100).toFixed(2).replace('.', ',');
         v['set_' + k] = ((kk) => (e) => this.setCfg('_price_' + kk, e.target.value))(k);
       }
-      v.planInfo = [['Prata (grátis)', '3 links, blocos de link e texto, 2 temas, visitas de 7 dias, marca WhiteLink'], ['Ouro', '10 links, todos os blocos, 13 temas, estatísticas de 30 dias, agendamento, efeitos, chat'], ['Diamante', 'Links ilimitados, 77 temas, teste A/B, 90 dias e exportar, domínio próprio, selo, Pixel e Analytics']].map((r) => ({ t: r[0], d: r[1] }));
+      const WP = window.WL_PLANOS || {};
+      v.planInfo = [['Prata (grátis)', 'prata'], ['Ouro', 'ouro'], ['Diamante', 'diamante']].map((r) => ({ t: r[0], d: (WP[r[1]] || []).join(' · ') }));
     }
     if (v.refs) {
       v.refKpis = [{ v: d.signups, l: 'cadastros por indicação' }, { v: (d.rewards || []).filter((r) => r.status === 'aguardando').length, l: 'prêmios aguardando' }];

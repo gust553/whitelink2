@@ -19,6 +19,9 @@
 .qr{width:220px;height:220px;border-radius:18px;background:#fff;padding:12px;margin:0 auto;display:block}
 .spin{flex:none;width:22px;height:22px;border-radius:50%;border:3px solid #26262F;border-top-color:#D4FF3A;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 .warn{padding:12px 14px;border-radius:14px;background:#2B2210;color:#F7DFA0;font-size:14px;line-height:1.5}
+.bf{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.bf li{position:relative;padding-left:26px;font-size:14px;line-height:1.45;color:#C9C9D6}
+.bf li::before{content:"";position:absolute;left:2px;top:4px;width:12px;height:7px;border-left:2px solid #D4FF3A;border-bottom:2px solid #D4FF3A;transform:rotate(-45deg)}
 </style>
 </helmet>
 <div>
@@ -38,6 +41,7 @@
             <span style="font: 700 22px 'Space Grotesk'">{{p.price}}</span>
           </button>
         </sc-for>
+        <div class="card" style="padding: 16px"><b style="font-size: 15px">O que vem no {{selName}}</b><ul class="bf"><sc-for list="{{selItems}}" as="it" hint-placeholder-count="5"><li>{{it}}</li></sc-for></ul></div>
         <span style="font-size: 14px; color: #9C9CAD; text-align: center">Pagamento só por Pix. Seu plano começa assim que o pagamento é confirmado.</span>
         <sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><div class="warn" style="background: #2A1512; color: #FFB4A3">{{err}}</div></sc-if>
         <button class="btn full" onClick="{{create}}" disabled="{{busy}}">{{createLabel}}</button>
@@ -110,6 +114,7 @@ class Component extends DCLogic {
       loading: false, choose: !o, pay: !!o, barTitle: o ? 'Pagar com Pix' : 'Assinar',
       isM: s.period === 'm', isY: s.period === 'y',
       setM: () => this.setState({ period: 'm' }), setY: () => this.setState({ period: 'y' }),
+      selName: s.plan === 'ouro' ? 'Ouro' : 'Diamante', selItems: (window.WL_PLANOS || {})[s.plan || 'diamante'] || [],
       plans: ['ouro', 'diamante'].map((p) => ({
         name: p === 'ouro' ? 'Ouro' : 'Diamante', color: C[p], hint: hints[p], sel: s.plan === p,
         price: d.prices[p + '_' + s.period].label + (s.period === 'y' ? '/ano' : '/mês'),

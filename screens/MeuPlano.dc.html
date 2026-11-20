@@ -13,6 +13,9 @@
 .big{font:700 30px 'Space Grotesk',sans-serif;letter-spacing:-.01em}
 .dots{display:flex;gap:8px;margin-top:8px}.dots span{flex:1;height:8px;border-radius:999px;background:#26262F}
 .plan-opt{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:#14141B;border:1px solid #24242E;text-decoration:none;color:inherit}
+.bf{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.bf li{position:relative;padding-left:26px;font-size:14px;line-height:1.45;color:#C9C9D6;text-align:left}
+.bf li::before{content:"";position:absolute;left:2px;top:4px;width:12px;height:7px;border-left:2px solid #D4FF3A;border-bottom:2px solid #D4FF3A;transform:rotate(-45deg)}
 </style>
 </helmet>
 <div>
@@ -24,6 +27,7 @@
       <span style="font-size: 13px; color: #9C9CAD">Seu plano</span>
       <span class="big" style="color: {{planColor}}">{{planName}}</span>
       <span style="font-size: 15px; color: #C9C9D6">{{planSub}}</span>
+      <ul class="bf" aria-label="O que seu plano tem"><sc-for list="{{myItems}}" as="it" hint-placeholder-count="4"><li>{{it}}</li></sc-for></ul>
     </div>
 
     <sc-if value="{{hasOpen}}" hint-placeholder-val="{{ false }}">
@@ -42,9 +46,13 @@
           <span style="flex: 1; display: flex; flex-direction: column; gap: 3px"><b style="font-size: 17px; color: {{p.color}}">{{p.name}}</b><span style="font-size: 14px; color: #9C9CAD">{{p.price}}</span></span>
           <span class="btn" style="height: 40px; padding: 0 16px; font-size: 14px; background: {{p.color}}">{{p.cta}}</span>
         </a>
+        <ul class="bf card" style="padding: 14px 16px 14px 16px; margin: -4px 0 6px" aria-label="Benefícios do {{p.name}}"><sc-for list="{{p.items}}" as="it" hint-placeholder-count="5"><li>{{it}}</li></sc-for></ul>
       </sc-for>
     </div>
-    <a href="/#precos" style="display: block; text-align: center; margin-top: 12px; font-size: 14px">Comparar os planos</a>
+    <sc-if value="{{showPrata}}" hint-placeholder-val="{{ false }}">
+      <div class="sec-t">Prata (grátis)</div>
+      <ul class="bf card" style="padding: 14px 16px" aria-label="Benefícios do Prata"><sc-for list="{{prataItems}}" as="it" hint-placeholder-count="5"><li>{{it}}</li></sc-for></ul>
+    </sc-if>
 
     <sc-if value="{{isPaid}}" hint-placeholder-val="{{ false }}">
       <div class="sec-t">Prêmio de fidelidade</div>
@@ -101,8 +109,11 @@ class Component extends DCLogic {
         price: d.prices[p[0] + '_m'].label + '/mês ou ' + d.prices[p[0] + '_y'].label + '/ano',
         cta: lv === p[2] && !u.trial ? 'Renovar' : 'Assinar',
         href: '/pagamento?p=' + p[0],
-        style: lv === p[2] && !u.trial ? 'border-color: ' + C[p[2]] : ''
+        style: lv === p[2] && !u.trial ? 'border-color: ' + C[p[2]] : '',
+        items: (window.WL_PLANOS || {})[p[0]] || []
       })),
+      myItems: (window.WL_PLANOS || {})[u.trial ? 'diamante' : ['prata', 'ouro', 'diamante'][lv]] || [],
+      showPrata: u.trial || lv > 0, prataItems: (window.WL_PLANOS || {}).prata || [],
       isPaid: isPaid,
       loyaltyText: 'A cada ' + every + ' renovações seguidas, você ganha ' + d.loyalty.days + ' dias grátis. ' + d.loyalty.count + ' de ' + every + '.',
       dots: Array.from({ length: every }, (_, i) => i < d.loyalty.count ? 'background: #D4FF3A' : ''),

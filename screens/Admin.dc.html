@@ -440,7 +440,8 @@ class Component extends DCLogic {
         v.p[k] = c['_price_' + k] !== undefined ? c['_price_' + k] : (c['price_' + k] / 100).toFixed(2).replace('.', ',');
         v['set_' + k] = ((kk) => (e) => this.setCfg('_price_' + kk, e.target.value))(k);
       }
-      v.planInfo = [['Prata (grátis)', '3 links, blocos de link e texto, 2 temas, visitas de 7 dias, marca WhiteLink'], ['Ouro', '10 links, todos os blocos, 13 temas, estatísticas de 30 dias, agendamento, efeitos, chat'], ['Diamante', 'Links ilimitados, 77 temas, teste A/B, 90 dias e exportar, domínio próprio, selo, Pixel e Analytics']].map((r) => ({ t: r[0], d: r[1] }));
+      const WP = window.WL_PLANOS || {};
+      v.planInfo = [['Prata (grátis)', 'prata'], ['Ouro', 'ouro'], ['Diamante', 'diamante']].map((r) => ({ t: r[0], d: (WP[r[1]] || []).join(' · ') }));
     }
     if (v.refs) {
       v.refKpis = [{ v: d.signups, l: 'cadastros por indicação' }, { v: (d.rewards || []).filter((r) => r.status === 'aguardando').length, l: 'prêmios aguardando' }];
