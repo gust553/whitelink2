@@ -11,7 +11,7 @@ export const LINKS = {
   'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': '/painel/criador-tema',
   'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/contatos',
   'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': '/painel/indique', 'MeuPlano.dc.html': '/painel/plano',
-  'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel/editar-link', 'Pagamento.dc.html': '/pagamento',
+  'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel', 'Pagamento.dc.html': '/pagamento',
   'ConfirmarPagamento.dc.html': '/pagamento/confirmar', 'CentralAjuda.dc.html': '/ajuda', 'SuporteCliente.dc.html': '/painel/suporte',
   'Recibo.dc.html': '/painel/recibo', 'Termos.dc.html': '/termos', 'Privacidade.dc.html': '/privacidade',
   'Planos.dc.html': '/#precos', 'PaginaPublica.dc.html': '/', 'PaginaFechada.dc.html': '/'
@@ -34,7 +34,6 @@ const PAGES = {
   'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'aparencia', null],
   'Admin.dc.html': ['admin.html', true, false, 'admin', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
-  'EditarLink.dc.html': ['painel/editar-link.html', true, true, 'pagina', 'Editar link'],
   'Recibo.dc.html': ['painel/recibo.html', true, false, 'mais', null],
   'Pagamento.dc.html': ['pagamento.html', true, false, 'mais', null],
   'ConfirmarPagamento.dc.html': ['pagamento/confirmar.html', true, false, 'mais', null],
