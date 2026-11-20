@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Aparência — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.th-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:700px){.th-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.th{position:relative;border-radius:20px;padding:16px 12px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;border:2px solid transparent;font-family:inherit}
+.th .mini{width:100%;height:12px;border-radius:7px}
+.th .av{width:34px;height:34px;border-radius:50%}
+.opt{display:flex;gap:8px;flex-wrap:wrap}
+.opt button{height:46px;padding:0 18px;border-radius:14px;cursor:pointer;font-size:14px;font-family:inherit}
+</style>
+</helmet>
+<div>
+  <div class="appbar"><h1>Aparência</h1><span role="status" style="font-size: 12.5px; color: {{saveColor}}; padding-right: 10px">{{saveText}}</span></div>
+  <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div class="app-main" style="color: #9C9CAD; padding-top: 40px">Carregando…</div></sc-if>
+  <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+  <div class="app-main">
+    <div class="sec-t" style="margin-top: 8px">Tema</div>
+    <div class="th-grid">
+      <sc-for list="{{themes}}" as="t" hint-placeholder-count="4">
+        <button class="th" onClick="{{t.pick}}" aria-pressed="{{t.sel}}" disabled="{{t.locked}}" style="{{t.style}}">
+          <span class="av" style="{{t.avStyle}}"></span>
+          <span class="mini" style="{{t.b1}}"></span>
+          <span class="mini" style="{{t.b2}}"></span>
+          <span class="mini" style="{{t.b2}}"></span>
+          <b style="font-size: 14px; color: {{t.fg}}; margin-top: 4px">{{t.name}}</b>
+          <sc-if value="{{t.locked}}" hint-placeholder-val="{{ false }}"><span class="lock">Ouro</span></sc-if>
+          <sc-if value="{{t.sel}}" hint-placeholder-val="{{ false }}"><span class="chip" style="position: absolute; top: 8px; left: 8px; height: 22px; font-size: 11px; background: #D4FF3A; color: #0E0E14">Em uso</span></sc-if>
+        </button>
+      </sc-for>
+    </div>
+    <div class="list" style="margin-top: 12px">
+      <a class="row" href="/painel/em-breve?t=Temas"><span class="row-ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span><span class="row-tx"><b>Ver os 77 temas</b><span>{{moreThemes}}</span></span><svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="margin-top: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; border-color: #4A3A14">
+        <b style="font-size: 16px">Cor, fonte e formato dos botões</b>
+        <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">No Ouro você escolhe a cor de destaque, a fonte e o formato dos botões da sua página.</span>
+        <a class="btn" href="MeuPlano.dc.html" style="background: #F2C14E">Conhecer o Ouro</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{canStyle}}" hint-placeholder-val="{{ true }}">
+      <div class="sec-t">Cor de destaque</div>
+      <div class="card" style="padding: 14px 16px; display: flex; align-items: center; gap: 14px">
+        <input type="color" value="{{acc}}" onChange="{{setAcc}}" aria-label="Cor de destaque" style="width: 52px; height: 52px; border: none; border-radius: 14px; background: transparent; padding: 0; cursor: pointer">
+        <span style="flex: 1; font-size: 14px; color: #C9C9D6">Usada no botão em destaque e na borda da foto</span>
+        <button class="chip" onClick="{{resetAcc}}" style="border: none; background: #1B1B24; color: #C9C9D6; cursor: pointer">Padrão</button>
+      </div>
+      <div class="sec-t">Fonte</div>
+      <div class="opt"><sc-for list="{{fonts}}" as="f" hint-placeholder-count="3"><button onClick="{{f.pick}}" aria-pressed="{{f.sel}}" style="{{f.style}}">{{f.name}}</button></sc-for></div>
+      <div class="sec-t">Formato dos botões</div>
+      <div class="opt"><sc-for list="{{shapes}}" as="x" hint-placeholder-count="3"><button onClick="{{x.pick}}" aria-pressed="{{x.sel}}" style="{{x.style}}">{{x.name}}</button></sc-for></div>
+    </sc-if>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { loading: true, plan: 0, theme: 0, font: 0, shape: 1, acc: '', saved: 'idle' }; }
+  async componentDidMount() {
+    const d = await DC.api('editor');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    const a = d.appearance || {};
+    this.setState({ loading: false, plan: { prata: 0, ouro: 1, diamante: 2 }[d.user && d.user.plan] || 0,
+      theme: a.theme || 0, font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '' });
+  }
+  set(patch) {
+    this.setState(Object.assign({ saved: 'saving' }, patch));
+    clearTimeout(this.t);
+    this.t = setTimeout(async () => {
+      const s = this.state;
+      const d = await DC.api('appearance', 'PUT', { appearance: { theme: s.theme, font: s.font, shape: s.shape, acc: s.acc } });
+      this.setState({ saved: d.ok ? 'saved' : 'error' });
+    }, 500);
+  }
+  renderVals() {
+    const s = this.state;
+    const T = [
+      { name: 'Noite', bg: '#0E0E14', fg: '#F3F3F7', card: '#1A1A22', acc: '#D4FF3A' },
+      { name: 'Papel', bg: '#F4F2EC', fg: '#16161A', card: '#FFFFFF', acc: '#1F5BFF' },
+      { name: 'Oceano', bg: '#06222B', fg: '#EAF7F7', card: '#0D3340', acc: '#7CF5D0' },
+      { name: 'Brasa', bg: '#1A0F0B', fg: '#FBEFE7', card: '#2A1912', acc: '#FF8A3D' }
+    ];
+    const cur = s.plan === 0 && s.theme >= 2 ? 0 : s.theme;
+    const pill = (sel) => sel ? 'border: 1px solid #D4FF3A; background: rgba(212,255,58,.12); color: #F3F3F7; font-weight: 600' : 'border: 1px solid #2A2A34; background: #14141B; color: #C9C9D6';
+    const SM = { idle: ['', '#6F6F80'], saving: ['Salvando…', '#9C9CAD'], saved: ['Salvo ✓', '#D4FF3A'], error: ['Não salvou', '#FF8A6B'] };
+    return {
+      loading: s.loading, ready: !s.loading,
+      saveText: SM[s.saved][0], saveColor: SM[s.saved][1],
+      themes: T.map((t, i) => {
+        const locked = s.plan === 0 && i >= 2;
+        const acc = s.plan >= 1 && s.acc ? s.acc : t.acc;
+        return {
+          name: t.name, fg: t.fg, sel: cur === i, locked: locked,
+          style: 'background: ' + t.bg + '; border-color: ' + (cur === i ? '#D4FF3A' : '#24242E') + (locked ? '; opacity: .45; cursor: not-allowed' : ''),
+          avStyle: 'background: ' + t.card + '; border: 2px solid ' + acc,
+          b1: 'background: ' + acc, b2: 'background: ' + t.card,
+          pick: () => { if (!locked) this.set({ theme: i }); }
+        };
+      }),
+      moreThemes: s.plan === 2 ? 'Todos liberados no seu plano' : (s.plan === 1 ? '13 liberados no Ouro' : '2 liberados no Prata'),
+      locked: s.plan === 0, canStyle: s.plan >= 1,
+      acc: s.acc || T[cur].acc,
+      setAcc: (e) => this.set({ acc: e.target.value }),
+      resetAcc: () => this.set({ acc: '' }),
+      fonts: ['Grotesk', 'Inter', 'Serifada'].map((n, i) => ({ name: n, sel: s.font === i, style: pill(s.font === i) + '; font-family: ' + ["'Space Grotesk'", 'Inter', 'Georgia, serif'][i], pick: () => this.set({ font: i }) })),
+      shapes: [['Reto', '6px'], ['Suave', '14px'], ['Pílula', '999px']].map((x, i) => ({ name: x[0], sel: s.shape === i, style: pill(s.shape === i) + '; border-radius: ' + x[1], pick: () => this.set({ shape: i }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

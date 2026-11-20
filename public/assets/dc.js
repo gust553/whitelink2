@@ -68,30 +68,48 @@
       }
       return out;
     }
-    function draw() {
-      // guarda o foco e o cursor para não atrapalhar quem está digitando
-      const act = document.activeElement;
-      let focusIdx = -1, selS = null, selE = null;
-      if (act && rootEl.contains(act) && /^(INPUT|TEXTAREA|SELECT)$/.test(act.tagName)) {
-        focusIdx = [...rootEl.querySelectorAll('input,textarea,select')].indexOf(act);
-        try { selS = act.selectionStart; selE = act.selectionEnd; } catch (e) {}
+    // atualiza só o que mudou na tela (mantém rolagem, foco e animações)
+    function morph(from, to) {
+      if (from.nodeType !== to.nodeType || from.nodeName !== to.nodeName) { from.replaceWith(to); return; }
+      if (from.nodeType === 3 || from.nodeType === 8) { if (from.nodeValue !== to.nodeValue) from.nodeValue = to.nodeValue; return; }
+      if (from.nodeType !== 1) return;
+      for (const a of [...from.attributes]) if (!to.hasAttribute(a.name)) from.removeAttribute(a.name);
+      for (const a of [...to.attributes]) if (from.getAttribute(a.name) !== a.value) from.setAttribute(a.name, a.value);
+      if (from.tagName === 'INPUT' || from.tagName === 'TEXTAREA') {
+        const v = to.getAttribute('value') ?? (from.tagName === 'TEXTAREA' ? to.textContent : '');
+        if (document.activeElement !== from && from.value !== v && from.type !== 'file') from.value = v;
+        if (from.type === 'checkbox' || from.type === 'radio') from.checked = to.hasAttribute('checked');
+        if (from.tagName === 'TEXTAREA') return;
       }
+      morphKids(from, to);
+      if (from.tagName === 'SELECT') { const o = from.querySelector('option[selected]'); if (o && document.activeElement !== from) from.value = o.value; }
+    }
+    function morphKids(from, to) {
+      const a = [...from.childNodes], b = [...to.childNodes];
+      for (let i = 0; i < b.length; i++) { if (i < a.length) morph(a[i], b[i]); else from.appendChild(b[i]); }
+      for (let i = b.length; i < a.length; i++) a[i].remove();
+    }
+    const EVENTS = ['click', 'input', 'change', 'keydown', 'keyup', 'submit', 'dragstart', 'dragover', 'drop', 'dragend', 'mouseenter', 'mouseleave', 'focus', 'blur'];
+    for (const type of EVENTS) {
+      rootEl.addEventListener(type, (e) => {
+        const attr = 'data-on-' + type;
+        let el = e.target;
+        if (type === 'mouseenter' || type === 'mouseleave' || type === 'focus' || type === 'blur') { if (!(el && el.getAttribute && el.hasAttribute(attr))) return; }
+        else { while (el && el !== rootEl && !(el.hasAttribute && el.hasAttribute(attr))) el = el.parentNode; if (!el || el === rootEl) return; }
+        const fn = handlers[+el.getAttribute(attr)];
+        if (typeof fn !== 'function') return;
+        const ev2 = new Proxy(e, { get: (t, k) => (k === 'currentTarget' ? el : (typeof t[k] === 'function' ? t[k].bind(t) : t[k])) });
+        fn(ev2);
+      }, true);
+    }
+    let first = true;
+    function draw() {
       handlers = [];
       let vals;
       try { vals = inst.renderVals(); } catch (e) { console.error(e); return; }
-      rootEl.innerHTML = render(tree, vals);
-      rootEl.querySelectorAll('*').forEach((el) => {
-        for (const a of [...el.attributes]) {
-          if (!a.name.startsWith('data-on-')) continue;
-          const fn = handlers[+a.value];
-          el.addEventListener(a.name.slice(8), (e) => fn(e));
-        }
-      });
-      rootEl.querySelectorAll('select').forEach((s) => { const o = s.querySelector('option[selected]'); if (o) s.value = o.value; });
-      if (focusIdx >= 0) {
-        const el = rootEl.querySelectorAll('input,textarea,select')[focusIdx];
-        if (el) { el.focus(); try { if (selS != null) el.setSelectionRange(selS, selE); } catch (e) {} }
-      }
+      const html = render(tree, vals);
+      if (first) { rootEl.innerHTML = html; first = false; }
+      else { const t = document.createElement('div'); t.innerHTML = html; morphKids(rootEl, t); }
     }
     draw();
     if (typeof inst.componentDidMount === 'function') inst.componentDidMount();

@@ -14,6 +14,7 @@ import * as go from '../functions/go/[id].js';
 import * as goBlock from '../functions/go/[uid]/[bid].js';
 import * as editor from '../functions/api/editor.js';
 import * as lead from '../functions/api/lead.js';
+import * as appearance from '../functions/api/appearance.js';
 import * as profile from '../functions/[handle].js';
 
 const ROUTES = [
@@ -29,6 +30,7 @@ const ROUTES = [
   [/^\/api\/links\/(?<id>\d+)$/, linksId],
   [/^\/api\/editor$/, editor],
   [/^\/api\/lead$/, lead],
+  [/^\/api\/appearance$/, appearance],
   [/^\/go\/(?<uid>\d+)\/(?<bid>\d+)$/, goBlock],
   [/^\/go\/(?<id>\d+)$/, go],
   [/^\/(?<handle>[^/]+)$/, profile]
