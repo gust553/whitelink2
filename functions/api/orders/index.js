@@ -1,6 +1,6 @@
 import { json, fail, readJson, currentUser, ensureSchema, rateLimit } from '../../../src/lib.js';
 import { getSettings, priceOf, uniqueCents, newOrderCode, orderView } from '../../../src/billing.js';
-import { gatewayReady, gatewayCreate } from '../../../src/gateway.js';
+import { gatewayReady, gatewayCreate, gatewayNeedsDoc, validDoc } from '../../../src/gateway.js';
 
 // Cria um pedido de Pix com valor exato e código
 export async function onRequestPost({ request, env }) {
@@ -28,8 +28,10 @@ export async function onRequestPost({ request, env }) {
     return env.DB.prepare('SELECT * FROM orders WHERE code = ?').bind(code).first();
   };
   if (gatewayReady(s)) {
+    let doc = '';
+    if (gatewayNeedsDoc(s)) { doc = validDoc(b.doc); if (!doc) return fail(b.doc ? 'CPF ou CNPJ inválido. Confira os números.' : 'Informe o CPF de quem vai pagar.', 400, { needDoc: true }); }
     const o = await mk(true);
-    const g = await gatewayCreate(env, s, o, u);
+    const g = await gatewayCreate(env, s, o, u, doc);
     if (g.ok) {
       const gw = await env.DB.prepare('SELECT pix FROM order_gw WHERE order_id = ?').bind(o.id).first();
       return json({ ok: true, order: orderView(o, s, gw.pix) });

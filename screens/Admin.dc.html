@@ -31,6 +31,7 @@
 .msg small{display:block;font-size:11px;opacity:.6;margin-top:3px}
 .me{align-self:flex-end;background:#D4FF3A;color:#0E0E14}
 .them{align-self:flex-start;background:#1B1B24}
+.gwp{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gwp button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border-radius:14px;border:1px solid #2A2A34;background:#14141B;color:#F3F3F7;font:inherit;cursor:pointer;text-align:left}.gwp button span{font-size:12px;color:#9C9CAD}.gwp button[aria-checked="true"]{border-color:#D4FF3A;background:rgba(212,255,58,.1)}
 .seg{display:flex;gap:4px;padding:4px;border-radius:999px;background:#14141B;margin-bottom:14px}
 .seg button{flex:1;height:42px;border-radius:999px;border:none;background:transparent;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
 .seg button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;font-weight:600}
@@ -131,27 +132,26 @@ textarea.inp{height:auto;min-height:90px;padding:12px 14px;resize:vertical;font-
           <div class="card" style="padding: 14px 16px; font-size: 14px; color: #C9C9D6; line-height: 1.5; margin-bottom: 6px">{{modeText}}</div>
 
           <sc-if value="{{isGw}}" hint-placeholder-val="{{ false }}"><div>
-            <div class="sec-t">Gateway (Mercado Pago)</div>
-            <div class="card" style="padding: 16px; display: flex; gap: 12px; align-items: center">
+            <div class="sec-t">Qual gateway</div>
+            <div class="gwp" role="radiogroup" aria-label="Qual gateway"><sc-for list="{{gwList}}" as="g" hint-placeholder-count="4"><button role="radio" aria-checked="{{g.sel}}" onClick="{{g.pick}}"><b>{{g.name}}</b><span>{{g.sub}}</span></button></sc-for></div>
+            <div class="card" style="padding: 16px; display: flex; gap: 12px; align-items: center; margin-top: 10px">
               <i style="{{gwDot}}"></i>
               <div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><b style="font-size: 15px">{{gwStatus}}</b><span style="font-size: 13px; color: #9C9CAD">{{gwSub}}</span></div>
-              <sc-if value="{{s.gw_has}}" hint-placeholder-val="{{ false }}"><button class="btn ghost" onClick="{{gwTest}}" style="height: 40px; padding: 0 14px; font-size: 13.5px">{{gwTestLabel}}</button></sc-if>
+              <sc-if value="{{gwCanTest}}" hint-placeholder-val="{{ false }}"><button class="btn ghost" onClick="{{gwTest}}" style="height: 40px; padding: 0 14px; font-size: 13.5px">{{gwTestLabel}}</button></sc-if>
             </div>
             <div class="card" style="padding: 16px; margin-top: 10px">
-              <label class="fld">Access Token de produção<input class="inp" value="{{s.gw_token}}" onInput="{{set_gw_token}}" onFocus="{{gwClearMask}}" placeholder="APP_USR-…" autocomplete="off" spellcheck="false" aria-label="Access Token do Mercado Pago"></label>
+              <label class="fld">{{gwKeyLabel}}<input class="inp" value="{{s.gw_token}}" onInput="{{set_gw_token}}" onFocus="{{gwClearMask}}" placeholder="{{gwKeyPh}}" autocomplete="off" spellcheck="false" aria-label="Chave do gateway"></label>
+              <sc-if value="{{gwSbOpt}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; border: none; padding: 4px 0 12px; min-height: 0"><span class="row-tx"><b>Ambiente de testes (sandbox)</b><span>Ligue só se o token for de testes do PagBank</span></span><button class="sw" onClick="{{toggleSb}}" aria-pressed="{{sbOn}}" aria-label="Ambiente de testes" style="{{sbSw}}"><span style="{{sbKn}}"></span></button></div></sc-if>
               <label class="fld">Tempo para o cliente pagar (minutos)<input class="inp" inputmode="numeric" value="{{s.gw_minutes}}" onInput="{{set_gw_minutes}}" aria-label="Tempo para pagar em minutos"></label>
-              <div class="row" style="cursor: default; border: none; padding: 4px 0; min-height: 0"><span class="row-tx"><b>Reserva por Pix direto</b><span>Se o Mercado Pago falhar, o cliente paga na sua chave Pix e manda o comprovante</span></span><button class="sw" onClick="{{toggleFb}}" aria-pressed="{{fbOn}}" aria-label="Reserva por Pix direto" style="{{fbSw}}"><span style="{{fbKn}}"></span></button></div>
-              <sc-if value="{{s.gw_has}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{gwRemove}}" style="margin-top: 10px; height: 42px; font-size: 13.5px">Remover token</button></sc-if>
+              <div class="row" style="cursor: default; border: none; padding: 4px 0; min-height: 0"><span class="row-tx"><b>Reserva por Pix direto</b><span>Se o gateway falhar, o cliente paga na sua chave Pix e manda o comprovante</span></span><button class="sw" onClick="{{toggleFb}}" aria-pressed="{{fbOn}}" aria-label="Reserva por Pix direto" style="{{fbSw}}"><span style="{{fbKn}}"></span></button></div>
+              <sc-if value="{{gwDocNote}}" hint-placeholder-val="{{ false }}"><p style="font-size: 13px; color: #F2C14E; line-height: 1.5; margin: 10px 0 0">O {{gwName}} pede o CPF de quem paga. A tela de pagamento vai pedir o CPF ao cliente.</p></sc-if>
+              <sc-if value="{{s.gw_has}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{gwRemove}}" style="margin-top: 10px; height: 42px; font-size: 13.5px">Remover chave do {{gwName}}</button></sc-if>
             </div>
-            <div class="sec-t">Como pegar o token</div>
+            <div class="sec-t">Como pegar a chave do {{gwName}}</div>
             <div class="card" style="padding: 16px; font-size: 13.5px; color: #C9C9D6; line-height: 1.6">
-              <ol style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px">
-                <li>Entre em <b>mercadopago.com.br/developers/panel</b> com a conta que vai receber.</li>
-                <li>Clique em <b>Suas integrações › Criar aplicação</b> (qualquer nome, ex.: WhiteLink; escolha "Pagamentos online").</li>
-                <li>Abra a aplicação, vá em <b>Credenciais de produção</b> e ative, se pedir.</li>
-                <li>Copie o <b>Access Token</b> (começa com APP_USR-) e cole acima. Toque em Salvar.</li>
-              </ol>
-              <p style="margin: 10px 0 0; color: #9C9CAD">Não precisa configurar webhook: o WhiteLink avisa o Mercado Pago em cada cobrança e confere o pagamento direto com ele antes de liberar.</p>
+              <ol style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px"><sc-for list="{{gwSteps}}" as="st" hint-placeholder-count="4"><li>{{st}}</li></sc-for></ol>
+              <sc-if value="{{gwHook}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 12px; padding: 12px; border-radius: 12px; background: #14141B; border: 1px solid #24242E"><b style="font-size: 13px">Endereço do webhook</b><div style="display: flex; gap: 8px; align-items: center; margin-top: 6px"><code style="flex: 1; font-size: 12.5px; word-break: break-all; color: #D4FF3A">{{gwHook}}</code><button class="chip" onClick="{{copyHook}}" style="border: none; cursor: pointer; background: #24242E; color: #F3F3F7">Copiar</button></div></div></sc-if>
+              <p style="margin: 10px 0 0; color: #9C9CAD">{{gwFoot}}</p>
             </div>
           </div></sc-if>
 
@@ -386,7 +386,7 @@ class Component extends DCLogic {
   }
   async saveCfg() {
     const c = this.state.cfg;
-    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'gw_minutes', 'gw_fallback', 'whatsapp'] : this.state.sub === 'dominios' ? ['cf_token', 'cf_zone'] : this.state.sub === 'anuncio' ? ['ann_on', 'ann_title', 'ann_text'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y', 'loyalty_every', 'loyalty_days'];
+    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_provider', 'gw_token', 'gw_minutes', 'gw_fallback', 'gw_sandbox', 'whatsapp'] : this.state.sub === 'dominios' ? ['cf_token', 'cf_zone'] : this.state.sub === 'anuncio' ? ['ann_on', 'ann_title', 'ann_text'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y', 'loyalty_every', 'loyalty_days'];
     const body = {};
     for (const k of keys) body[k] = k.startsWith('price_') ? (c['_' + k] !== undefined ? c['_' + k] : (c[k] / 100).toFixed(2).replace('.', ',')) : c[k];
     if (!body.gw_token || String(body.gw_token).startsWith('••••')) delete body.gw_token; // token só muda quando cola um novo (remover: botão próprio)
@@ -491,19 +491,35 @@ class Component extends DCLogic {
       for (const k of ['pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'gw_minutes', 'whatsapp', 'loyalty_every', 'loyalty_days', 'cf_token', 'cf_zone', 'ann_title', 'ann_text']) v['set_' + k] = (e) => this.setCfg(k, e.target.value);
       v.isPix = c.pay_mode !== 'gateway'; v.isGw = c.pay_mode === 'gateway';
       v.modePix = () => this.setCfg('pay_mode', 'pix'); v.modeGw = () => this.setCfg('pay_mode', 'gateway');
-      v.modeText = c.pay_mode === 'gateway' ? 'Gateway automático: o cliente paga um Pix gerado pelo Mercado Pago e o plano libera sozinho na hora, sem comprovante. Toque em Salvar para valer.' : 'Pix direto: o cliente paga na sua chave Pix, envia o comprovante e você libera em Pagamentos. Toque em Salvar para valer.';
+      v.modeText = c.pay_mode === 'gateway' ? 'Gateway automático: o cliente paga um Pix gerado pelo ' + (((c.gw_providers || []).find((x) => x.id === (c.gw_provider || 'mercadopago')) || {}).name || 'gateway') + ' e o plano libera sozinho na hora, sem comprovante. Você pode trocar de gateway quando quiser. Toque em Salvar para valer.' : 'Pix direto: o cliente paga na sua chave Pix, envia o comprovante e você libera em Pagamentos. Toque em Salvar para valer.';
       const fb = c.gw_fallback !== '0';
       v.fbOn = fb; v.fbSw = 'background: ' + (fb ? '#D4FF3A' : '#33333E') + '; justify-content: ' + (fb ? 'flex-end' : 'flex-start'); v.fbKn = 'background: ' + (fb ? '#0E0E14' : '#A7A7B8');
       v.toggleFb = () => this.setCfg('gw_fallback', fb ? '0' : '1');
       v.showPix = !v.isGw || fb; v.pixTitle = v.isGw ? 'Pix direto (reserva)' : 'Pix direto';
+      const GWS = {
+        mercadopago: { key: 'Access Token de produção', ph: 'APP_USR-…', steps: ['Entre em mercadopago.com.br/developers/panel com a conta que vai receber.', 'Clique em Suas integrações › Criar aplicação (qualquer nome, ex.: WhiteLink; escolha "Pagamentos online").', 'Abra a aplicação › Credenciais de produção (ative, se pedir).', 'Copie o Access Token (começa com APP_USR-), cole acima e toque em Salvar.'], hook: '', foot: 'Não precisa configurar webhook: o WhiteLink avisa o Mercado Pago em cada cobrança e confere o pagamento direto com ele antes de liberar.' },
+        asaas: { key: 'Chave da API', ph: '$aact_prod_…', steps: ['Entre em asaas.com com a conta que vai receber e confira se ela tem uma chave Pix cadastrada.', 'Toque no seu nome (canto de cima) › Integrações › Chaves de API › Gerar nova chave.', 'Copie a chave (começa com $aact_prod_), cole acima e toque em Salvar.', 'Ainda em Integrações › Webhooks › Adicionar: cole o endereço abaixo e marque os eventos de cobrança (pagamento recebido e confirmado).'], hook: 'https://whitelink.site/api/webhooks/gateway?p=asaas', foot: 'O webhook faz o plano liberar mesmo se o cliente fechar a tela. Antes de liberar, o WhiteLink sempre confere o pagamento direto no Asaas.' },
+        pagbank: { key: 'Token', ph: 'Cole o token do PagBank', steps: ['Entre na sua conta PagBank pelo computador.', 'Vá em Venda online › Integrações › Gerar token (o menu pode mudar um pouco).', 'Copie o token, cole acima e toque em Salvar.'], hook: '', foot: 'Não precisa configurar webhook: o WhiteLink manda o endereço em cada cobrança e confere o pagamento direto no PagBank antes de liberar.' },
+        pagarme: { key: 'Chave secreta', ph: 'sk_…', steps: ['Entre em dash.pagar.me com a conta que vai receber.', 'Vá em Configurações › Chaves de API e copie a Chave secreta (começa com sk_).', 'Cole acima e toque em Salvar.', 'Em Configurações › Webhooks › Criar: cole o endereço abaixo e marque o evento order.paid.'], hook: 'https://whitelink.site/api/webhooks/gateway?p=pagarme', foot: 'O webhook faz o plano liberar mesmo se o cliente fechar a tela. Antes de liberar, o WhiteLink sempre confere o pagamento direto no Pagar.me.' }
+      };
+      const PV = c.gw_providers || [];
+      const sel = c.gw_provider || 'mercadopago', G = GWS[sel] || GWS.mercadopago, info = PV.find((x) => x.id === sel) || {};
+      v.gwName = info.name || 'gateway';
+      v.gwList = PV.map((x) => ({ name: x.name, sel: x.id === sel, sub: x.id === c.gw_active && c.pay_mode === 'gateway' && x.has ? 'Em uso' : x.account ? 'Conectado' : x.has ? 'Chave salva' : 'Sem chave', pick: () => this.setState({ cfg: Object.assign({}, this.state.cfg, { gw_provider: x.id, gw_token: x.token, gw_has: x.has, gw_account: x.account }), saved: false, cfgErr: '' }) }));
+      v.gwKeyLabel = G.key; v.gwKeyPh = G.ph; v.gwSteps = G.steps; v.gwHook = G.hook; v.gwFoot = G.foot; v.gwDocNote = !!info.doc;
+      v.copyHook = async () => { try { await navigator.clipboard.writeText(G.hook); } catch (e) {} this.flash('Endereço copiado'); };
+      v.gwSbOpt = !!info.sandbox; const sb = c.gw_sandbox === '1';
+      v.sbOn = sb; v.sbSw = 'background: ' + (sb ? '#D4FF3A' : '#33333E') + '; justify-content: ' + (sb ? 'flex-end' : 'flex-start'); v.sbKn = 'background: ' + (sb ? '#0E0E14' : '#A7A7B8');
+      v.toggleSb = () => this.setCfg('gw_sandbox', sb ? '0' : '1');
       const newTok = c.gw_token && !String(c.gw_token).startsWith('••••');
-      v.gwStatus = newTok ? 'Token novo: toque em Salvar' : !c.gw_has ? 'Sem token' : c.gw_account ? 'Conectado' : 'Token salvo, não conferido';
-      v.gwSub = newTok ? 'Vamos conferir com o Mercado Pago ao salvar' : !c.gw_has ? 'Cole o Access Token abaixo' : c.gw_account ? c.gw_account + (c.gw_test ? ' · token de TESTE' : '') + (s.gwOkAt ? ' · conferido agora' : '') : 'Toque em Testar para conferir';
+      v.gwStatus = newTok ? 'Chave nova: toque em Salvar' : !c.gw_has ? 'Sem chave do ' + v.gwName : c.gw_account ? 'Conectado' : 'Chave salva, não conferida';
+      v.gwSub = newTok ? 'Vamos conferir com o ' + v.gwName + ' ao salvar' : !c.gw_has ? 'Cole a chave abaixo' : c.gw_account ? c.gw_account + (c.gw_test && sel === c.gw_active ? ' · chave de TESTE' : '') + (s.gwOkAt ? ' · conferido agora' : '') : 'Toque em Testar para conferir';
       v.gwDot = 'width: 12px; height: 12px; border-radius: 50%; flex: none; background: ' + (newTok ? '#F2C14E' : c.gw_account ? '#4ADE80' : c.gw_has ? '#F2C14E' : '#FF8A6B');
+      v.gwCanTest = !!c.gw_has && !newTok;
       v.gwTestLabel = s.gwTesting ? 'Testando…' : 'Testar';
-      v.gwTest = async () => { this.setState({ gwTesting: true, cfgErr: '' }); const r = await DC.api('admin/settings', 'POST', {}); this.setState({ gwTesting: false, cfgErr: r.ok ? '' : r.error, gwOkAt: r.ok ? Date.now() : 0, cfg: Object.assign({}, this.state.cfg, { gw_account: r.ok ? r.account : '' }) }); if (r.ok) this.flash('Conectado ✓'); };
+      v.gwTest = async () => { this.setState({ gwTesting: true, cfgErr: '' }); const r = await DC.api('admin/settings', 'POST', { provider: sel }); const f = await DC.api('admin/settings'); const keep = this.state.cfg; this.setState({ gwTesting: false, cfgErr: r.ok ? '' : r.error, gwOkAt: r.ok ? Date.now() : 0, cfg: Object.assign({}, f.settings, { gw_provider: keep.gw_provider, gw_token: (f.settings.gw_providers.find((x) => x.id === sel) || {}).token, gw_has: true, gw_account: r.ok ? r.account : '', pay_mode: keep.pay_mode }) }); if (r.ok) this.flash('Conectado ✓'); };
       v.gwClearMask = () => { if (String(c.gw_token || '').startsWith('••••')) this.setCfg('gw_token', ''); };
-      v.gwRemove = async () => { if (!confirm('Remover o token do Mercado Pago? O site volta para Pix direto.')) return; const r = await DC.api('admin/settings', 'PUT', { gw_token: '', pay_mode: 'pix' }); if (!r.ok) { this.setState({ cfgErr: r.error }); return; } const f = await DC.api('admin/settings'); this.setState({ cfg: f.settings, cfgErr: '' }); this.flash('Token removido'); };
+      v.gwRemove = async () => { const act = sel === c.gw_active && c.pay_mode === 'gateway'; if (!confirm('Remover a chave do ' + v.gwName + '?' + (act ? ' O site volta para Pix direto.' : ''))) return; const r = await DC.api('admin/settings', 'PUT', Object.assign({ gw_remove: sel }, act ? { pay_mode: 'pix' } : {})); if (!r.ok) { this.setState({ cfgErr: r.error }); return; } const f = await DC.api('admin/settings'); this.setState({ cfg: Object.assign({}, f.settings, act ? {} : { gw_provider: sel, gw_token: '', gw_has: false, gw_account: '' }), cfgErr: '' }); this.flash('Chave removida'); };
       v.p = {};
       for (const k of ['ouro_m', 'ouro_y', 'diamante_m', 'diamante_y', 'agencia_m', 'agencia_y']) {
         v.p[k] = c['_price_' + k] !== undefined ? c['_price_' + k] : (c['price_' + k] / 100).toFixed(2).replace('.', ',');

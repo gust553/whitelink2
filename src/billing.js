@@ -10,7 +10,8 @@ export const DEFAULTS = {
   pay_mode: 'pix',
   price_ouro_m: '1990', price_ouro_y: '19990', price_diamante_m: '3990', price_diamante_y: '39990', price_agencia_m: '9990', price_agencia_y: '99990',
   ref_bonus_days: '7', loyalty_every: '3', loyalty_days: '7',
-  gw_provider: 'mercadopago', gw_token: '', gw_fallback: '1', gw_minutes: '60', gw_account: '', gw_checked: '',
+  gw_provider: 'mercadopago', gw_token: '', gw_fallback: '1', gw_minutes: '60', gw_account: '', gw_checked: '', gw_sandbox: '0',
+  gw_tok_mercadopago: '', gw_tok_asaas: '', gw_tok_pagbank: '', gw_tok_pagarme: '', gw_acc_mercadopago: '', gw_acc_asaas: '', gw_acc_pagbank: '', gw_acc_pagarme: '',
   cf_token: '', cf_zone: '', vapid_pub: '', vapid_priv: '',
   ann_on: '1', ann_title: '', ann_text: ''
 };

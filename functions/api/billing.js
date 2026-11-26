@@ -1,5 +1,6 @@
 import { json, fail, currentUser, publicUser, ensureSchema } from '../../src/lib.js';
 import { getSettings, orderView, priceOf, brl, settleRewards } from '../../src/billing.js';
+import { gatewayNeedsDoc } from '../../src/gateway.js';
 
 // Meu plano: plano atual, pedido aberto, histórico e preços
 export async function onRequestGet({ request, env }) {
@@ -21,6 +22,6 @@ export async function onRequestGet({ request, env }) {
     open: open ? orderView(open, s, open.method === 'gateway' ? ((await env.DB.prepare('SELECT pix FROM order_gw WHERE order_id = ?').bind(open.id).first()) || {}).pix : '') : null,
     history: (hist.results || []).map((o) => orderView(o, s)),
     loyalty: { every: +s.loyalty_every, days: +s.loyalty_days, count: Math.max(0, paid - 1) % (+s.loyalty_every || 3) },
-    whatsapp: s.whatsapp, payMode: s.pay_mode
+    whatsapp: s.whatsapp, payMode: s.pay_mode, needDoc: gatewayNeedsDoc(s)
   });
 }

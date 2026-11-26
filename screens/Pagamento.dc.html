@@ -43,6 +43,7 @@
         </sc-for>
         <div class="card" style="padding: 16px"><b style="font-size: 15px">O que vem no {{selName}}</b><ul class="bf"><sc-for list="{{selItems}}" as="it" hint-placeholder-count="5"><li>{{it}}</li></sc-for></ul></div>
         <span style="font-size: 14px; color: #9C9CAD; text-align: center">Pagamento só por Pix. Seu plano começa assim que o pagamento é confirmado.</span>
+        <sc-if value="{{needDoc}}" hint-placeholder-val="{{ false }}"><label class="fld" style="margin: 0">CPF de quem vai pagar<input class="inp" inputmode="numeric" value="{{doc}}" onInput="{{setDoc}}" placeholder="000.000.000-00" maxlength="18" autocomplete="off" aria-label="CPF de quem vai pagar"><span style="font-size: 12.5px; color: #9C9CAD; margin-top: 4px">O banco pede o CPF para gerar o Pix. Não guardamos esse número.</span></label></sc-if>
         <sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><div class="warn" style="background: #2A1512; color: #FFB4A3">{{err}}</div></sc-if>
         <button class="btn full" onClick="{{create}}" disabled="{{busy}}">{{createLabel}}</button>
       </div>
@@ -122,13 +123,14 @@ class Component extends DCLogic {
         style: s.plan === p ? 'border-color: ' + C[p] + '; background: #191920' : '',
         pick: () => this.setState({ plan: p })
       })),
-      err: s.err, busy: s.busy,
+      err: s.err, busy: s.busy, needDoc: !!(d.needDoc || s.needDoc), doc: s.doc || '',
+      setDoc: (e) => { const x = e.target.value.replace(/\D/g, '').slice(0, 14); const f = x.length <= 11 ? x.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2') : x.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5'); this.setState({ doc: f }); },
       createLabel: s.busy ? 'Gerando…' : 'Gerar Pix',
       create: async () => {
         this.setState({ busy: true, err: '' });
-        const r = await DC.api('orders', 'POST', { plan: s.plan, period: s.period });
+        const r = await DC.api('orders', 'POST', { plan: s.plan, period: s.period, doc: s.doc || '' });
         this.setState({ busy: false });
-        if (!r.ok) { this.setState({ err: r.error }); return; }
+        if (!r.ok) { this.setState({ err: r.error, needDoc: !!r.needDoc || s.needDoc }); return; }
         history.replaceState(null, '', '/pagamento?c=' + r.order.code);
         this.setState({ order: r.order });
         this.watch();
