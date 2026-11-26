@@ -3,7 +3,7 @@ import { track, notify } from '../../src/crm.js';
 import { agendaCfg, freeSlots, creatorPix, creatorWa, waLink, newCode, dayOf, brl } from '../../src/biz.js';
 
 // Ações de quem visita a página do criador: comprar, agendar, apoiar, responder quiz.
-// /api/pub/order | slots | book | support | quiz | goal
+// /api/pub/order | slots | book | support | quiz | goal | live | publi
 async function owner(env, h) {
   h = String(h || '').toLowerCase();
   let u = await env.DB.prepare("SELECT * FROM users WHERE handle = ? AND status = 'ativo'").bind(h).first();
@@ -27,6 +27,24 @@ export async function onRequestGet({ request, env, params }) {
     return json({ ok: true, slots: await freeSlots(env, o.u.id, cfg, svc, day) });
   }
   if (params.action === 'goal') return json({ ok: true, goal: await goalView(env, o) });
+  if (params.action === 'live') {
+    // prova social ao vivo (Diamante): pessoas vendo agora e compras recentes
+    if (o.lvl < 2) return json({ ok: true, viewers: 0, recent: [] });
+    const sid = String(url.searchParams.get('sid') || '').replace(/[^a-z0-9]/gi, '').slice(0, 24);
+    const now = Date.now();
+    if (sid) await env.DB.prepare('INSERT INTO presence (user_id, sid, at) VALUES (?, ?, ?) ON CONFLICT(user_id, sid) DO UPDATE SET at = excluded.at').bind(o.u.id, sid, now).run();
+    if (Math.random() < 0.05) await env.DB.prepare('DELETE FROM presence WHERE at < ?').bind(now - 600000).run();
+    const v = await env.DB.prepare('SELECT COUNT(*) AS n FROM presence WHERE user_id = ? AND at > ?').bind(o.u.id, now - 70000).first();
+    const r = await env.DB.prepare("SELECT kind, name, items, service, created_at FROM sales WHERE user_id = ? AND created_at > ? AND status <> 'cancelado' ORDER BY id DESC LIMIT 5").bind(o.u.id, now - 6 * 3600000).all();
+    const svc = agendaCfg(o.st).services;
+    const recent = (r.results || []).map((x) => {
+      const first = String(x.name || 'Alguém').split(' ')[0];
+      let what = x.kind === 'apoio' ? 'apoiou' : x.kind === 'agendamento' ? 'agendou ' + (((svc.find((q) => q.id === x.service) || {}).name) || 'um horário') : 'comprou';
+      if (x.kind === 'pedido') { try { const it = JSON.parse(x.items).items[0]; if (it) what = 'comprou ' + it.name; } catch (e) {} }
+      return { t: first + ' ' + what, ago: Math.max(1, Math.round((now - x.created_at) / 60000)) };
+    });
+    return json({ ok: true, viewers: v.n, recent });
+  }
   return fail('Não encontrado.', 404);
 }
 

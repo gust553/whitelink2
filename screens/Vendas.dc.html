@@ -183,6 +183,8 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
       <label class="fld">Nome<input class="inp" value="{{pe.name}}" onInput="{{pe.setName}}" maxlength="80"></label>
       <div class="grid2"><label class="fld">Preço (R$)<input class="inp" inputmode="decimal" value="{{pe.price}}" onInput="{{pe.setPrice}}" placeholder="59,90"></label><label class="fld">Estoque<input class="inp" inputmode="numeric" value="{{pe.stock}}" onInput="{{pe.setStock}}" placeholder="vazio = sem limite"></label></div>
       <label class="fld">Descrição<input class="inp" value="{{pe.descr}}" onInput="{{pe.setDescr}}" maxlength="300"></label>
+      <button class="btn ghost" onClick="{{pe.ai}}" style="height: 36px; font-size: 13.5px; margin: -4px 0 10px; color: #D9CCFF; border-color: #3B2F5E">✨ {{pe.aiLabel}}</button>
+      <sc-for list="{{pe.aiItems}}" as="x" hint-placeholder-count="2"><button onClick="{{x.use}}" style="display: block; width: 100%; text-align: left; padding: 11px 13px; border-radius: 14px; border: 1px solid #2E2A44; background: #14121F; color: #F3F3F7; font: 14px/1.4 Inter, sans-serif; margin-bottom: 8px; cursor: pointer">{{x.t}}</button></sc-for>
       <sc-if value="{{pe.err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 10px">{{pe.err}}</div></sc-if>
       <button class="btn full" onClick="{{pe.save}}">Salvar produto</button>
       <sc-if value="{{pe.id}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{pe.del}}" style="margin-top: 10px; color: #FF8A8E">Apagar produto</button></sc-if>
@@ -333,6 +335,8 @@ class Component extends DCLogic {
       v.pe = { head: p.id ? 'Editar produto' : 'Novo produto', id: p.id || '', name: p.name, price: p.price, stock: p.stock, descr: p.descr, err: p.err || '',
         img: p.image ? "background-image: url('/m/" + p.image + "'); background-size: cover; background-position: center; border-style: solid" : '', imgLabel: p.image ? '' : '+ Foto do produto',
         pick: async () => { const r = await DC.pickImage({ max: 900, square: true }); if (!r) return; if (!r.ok) { up({ err: r.error }); return; } up({ image: r.id, err: '' }); },
+        aiLabel: p.aiBusy ? 'Pensando…' : 'Escrever descrição com IA', aiItems: (p.aiItems || []).map((t) => ({ t, use: () => up({ descr: t.slice(0, 300), aiItems: null }) })),
+        ai: async () => { if (!p.name) { up({ err: 'Escreva o nome do produto primeiro.' }); return; } up({ aiBusy: true, err: '' }); const r = await DC.ai('product', p.name + (p.price ? ' — R$ ' + p.price : '')); const cur = this.state.sheet.p; this.setState({ sheet: { kind: 'prod', p: Object.assign({}, cur, { aiBusy: false, aiItems: r.ok ? r.items : null, err: r.ok ? '' : r.error }) } }); },
         setName: (e) => up({ name: e.target.value }), setPrice: (e) => up({ price: e.target.value }), setStock: (e) => up({ stock: e.target.value }), setDescr: (e) => up({ descr: e.target.value }),
         save: async () => { const r = await DC.api('products', 'POST', p); if (!r.ok) { up({ err: r.error }); return; } this.setState({ sheet: null }); this.flash('Produto salvo ✓'); this.load(); },
         del: async () => { if (!confirm('Apagar este produto?')) return; await DC.api('products?id=' + p.id, 'DELETE'); this.setState({ sheet: null }); this.load(); } };

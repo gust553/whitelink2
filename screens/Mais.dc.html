@@ -79,6 +79,8 @@ class Component extends DCLogic {
       planColor: ['#C9CDD6', '#F2C14E', '#8FE3FF'][lv],
       planLabel: u.trial ? 'Teste Diamante · ' + days + (days === 1 ? ' dia restante' : ' dias restantes') : u.agency ? 'Plano Agência' : ['Prata grátis', 'Plano Ouro', 'Plano Diamante'][lv],
       g1: [
+        { t: 'Turbo', d: 'Prova social ao vivo, otimização e links de campanha', href: '/painel/turbo', icon: I.bolt, icStyle: ic('#D4FF3A') },
+        { t: 'Avisos e app no celular', d: 'Saiba na hora de cada venda e contato', href: '/painel/avisos', icon: I.chat, icStyle: ic('#4ADE80') },
         { t: 'Mídia kit', d: 'Página para fechar publis com marcas', href: '/painel/midiakit', icon: I.kit, icStyle: ic('#F2C14E') },
         { t: 'Parceiros', d: 'Afiliados que vendem por você', href: '/painel/parceiros', icon: I.link, icStyle: ic('#8FE3FF') },
         { t: 'Aparência e temas', d: 'Tema, cores, fonte e criador de tema', href: '/painel/aparencia', icon: I.palette, icStyle: ic('#FF9AD5') },

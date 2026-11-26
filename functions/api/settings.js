@@ -1,4 +1,4 @@
-import { json, fail, readJson, currentUser, cleanText, effectivePlan, PLAN_LEVEL, getUserSettings, setUserSettings } from '../../src/lib.js';
+import { json, fail, readJson, currentUser, cleanText, effectivePlan, PLAN_LEVEL, getUserSettings, setUserSettings, loadPage } from '../../src/lib.js';
 
 // Configurações da conta: Google, Pixel, Analytics, recebimentos por Pix, otimização e prova social.
 // Só mexe no que vier na requisição; o resto continua como estava.
@@ -6,7 +6,7 @@ export async function onRequestGet({ request, env }) {
   const u = await currentUser(env, request);
   if (!u) return fail('Entre na sua conta.', 401);
   const ep = effectivePlan(u);
-  return json({ ok: true, level: PLAN_LEVEL[ep.plan], agency: !!ep.agency, handle: u.handle, settings: await getUserSettings(env, u.id) });
+  return json({ ok: true, level: PLAN_LEVEL[ep.plan], agency: !!ep.agency, handle: u.handle, avatar: (await loadPage(env, u.id)).appearance.avatar || '', settings: await getUserSettings(env, u.id) });
 }
 
 export async function onRequestPut({ request, env }) {

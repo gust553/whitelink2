@@ -21,9 +21,15 @@
     <div>
       <div class="sec-t" style="margin-top: 6px">QR code da sua página</div>
       <div class="card" style="padding: 18px; display: flex; flex-direction: column; gap: 14px; align-items: center">
-        <img class="qr" src="{{qr}}" alt="QR code de whitelink.site/{{handle}}">
+        <div style="position: relative; width: 220px; height: 220px; border-radius: 18px; padding: 10px; box-sizing: border-box; {{qrBox}}"><img src="{{qr}}" alt="QR code de whitelink.site/{{handle}}" style="width: 100%; height: 100%; display: block"><sc-if value="{{qrLogo}}" hint-placeholder-val="{{ false }}"><img src="{{qrLogo}}" alt="" style="position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px; border-radius: 50%; border: 4px solid {{qrBgHex}}; object-fit: cover"></sc-if></div>
         <span style="font-size: 15px">whitelink.site/<b>{{handle}}</b></span>
-        <a class="btn full" href="{{qrDownload}}" target="_blank" rel="noopener" download="whitelink-qrcode.png">Baixar QR code</a>
+        <div style="display: flex; gap: 10px; width: 100%; align-items: center">
+          <label style="flex: 1; font-size: 12.5px; color: #9C9CAD; display: flex; flex-direction: column; gap: 4px">Cor<input type="color" value="{{qrColor}}" onInput="{{setQrColor}}" disabled="{{qrLocked}}" style="width: 100%; height: 42px; border-radius: 12px; border: 1px solid #24242E; background: #14141B"></label>
+          <label style="flex: 1; font-size: 12.5px; color: #9C9CAD; display: flex; flex-direction: column; gap: 4px">Fundo<input type="color" value="{{qrBgHex}}" onInput="{{setQrBg}}" disabled="{{qrLocked}}" style="width: 100%; height: 42px; border-radius: 12px; border: 1px solid #24242E; background: #14141B"></label>
+          <button class="btn ghost" onClick="{{toggleLogo}}" style="flex: 1.3; height: 42px; margin-top: 18px; font-size: 13px">{{logoLabel}}</button>
+        </div>
+        <sc-if value="{{qrLocked}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; color: #9C9CAD; text-align: center">Cores e sua foto no meio do QR: plano Ouro.</span></sc-if>
+        <button class="btn full" onClick="{{downloadQr}}">Baixar QR code</button>
       </div>
 
       <div class="sec-t">Aparecer no Google</div>
@@ -135,6 +141,24 @@ class Component extends DCLogic {
       remove: async () => { if (!confirm('Remover o domínio ' + dmn.hostname + '? Sua página continua em whitelink.site.')) return; await DC.api('domain', 'DELETE'); this.setState({ dmInput: '' }); this.loadDomain(false); }
     });
   }
+  qrUrl(url, size) {
+    const c = (this.state.qrColor || '#0e0e14').slice(1), b = (this.state.qrBg || '#ffffff').slice(1);
+    return 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&margin=0&ecc=H&color=' + c + '&bgcolor=' + b + '&data=' + encodeURIComponent(url);
+  }
+  async downloadQr(url, d) {
+    const load = (src, cors) => new Promise((ok, bad) => { const i = new Image(); if (cors) i.crossOrigin = 'anonymous'; i.onload = () => ok(i); i.onerror = bad; i.src = src; });
+    try {
+      const S = 1000, P = 60, cv = document.createElement('canvas'); cv.width = cv.height = S + P * 2;
+      const x = cv.getContext('2d'); x.fillStyle = this.state.qrBg || '#ffffff'; x.fillRect(0, 0, cv.width, cv.height);
+      x.drawImage(await load(this.qrUrl(url, S), true), P, P, S, S);
+      if (this.state.qrLogoOn && d.avatar) {
+        const a = await load('/m/' + d.avatar), r = 110, c = cv.width / 2;
+        x.fillStyle = this.state.qrBg || '#ffffff'; x.beginPath(); x.arc(c, c, r + 16, 0, 7); x.fill();
+        x.save(); x.beginPath(); x.arc(c, c, r, 0, 7); x.clip(); x.drawImage(a, c - r, c - r, r * 2, r * 2); x.restore();
+      }
+      const link = document.createElement('a'); link.download = 'whitelink-qrcode.png'; link.href = cv.toDataURL('image/png'); link.click();
+    } catch (e) { window.open(this.qrUrl(url, 1000), '_blank'); }
+  }
   set(patch) { this.setState({ s: Object.assign({}, this.state.s, patch), saved: false }); }
   renderVals() {
     const d = this.state.d, s = this.state.s;
@@ -142,8 +166,13 @@ class Component extends DCLogic {
     const url = 'https://whitelink.site/' + d.handle;
     return {
       loading: false, ready: true, handle: d.handle,
-      qr: 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=0&data=' + encodeURIComponent(url),
-      qrDownload: 'https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&margin=20&format=png&data=' + encodeURIComponent(url),
+      qr: this.qrUrl(url, 400),
+      qrBox: 'background: ' + (this.state.qrBg || '#ffffff'), qrBgHex: this.state.qrBg || '#ffffff', qrColor: this.state.qrColor || '#0e0e14',
+      qrLocked: d.level < 1, qrLogo: this.state.qrLogoOn && d.avatar ? '/m/' + d.avatar : '',
+      logoLabel: !d.avatar ? 'Sem foto de perfil' : this.state.qrLogoOn ? 'Tirar minha foto' : 'Pôr minha foto',
+      setQrColor: (e) => this.setState({ qrColor: e.target.value }), setQrBg: (e) => this.setState({ qrBg: e.target.value }),
+      toggleLogo: () => { if (d.level < 1) return; if (!d.avatar) { location.href = '/painel'; return; } this.setState({ qrLogoOn: !this.state.qrLogoOn }); },
+      downloadQr: () => this.downloadQr(url, d),
       seoTitle: s.seo.title || '', seoDesc: s.seo.desc || '',
       setSeoTitle: (e) => this.set({ seo: Object.assign({}, s.seo, { title: e.target.value }) }),
       setSeoDesc: (e) => this.set({ seo: Object.assign({}, s.seo, { desc: e.target.value }) }),

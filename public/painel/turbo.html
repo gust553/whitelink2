@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turbo — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.note{font-size:13px;color:#9C9CAD;line-height:1.5}
+.lk{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid #8FE3FF;color:#8FE3FF;margin-left:6px}
+.lk.o{border-color:#F2C14E;color:#F2C14E}
+.feat{display:flex;gap:12px;align-items:flex-start;padding:14px 16px}
+.feat .ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;background:#1B1B24}
+.cl{display:flex;gap:8px;align-items:center;background:#0E0E14;border-radius:12px;padding:8px 8px 8px 12px;font-size:13px;color:#C9C9D6;margin-top:8px}
+.cl span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+<link rel="stylesheet" href="/assets/shell.css">
+<link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0B0B10"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" href="/assets/icons/icon-192.png">
+</head>
+<body class="has-shell">
+
+<div id="root"></div>
+<nav class="rail" aria-label="Menu"><a class="rail-logo" href="/painel" aria-label="WhiteLink">W</a><a class="rail-i" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="rail-i" href="/painel/vendas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/></svg></span>Vendas</a><a class="rail-i" href="/painel/clientes"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Clientes</a><a class="rail-i" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Números</a><a class="rail-i on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<nav class="tabbar" aria-label="Menu"><a class="tab" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="tab" href="/painel/vendas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/></svg></span>Vendas</a><a class="tab" href="/painel/clientes"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Clientes</a><a class="tab" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Números</a><a class="tab on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Aparencia.dc.html":"/painel/aparencia","Temas.dc.html":"/painel/temas","CriadorTema.dc.html":"/painel/criador-tema","Agenda.dc.html":"/painel/agendamentos","Stats.dc.html":"/painel/estatisticas","Contatos.dc.html":"/painel/clientes","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/indique","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/conta","EditarLink.dc.html":"/painel","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/painel/suporte","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
+<script src="/assets/dc.js"></script>
+<script src="/assets/temas-list.js"></script>
+<script src="/assets/planos.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, nl: { name: '', slug: '', url: '' }, err: '', toast: '' }; }
+  componentDidMount() { this.load(); }
+  async load() { const d = await DC.api('smart'); if (d.status === 401) { location.href = '/entrar'; return; } this.setState({ d: d }); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1600); }
+  async setFlag(group, key) {
+    const d = this.state.d;
+    const g = Object.assign({}, d[group], { [key]: !d[group][key] });
+    this.setState({ d: Object.assign({}, d, { [group]: g }) });
+    const r = await DC.api('settings', 'PUT', { [group]: g });
+    this.flash(r.ok ? 'Salvo ✓' : r.error);
+  }
+  renderVals() {
+    const s = this.state, d = s.d;
+    if (!d) return { loading: true };
+    const dia = d.level >= 2;
+    const sw = (on) => 'background: ' + (on ? '#D4FF3A' : '#33333E') + '; justify-content: ' + (on ? 'flex-end' : 'flex-start') + (dia ? '' : '; opacity: .5');
+    const kn = (on) => 'background: ' + (on ? '#0E0E14' : '#A7A7B8');
+    const live = dia ? d.live : { viewers: false, sales: false }, auto = dia ? d.auto : { ab: false, order: false };
+    const v = {
+      loading: false, ready: true, dia, notDia: !dia, handle: d.handle, live, auto, err: s.err, toast: s.toast, nl: s.nl,
+      appStatus: d.level >= 1 ? 'Já está ligado na sua página. ✓' : 'Disponível a partir do Ouro.',
+      swViewers: sw(live.viewers), knViewers: kn(live.viewers), tViewers: () => dia && this.setFlag('live', 'viewers'),
+      swSales: sw(live.sales), knSales: kn(live.sales), tSales: () => dia && this.setFlag('live', 'sales'),
+      swAb: sw(auto.ab), knAb: kn(auto.ab), tAb: () => dia && this.setFlag('auto', 'ab'),
+      swOrder: sw(auto.order), knOrder: kn(auto.order), tOrder: () => dia && this.setFlag('auto', 'order'),
+      links: d.links.map((l) => { const url = 'https://whitelink.site/' + d.handle + '/' + l.slug; return { name: l.name, n: l.n30 + ' cliques (30 dias) · ' + l.total + ' no total', dest: l.url === 'page' ? 'Vai para a sua página' : 'Vai para ' + l.url, url,
+        copy: () => { try { navigator.clipboard.writeText(url); } catch (e) {} this.flash('Link copiado ✓'); },
+        del: async () => { if (!confirm('Apagar o link ' + l.slug + '?')) return; await DC.api('smart?id=' + l.id, 'DELETE'); this.load(); } }; }),
+      noLinks: d.links.length === 0,
+      setLName: (e) => this.setState({ nl: Object.assign({}, s.nl, { name: e.target.value }) }),
+      setLSlug: (e) => this.setState({ nl: Object.assign({}, s.nl, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }) }),
+      setLUrl: (e) => this.setState({ nl: Object.assign({}, s.nl, { url: e.target.value }) }),
+      createLink: async () => { const r = await DC.api('smart', 'POST', { name: s.nl.name, slug: s.nl.slug, url: s.nl.url.trim() || 'page' }); if (!r.ok) { this.setState({ err: r.error }); return; } this.setState({ nl: { name: '', slug: '', url: '' }, err: '' }); this.flash('Link criado ✓'); this.load(); }
+    };
+    return v;
+  }
+}
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/mais\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Turbo</h1></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{ready}}\" hint-placeholder-val=\"{{ true }}\">\n    <div>\n      <div class=\"card feat\"><span class=\"ic\">📲</span><span style=\"flex: 1\"><b>Abrir direto no app</b> <span class=\"lk o\">Ouro</span><div class=\"note\" style=\"margin-top: 4px\">Quem clica no seu link de YouTube, Instagram, WhatsApp, TikTok ou Spotify dentro do Instagram abre direto no aplicativo, sem ficar preso no navegador. {{appStatus}}</div></span></div>\n\n      <div class=\"sec-t\">Prova social ao vivo <span class=\"lk\">Diamante</span></div>\n      <div class=\"card\">\n        <div class=\"row\" style=\"cursor: default\"><span class=\"row-tx\"><b>Pessoas vendo agora</b><span>Mostra \"12 pessoas vendo agora\" no topo da página</span></span><button class=\"sw\" onClick=\"{{tViewers}}\" aria-pressed=\"{{live.viewers}}\" style=\"{{swViewers}}\" disabled=\"{{notDia}}\"><span style=\"{{knViewers}}\"></span></button></div>\n        <div class=\"row\" style=\"cursor: default; border: none\"><span class=\"row-tx\"><b>Compras recentes</b><span>Mostra \"Ana comprou Bolo de pote há 5 min\"</span></span><button class=\"sw\" onClick=\"{{tSales}}\" aria-pressed=\"{{live.sales}}\" style=\"{{swSales}}\" disabled=\"{{notDia}}\"><span style=\"{{knSales}}\"></span></button></div>\n      </div>\n\n      <div class=\"sec-t\">Otimização automática <span class=\"lk\">Diamante</span></div>\n      <div class=\"card\">\n        <div class=\"row\" style=\"cursor: default\"><span class=\"row-tx\"><b>Teste A/B decide sozinho</b><span>Com 100 cliques, o título que vende mais vira o oficial e você recebe um aviso</span></span><button class=\"sw\" onClick=\"{{tAb}}\" aria-pressed=\"{{auto.ab}}\" style=\"{{swAb}}\" disabled=\"{{notDia}}\"><span style=\"{{knAb}}\"></span></button></div>\n        <div class=\"row\" style=\"cursor: default; border: none\"><span class=\"row-tx\"><b>Ordem pelos cliques</b><span>Os links mais clicados sobem sozinhos (os fixados continuam no topo)</span></span><button class=\"sw\" onClick=\"{{tOrder}}\" aria-pressed=\"{{auto.order}}\" style=\"{{swOrder}}\" disabled=\"{{notDia}}\"><span style=\"{{knOrder}}\"></span></button></div>\n      </div>\n      <p class=\"note\" style=\"margin: 8px 4px 0\">Regras por aparelho e por horário: no editor, toque num link e role até \"Link inteligente\".</p>\n\n      <div class=\"sec-t\">Links de campanha <span class=\"lk\">Diamante</span></div>\n      <sc-if value=\"{{dia}}\" hint-placeholder-val=\"{{ true }}\">\n        <div>\n          <p class=\"note\" style=\"margin: 0 4px 10px\">Crie um link curto para cada campanha (ex.: whitelink.site/{{handle}}/blackfriday) e veja quantos cliques cada uma trouxe.</p>\n          <div class=\"list\">\n            <sc-for list=\"{{links}}\" as=\"l\" hint-placeholder-count=\"2\"><div class=\"row\" style=\"cursor: default; flex-direction: column; align-items: stretch\"><div style=\"display: flex; justify-content: space-between; gap: 10px\"><b>{{l.name}}</b><span class=\"chip\">{{l.n}}</span></div><span class=\"note\">{{l.dest}}</span><div class=\"cl\"><span>{{l.url}}</span><button class=\"btn\" onClick=\"{{l.copy}}\" style=\"height: 32px; padding: 0 12px; font-size: 12.5px\">Copiar</button><button class=\"btn ghost\" onClick=\"{{l.del}}\" style=\"height: 32px; padding: 0 10px; font-size: 12.5px; color: #FF8A8E\">×</button></div></div></sc-for>\n            <sc-if value=\"{{noLinks}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"row\" style=\"cursor: default; color: #9C9CAD\">Nenhum link de campanha ainda.</div></sc-if>\n          </div>\n          <div class=\"card\" style=\"padding: 16px; margin-top: 12px\">\n            <label class=\"fld\">Nome da campanha<input class=\"inp\" value=\"{{nl.name}}\" onInput=\"{{setLName}}\" placeholder=\"Ex.: Black Friday nos stories\"></label>\n            <label class=\"fld\">Final do link<div style=\"display: flex; align-items: center; border-radius: 14px; border: 1px solid #24242E; background: #14141B\"><span style=\"padding-left: 14px; color: #9C9CAD; white-space: nowrap; font-size: 14px\">/{{handle}}/</span><input class=\"inp\" style=\"border: none; background: transparent; padding-left: 2px\" value=\"{{nl.slug}}\" onInput=\"{{setLSlug}}\" placeholder=\"blackfriday\" autocapitalize=\"none\"></div></label>\n            <label class=\"fld\">Para onde vai (vazio = sua página)<input class=\"inp\" value=\"{{nl.url}}\" onInput=\"{{setLUrl}}\" placeholder=\"https://...\" inputmode=\"url\"></label>\n            <sc-if value=\"{{err}}\" hint-placeholder-val=\"{{ false }}\"><div role=\"alert\" style=\"padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 10px\">{{err}}</div></sc-if>\n            <button class=\"btn full\" onClick=\"{{createLink}}\">Criar link</button>\n          </div>\n        </div>\n      </sc-if>\n      <sc-if value=\"{{notDia}}\" hint-placeholder-val=\"{{ false }}\"><a class=\"row card\" href=\"/painel/plano\" style=\"padding: 14px; border-color: #1E3A44\"><span class=\"row-tx\"><b>Liberar o Turbo completo</b><span>Prova social ao vivo, otimização automática, links de campanha e regras por aparelho e horário.</span></span><span class=\"chev\">›</span></a></sc-if>\n    </div>\n    </sc-if>\n  </div>\n  <sc-if value=\"{{toast}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"toast\" role=\"status\">{{toast}}</div></sc-if>\n</div>\n", Component, {});
+(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar?next='+encodeURIComponent(location.pathname+location.search);})();
+</script>
+</body>
+</html>

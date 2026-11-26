@@ -56,6 +56,11 @@ export async function onRequestGet(context) {
   let shown = blocks.filter((b) => b.on && BLOCK_NEED[b.kind] <= lvl && (lvl === 0 || scheduledOk(b, now)));
   const limit = { prata: 3, ouro: 10, diamante: 0 }[ep.plan];
   if (limit) { let n = 0; shown = shown.filter((b) => b.kind !== 'link' || ++n <= limit); }
+  if (lvl === 2) {
+    const st0 = await gus(env, u.id);
+    if (st0.auto && st0.auto.order) { const { autoOrder } = await import('../src/auto.js'); shown = await autoOrder(env, u.id, extra ? extra.id * 1000000 : 0, shown); }
+    var liveCfg = Object.assign({ viewers: true, sales: true }, st0.live || {});
+  }
   const pinned = shown.filter((b) => b.featured || (lvl >= 1 && b.pin));
   shown = pinned.concat(shown.filter((b) => !(b.featured || (lvl >= 1 && b.pin))));
 
@@ -167,6 +172,7 @@ export async function onRequestGet(context) {
   document.querySelectorAll('form.lead').forEach(function(f){f.onsubmit=function(e){e.preventDefault();var m=f.querySelector('.msg');fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({h:${JSON.stringify(h)},name:f.name.value,phone:f.phone.value,source:f.dataset.src})}).then(function(r){return r.json()}).then(function(d){if(d.ok){f.innerHTML='<b>Pronto! Você vai receber as novidades.</b>';}else{m.textContent=d.error||'Tente de novo.';}}).catch(function(){m.textContent='Sem conexão.';});};});
 })();
 </script>
+${lvl === 2 && liveCfg && (liveCfg.viewers || liveCfg.sales) ? `<script>window.WL_LIVE=${JSON.stringify({ h, v: !!liveCfg.viewers, s: !!liveCfg.sales })}</script><script src="/assets/live.js" defer></script>` : ''}
 ${kinds.has('store') || kinds.has('booking') || kinds.has('support') || kinds.has('quiz') ? `<script type="application/json" id="wl-data">${JSON.stringify(pubData).replace(/</g, '\\u003c')}</script><script src="/assets/pub.js" defer></script>` : ''}`;
   const cfgRow = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(u.id).first();
   let cfg = {}; try { cfg = JSON.parse((cfgRow && cfgRow.data) || '{}'); } catch (e) {}
@@ -184,7 +190,8 @@ async function trackMeta(env, request, userId) {
     const dev = /iphone|ipad/.test(ua) ? 'iPhone' : /android/.test(ua) ? 'Android' : 'Computador';
     const city = (request.cf && request.cf.city) || 'Desconhecida';
     const day = new Date().toISOString().slice(0, 10);
-    for (const [k, v] of [['src', src], ['dev', dev], ['city', city]]) {
+    const br = new Date(Date.now() - 3 * 3600000);
+    for (const [k, v] of [['src', src], ['dev', dev], ['city', city], ['hour', String(br.getUTCHours()).padStart(2, '0')], ['dow', String(br.getUTCDay())]]) {
       await env.DB.prepare('INSERT INTO visit_meta (user_id, day, kind, key, n) VALUES (?, ?, ?, ?, 1) ON CONFLICT(user_id, day, kind, key) DO UPDATE SET n = n + 1')
         .bind(userId, day, k, String(v).slice(0, 60)).run();
     }

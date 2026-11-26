@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Avisos — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.note{font-size:13px;color:#9C9CAD;line-height:1.5}
+.nic{width:40px;height:40px;border-radius:12px;background:#1B1B24;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.new{width:8px;height:8px;border-radius:50%;background:#D4FF3A;flex:none}
+.steps{margin:8px 0 0;padding-left:18px;font-size:13.5px;color:#C9C9D6;line-height:1.6}
+</style>
+</helmet>
+<div>
+  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Avisos</h1></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
+        <b style="font-size: 16px">📲 WhiteLink no seu celular</b>
+        <span class="note">{{pushText}}</span>
+        <sc-if value="{{canInstall}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{install}}">Instalar o app</button></sc-if>
+        <sc-if value="{{iosHelp}}" hint-placeholder-val="{{ false }}"><ol class="steps"><li>Abra o whitelink.site/painel no <b>Safari</b></li><li>Toque em <b>Compartilhar</b> (quadrado com seta)</li><li>Escolha <b>Adicionar à Tela de Início</b></li><li>Abra o app pela tela inicial e volte aqui para ligar os avisos</li></ol></sc-if>
+        <sc-if value="{{canPush}}" hint-placeholder-val="{{ false }}"><button class="btn full" onClick="{{enable}}" disabled="{{busy}}">{{pushBtn}}</button></sc-if>
+        <sc-if value="{{hasDevices}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px"><button class="btn ghost" onClick="{{test}}" style="flex: 1">Mandar aviso de teste</button><button class="btn ghost" onClick="{{disable}}" style="color: #FF8A8E">Desligar</button></div></sc-if>
+        <sc-if value="{{msg}}" hint-placeholder-val="{{ false }}"><div role="status" class="note" style="color: #D4FF3A">{{msg}}</div></sc-if>
+        <span class="note">{{planNote}}</span>
+      </div>
+      <div class="sec-t">Últimos avisos</div>
+      <div class="list">
+        <sc-for list="{{items}}" as="n" hint-placeholder-count="4"><a class="row" href="{{n.url}}"><span class="nic">{{n.ic}}</span><span class="row-tx"><b style="font-weight: 500">{{n.text}}</b><span>{{n.at}}</span></span><sc-if value="{{n.unread}}" hint-placeholder-val="{{ false }}"><span class="new"></span></sc-if></a></sc-for>
+        <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nenhum aviso ainda. Quando alguém comprar, agendar, apoiar ou deixar o contato, aparece aqui.</div></sc-if>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, p: null, me: null, busy: false, msg: '', inst: null }; }
+  async componentDidMount() {
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); this.setState({ inst: e }); });
+    const [d, p, me] = await Promise.all([DC.api('notifications'), DC.api('push'), DC.api('me')]);
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d, p: p, me: me.user || me });
+  }
+  async enable() {
+    this.setState({ busy: true, msg: '' });
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { this.setState({ busy: false, msg: 'Você não permitiu os avisos. Libere nas configurações do navegador.' }); return; }
+      const reg = await navigator.serviceWorker.register('/sw.js'); await navigator.serviceWorker.ready;
+      const key = Uint8Array.from(atob(this.state.p.key.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((this.state.p.key.length + 3) % 4)), (c) => c.charCodeAt(0));
+      const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+      const r = await DC.api('push', 'POST', { subscription: sub.toJSON() });
+      this.setState({ busy: false, msg: r.ok ? 'Avisos ligados neste aparelho ✓' : r.error, p: Object.assign({}, this.state.p, { devices: (this.state.p.devices || 0) + (r.ok ? 1 : 0) }) });
+    } catch (e) { this.setState({ busy: false, msg: 'Este navegador não aceita avisos. No iPhone, instale o app primeiro (passos acima).' }); }
+  }
+  renderVals() {
+    const s = this.state, d = s.d;
+    if (!d) return { loading: true };
+    const IC = { contato: '👤', pedido: '🛍', agendamento: '📅', apoio: '💛', publi: '🤝', otimizacao: '✨' };
+    const ios = /iphone|ipad/i.test(navigator.userAgent), standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    const supported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+    const lvl = { ouro: 1, diamante: 2 }[(s.me || {}).plan] || 0;
+    const ago = (t) => { const m = Math.floor((Date.now() - t) / 60000); return m < 60 ? 'há ' + Math.max(1, m) + ' min' : m < 1440 ? 'há ' + Math.floor(m / 60) + ' h' : new Date(t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); };
+    return {
+      loading: false, ready: true, busy: s.busy, msg: s.msg,
+      pushText: (s.p && s.p.devices) ? 'Os avisos estão ligados em ' + s.p.devices + (s.p.devices === 1 ? ' aparelho.' : ' aparelhos.') : 'Instale o WhiteLink como app e receba um aviso na hora em que alguém comprar, agendar ou deixar o contato.',
+      canInstall: !!s.inst, install: async () => { s.inst.prompt(); await s.inst.userChoice; this.setState({ inst: null }); },
+      iosHelp: ios && !standalone,
+      canPush: supported && (!ios || standalone) && lvl >= 1, pushBtn: s.busy ? 'Aguarde…' : 'Ligar avisos neste aparelho', enable: () => this.enable(),
+      hasDevices: !!(s.p && s.p.devices),
+      test: async () => { const r = await DC.api('push', 'POST', { test: true }); this.setState({ msg: r.ok && r.sent ? 'Aviso de teste enviado ✓' : 'Não consegui enviar. Ligue os avisos de novo.' }); },
+      disable: async () => { await DC.api('push', 'DELETE'); this.setState({ msg: 'Avisos desligados.', p: Object.assign({}, s.p, { devices: 0 }) }); },
+      planNote: lvl >= 2 ? 'No seu plano você recebe todos os avisos: vendas, agendamentos, apoios, contatos e publis.' : lvl === 1 ? 'No Ouro você recebe avisos de novos contatos. No Diamante, de tudo: vendas, agendamentos, apoios e publis.' : 'Avisos no celular a partir do plano Ouro.',
+      items: d.items.map((n) => ({ ic: IC[n.kind] || '🔔', text: n.text, at: ago(n.created_at), url: n.url || '/painel', unread: !n.read_at })),
+      empty: d.items.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

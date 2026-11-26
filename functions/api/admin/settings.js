@@ -9,6 +9,7 @@ export async function onRequestGet({ request, env }) {
   const out = Object.assign({}, s);
   out.gw_token = s.gw_token ? '••••' + s.gw_token.slice(-6) : '';
   out.gw_has = !!s.gw_token;
+  delete out.vapid_priv;
   out.cf_token = s.cf_token ? '••••' + s.cf_token.slice(-4) : '';
   const d = await env.DB.prepare('SELECT d.hostname, d.status, d.created_at, u.name, u.handle FROM domains d JOIN users u ON u.id = d.user_id ORDER BY d.created_at DESC LIMIT 200').all();
   return json({ ok: true, settings: out, domains: d.results || [] });

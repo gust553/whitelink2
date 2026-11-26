@@ -34,6 +34,8 @@ const PAGES = {
   'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'pagina', null],
   'Vendas.dc.html': ['painel/vendas.html', true, false, 'vendas', null],
   'MidiaKit.dc.html': ['painel/midiakit.html', true, false, 'mais', null],
+  'Inteligente.dc.html': ['painel/turbo.html', true, false, 'mais', null],
+  'Avisos.dc.html': ['painel/avisos.html', true, false, 'mais', null],
   'Parceiros.dc.html': ['painel/parceiros.html', true, false, 'mais', null],
   'Admin.dc.html': ['admin.html', true, false, 'admin', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
@@ -86,6 +88,7 @@ function build(file, [out, login, preview, tab, barTitle]) {
 ${login ? '<meta name="robots" content="noindex">' : ''}
 ${helmet.trim()}
 ${tab ? '<link rel="stylesheet" href="/assets/shell.css">' : ''}
+<link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0B0B10"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" href="/assets/icons/icon-192.png">
 </head>
 <body${tab ? ' class="has-shell"' : ''}>
 ${preview ? PREVIEW_BAR : ''}
@@ -97,6 +100,7 @@ ${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
 <script src="/assets/planos.js"></script>
 <script>
 ${code.replace(/<\/script/gi, '<\\/script')}
+${tab ? "if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});" : ''}
 DC.mount(document.getElementById('root'), ${JSON.stringify(tpl).replace(/<\/script/gi, '<\\/script')}, Component, ${JSON.stringify(props)});
 ${guard}
 </script>

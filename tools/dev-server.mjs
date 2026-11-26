@@ -19,6 +19,8 @@ if (process.env.MOCK_CF) {
     return ok(h);
   };
 }
+// IA de teste (só no servidor local)
+const MOCK_AI = { run: async (m, o) => ({ response: JSON.stringify(['Sugestão 1 para: ' + o.messages[1].content.slice(0, 30), 'Sugestão 2', 'Sugestão 3']) }) };
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const db = new DatabaseSync(':memory:');
 db.exec(fs.readFileSync(path.join(ROOT, 'schema-console.sql'), 'utf8'));
@@ -33,7 +35,7 @@ const ASSETS = { async fetch(u) {
   return new Response('not found', { status: 404 });
 } };
 const worker = (await import(path.join(ROOT, 'src/worker.js'))).default;
-const env = { DB, ASSETS };
+const env = { AI: MOCK_AI, DB, ASSETS };
 const port = Number(process.argv[2] || 8787);
 http.createServer(async (req, res) => {
   const chunks = []; for await (const c of req) chunks.push(c);

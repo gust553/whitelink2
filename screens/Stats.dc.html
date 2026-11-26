@@ -57,6 +57,24 @@
           </sc-for>
           <sc-if value="{{noLinks}}" hint-placeholder-val="{{ false }}"><div class="row" style="color: #9C9CAD; cursor: default">Ainda sem cliques neste período.</div></sc-if>
         </div>
+        <sc-if value="{{dia}}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div class="sec-t">Horários de pico</div>
+            <div class="card" style="padding: 14px">
+              <div class="chart" style="height: 110px; padding: 0"><sc-for list="{{hours}}" as="h" hint-placeholder-count="24"><div style="{{h.st}}" title="{{h.t}}"></div></sc-for></div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: #9C9CAD; margin-top: 6px"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div>
+              <p style="font-size: 14px; margin: 12px 0 0; color: #C9C9D6">{{peakText}}</p>
+            </div>
+            <sc-if value="{{hasCamps}}" hint-placeholder-val="{{ false }}"><div><div class="sec-t">Links de campanha</div><div class="list"><sc-for list="{{camps}}" as="c" hint-placeholder-count="2"><div class="row" style="cursor: default"><span class="row-tx"><b>{{c.name}}</b><span>/{{c.slug}}</span></span><b style="font: 700 18px 'Space Grotesk'">{{c.n}}</b></div></sc-for></div></div></sc-if>
+            <div class="sec-t">Análise da IA</div>
+            <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
+              <sc-for list="{{tips}}" as="t" hint-placeholder-count="2"><div style="font-size: 14px; line-height: 1.5; padding: 10px 12px; border-radius: 12px; background: #14121F; border: 1px solid #2E2A44">💡 {{t}}</div></sc-for>
+              <sc-if value="{{tipErr}}" hint-placeholder-val="{{ false }}"><div style="color: #FFB4A3; font-size: 13.5px">{{tipErr}}</div></sc-if>
+              <button class="btn ghost full" onClick="{{analyze}}">{{analyzeLabel}}</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ouroOnly}}" hint-placeholder-val="{{ false }}"><a class="row card" href="/painel/plano" style="margin-top: 14px; padding: 14px; border-color: #1E3A44"><span class="row-tx"><b>Horários de pico e análise da IA</b><span>No Diamante você descobre a melhor hora de postar e recebe dicas da IA para vender mais.</span></span><span class="chev">›</span></a></sc-if>
         <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
           <div>
             <div class="sec-t">{{g.title}}</div>
@@ -101,6 +119,13 @@ class Component extends DCLogic {
       locked: !full, full: full,
       links: (d.links || []).filter((l) => l.clicks || l.clicksB).slice(0, 10).map((l) => ({ title: l.title, clicks: fmt(l.clicks + l.clicksB), ab: l.titleB ? 'Teste A/B · A: ' + fmt(l.clicks) + ' · B: ' + fmt(l.clicksB) : '' })),
       noLinks: !(d.links || []).some((l) => l.clicks || l.clicksB),
+      dia: d.level === 2, ouroOnly: d.level === 1,
+      hours: (d.hours || []).map((n, i, a) => ({ st: 'height: ' + Math.max(4, n / Math.max(1, ...a) * 100) + '%' + (n === Math.max(...a) && n ? '; background: #7CF5D0' : n ? '' : '; background: #26262F'), t: i + 'h: ' + n })),
+      peakText: (() => { const h = d.hours || []; const mx = Math.max(0, ...h); if (!mx) return 'Ainda sem visitas suficientes.'; const i = h.indexOf(mx); const D = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado']; const w = d.dows || []; const wi = w.indexOf(Math.max(...w)); return 'Seu público mais entra às ' + i + 'h' + (wi >= 0 ? ', e o melhor dia é ' + D[wi] : '') + '. Poste um pouco antes.'; })(),
+      hasCamps: (d.campaigns || []).length > 0, camps: (d.campaigns || []).map((c) => ({ name: c.name, slug: c.slug, n: c.n })),
+      tips: this.state.tips || [], tipErr: this.state.tipErr || '',
+      analyzeLabel: this.state.tipBusy ? 'Analisando…' : (this.state.tips ? '✨ Analisar de novo' : '✨ Pedir análise da IA'),
+      analyze: async () => { this.setState({ tipBusy: true, tipErr: '' }); const r = await DC.ai('analyze'); this.setState({ tipBusy: false, tips: r.ok ? r.items : this.state.tips, tipErr: r.ok ? '' : r.error }); },
       groups: [['De onde vieram', b.src, '#D4FF3A'], ['Aparelho', b.dev, '#7CF5D0'], ['Cidade', b.city, '#B9A6FF']].map((g) => ({ title: g[0], rows: pct(g[1].map((r) => ({ k: r.k, n: r.n, c: g[2] }))), empty: !g[1].length }))
     };
   }

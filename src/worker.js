@@ -38,6 +38,10 @@ import * as crmApi from '../functions/api/crm.js';
 import * as campApi from '../functions/api/campaigns.js';
 import * as mkApi from '../functions/api/mediakit.js';
 import * as affApi from '../functions/api/affiliates.js';
+import * as smartApi from '../functions/api/smart.js';
+import * as aiApi from '../functions/api/ai.js';
+import * as pushApi from '../functions/api/push.js';
+import * as notifApi from '../functions/api/notifications.js';
 import * as subPage from '../functions/[handle]/[sub].js';
 import { isMainHost, domainOwner, domainCleanup, domainSeen } from './domains.js';
 import { effectivePlan } from './lib.js';
@@ -90,7 +94,11 @@ const ROUTES = [
   [/^\/api\/campaigns$/, campApi],
   [/^\/api\/mediakit$/, mkApi],
   [/^\/api\/affiliates$/, affApi],
-  [/^\/api\/pub\/(?<action>order|slots|book|support|quiz|goal|publi)$/, pubApi],
+  [/^\/api\/smart$/, smartApi],
+  [/^\/api\/ai$/, aiApi],
+  [/^\/api\/push$/, pushApi],
+  [/^\/api\/notifications$/, notifApi],
+  [/^\/api\/pub\/(?<action>order|slots|book|support|quiz|goal|publi|live)$/, pubApi],
   [/^\/m\/(?<id>[a-f0-9]{8,40})$/, mediaGet],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],

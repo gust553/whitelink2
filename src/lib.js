@@ -278,6 +278,11 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS campaign_sends (campaign_id INTEGER NOT NULL, person_id INTEGER NOT NULL, sent_at INTEGER, PRIMARY KEY (campaign_id, person_id))',
     'CREATE TABLE IF NOT EXISTS affiliates (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, code TEXT NOT NULL, name TEXT NOT NULL, phone TEXT, pct INTEGER NOT NULL DEFAULT 10, token TEXT NOT NULL, created_at INTEGER NOT NULL, UNIQUE(user_id, code))',
     'CREATE TABLE IF NOT EXISTS aff_stats (user_id INTEGER NOT NULL, code TEXT NOT NULL, day TEXT NOT NULL, visits INTEGER NOT NULL DEFAULT 0, clicks INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, code, day))',
+    'CREATE TABLE IF NOT EXISTS camp_links (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, slug TEXT NOT NULL, name TEXT NOT NULL, url TEXT NOT NULL, created_at INTEGER NOT NULL, UNIQUE(user_id, slug))',
+    'CREATE TABLE IF NOT EXISTS camp_clicks (link_id INTEGER NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (link_id, day))',
+    'CREATE TABLE IF NOT EXISTS presence (user_id INTEGER NOT NULL, sid TEXT NOT NULL, at INTEGER NOT NULL, PRIMARY KEY (user_id, sid))',
+    'CREATE TABLE IF NOT EXISTS ai_usage (user_id INTEGER NOT NULL, month TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, month))',
+    'CREATE TABLE IF NOT EXISTS push_subs (endpoint TEXT PRIMARY KEY, user_id INTEGER NOT NULL, p256dh TEXT NOT NULL, auth TEXT NOT NULL, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
@@ -335,6 +340,15 @@ export async function listPages(env, u) {
   return r.results || [];
 }
 
+// Regras do link inteligente (Diamante): destino diferente por aparelho e por horário
+function cleanRules(r) {
+  if (!r || typeof r !== 'object') return undefined;
+  const u = (v) => (v ? cleanUrl(v) || '' : '');
+  const hh = (v) => (/^\d\d:\d\d$/.test(v || '') ? v : '');
+  const out = { ios: u(r.ios), android: u(r.android), desktop: u(r.desktop), alt: u(r.alt), altFrom: hh(r.altFrom), altTo: hh(r.altTo) };
+  return out.ios || out.android || out.desktop || (out.alt && out.altFrom && out.altTo) ? out : undefined;
+}
+
 export function cleanBlocks(list) {
   if (!Array.isArray(list)) return null;
   const out = [];
@@ -350,7 +364,8 @@ export function cleanBlocks(list) {
     const dt = (v) => (/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}$/.test(String(v || '')) ? String(v).replace(' ', 'T') : '');
     out.push({ id, kind: b.kind, title: cleanText(b.title, b.kind === 'text' ? 300 : 80), url, on: !!b.on, featured: b.kind === 'link' && !!b.featured,
       start: dt(b.start), end: dt(b.end), effect: ['pulse', 'shake', 'glow'].includes(b.effect) ? b.effect : '', pin: !!b.pin,
-      titleB: cleanText(b.titleB, 80), split: Math.max(10, Math.min(90, parseInt(b.split, 10) || 50)) });
+      titleB: cleanText(b.titleB, 80), split: Math.max(10, Math.min(90, parseInt(b.split, 10) || 50)),
+      rules: cleanRules(b.rules) });
   }
   return out;
 }

@@ -132,6 +132,8 @@
     mount,
     html: (s) => ({ __html: String(s) }), // HTML fixo do próprio código (ícones), nunca dados do usuário
     // chamadas para o servidor do WhiteLink
+    // Assistente de IA: devolve { ok, items } ou { ok:false, error }
+    ai(task, input) { return this.api('ai', 'POST', { task: task, input: input || '' }); },
     // Escolhe uma foto no aparelho, reduz e envia. opts: { max: 1200, square: false }
     pickImage(opts) {
       opts = opts || {};

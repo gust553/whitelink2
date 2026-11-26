@@ -23,6 +23,14 @@ export async function statsData(env, u, days) {
     const g = { src: [], dev: [], city: [] };
     for (const r of m.results || []) if (g[r.kind] && g[r.kind].length < 6) g[r.kind].push({ k: r.key, n: r.n });
     out.breakdown = g;
+    if (lvl >= 2) {
+      // horários de pico (Diamante)
+      const hours = Array(24).fill(0), dows = Array(7).fill(0);
+      for (const r of m.results || []) { if (r.kind === 'hour') hours[+r.key] += r.n; if (r.kind === 'dow') dows[+r.key] += r.n; }
+      out.hours = hours; out.dows = dows;
+      const cl = await env.DB.prepare('SELECT l.id, l.slug, l.name, COALESCE((SELECT SUM(n) FROM camp_clicks c WHERE c.link_id = l.id AND c.day >= ?), 0) AS n FROM camp_links l WHERE l.user_id = ? ORDER BY n DESC LIMIT 10').bind(from, u.id).all();
+      out.campaigns = cl.results || [];
+    }
     const ct = await env.DB.prepare('SELECT COUNT(*) AS n FROM contacts WHERE user_id = ? AND created_at >= ?').bind(u.id, Date.parse(from)).first();
     out.contacts = ct.n;
   }

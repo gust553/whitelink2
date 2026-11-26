@@ -11,7 +11,7 @@ export const DEFAULTS = {
   price_ouro_m: '1990', price_ouro_y: '19990', price_diamante_m: '3990', price_diamante_y: '39990', price_agencia_m: '9990', price_agencia_y: '99990',
   ref_bonus_days: '7', loyalty_every: '3', loyalty_days: '7',
   gw_provider: 'mercadopago', gw_token: '',
-  cf_token: '', cf_zone: ''
+  cf_token: '', cf_zone: '', vapid_pub: '', vapid_priv: ''
 };
 
 export async function getSettings(env) {
