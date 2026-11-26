@@ -9,7 +9,9 @@ export async function onRequestGet({ request, env }) {
   const out = Object.assign({}, s);
   out.gw_token = s.gw_token ? '••••' + s.gw_token.slice(-6) : '';
   out.gw_has = !!s.gw_token;
-  return json({ ok: true, settings: out });
+  out.cf_token = s.cf_token ? '••••' + s.cf_token.slice(-4) : '';
+  const d = await env.DB.prepare('SELECT d.hostname, d.status, d.created_at, u.name, u.handle FROM domains d JOIN users u ON u.id = d.user_id ORDER BY d.created_at DESC LIMIT 200').all();
+  return json({ ok: true, settings: out, domains: d.results || [] });
 }
 
 export async function onRequestPut({ request, env }) {
@@ -25,6 +27,8 @@ export async function onRequestPut({ request, env }) {
   if (b.pay_mode !== undefined) patch.pay_mode = b.pay_mode === 'gateway' ? 'gateway' : 'pix';
   if (b.gw_provider !== undefined) patch.gw_provider = 'mercadopago';
   if (b.gw_token !== undefined && !String(b.gw_token).startsWith('••••')) patch.gw_token = String(b.gw_token).trim().slice(0, 300);
+  if (b.cf_token !== undefined && !String(b.cf_token).startsWith('••••')) patch.cf_token = String(b.cf_token).trim().slice(0, 200);
+  if (b.cf_zone !== undefined) { const z = String(b.cf_zone).trim().toLowerCase(); if (z && !/^[a-f0-9]{32}$/.test(z)) return fail('O ID da zona tem 32 letras e números. Confira se copiou certo.'); patch.cf_zone = z; }
   for (const k of ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y']) {
     if (b[k] !== undefined) { const c = Math.round(parseFloat(String(b[k]).replace(/\./g, '').replace(',', '.')) * 100); if (!(c >= 100 && c <= 10000000)) return fail('Preço inválido.'); patch[k] = String(c); }
   }
@@ -36,6 +40,6 @@ export async function onRequestPut({ request, env }) {
   const next = Object.assign({}, cur, patch);
   if (next.pay_mode === 'gateway' && !next.gw_token) return fail('Para usar o gateway, cole primeiro o Access Token do Mercado Pago.');
   await setSettings(env, patch);
-  await adminLog(env, admin.id, 'configurações: ' + Object.keys(patch).filter((k) => k !== 'gw_token').join(', ') + (patch.gw_token !== undefined ? ', token do gateway' : ''), '');
+  await adminLog(env, admin.id, 'configurações: ' + Object.keys(patch).filter((k) => k !== 'gw_token' && k !== 'cf_token').join(', ') + (patch.gw_token !== undefined ? ', token do gateway' : '') + (patch.cf_token !== undefined ? ', token da Cloudflare' : ''), '');
   return json({ ok: true });
 }

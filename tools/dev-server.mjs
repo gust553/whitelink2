@@ -4,6 +4,21 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
+// MOCK_CF=1: imita a API de domínios da Cloudflare (só para testes)
+if (process.env.MOCK_CF) {
+  const real = globalThis.fetch, hosts = {};
+  globalThis.fetch = async (u, o = {}) => {
+    const url = String(u);
+    if (!url.startsWith('https://api.cloudflare.com/')) return real(u, o);
+    const ok = (result) => new Response(JSON.stringify({ success: true, result }));
+    const id = url.split('/custom_hostnames/')[1];
+    if (o.method === 'POST') { const b = JSON.parse(o.body); const h = { id: 'h' + Date.now(), hostname: b.hostname, status: 'pending', checks: 0, ssl: { status: 'pending_validation' }, ownership_verification: { type: 'txt', name: '_cf-custom-hostname.' + b.hostname, value: 'abc-123' } }; hosts[h.id] = h; return ok(h); }
+    if (o.method === 'DELETE') { delete hosts[id]; return ok({ id }); }
+    const h = hosts[id]; if (!h) return new Response(JSON.stringify({ success: false, errors: [{ message: 'not found' }] }));
+    if (++h.checks >= 2) { h.status = 'active'; h.ssl.status = 'active'; }
+    return ok(h);
+  };
+}
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const db = new DatabaseSync(':memory:');
 db.exec(fs.readFileSync(path.join(ROOT, 'schema-console.sql'), 'utf8'));

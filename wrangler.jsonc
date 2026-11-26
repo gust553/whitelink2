@@ -17,7 +17,11 @@
   ],
   "routes": [
     { "pattern": "whitelink.site", "custom_domain": true },
-    { "pattern": "www.whitelink.site", "custom_domain": true }
+    { "pattern": "www.whitelink.site", "custom_domain": true },
+    // domínios próprios dos clientes Diamante (Cloudflare for SaaS) chegam por aqui
+    { "pattern": "*/*", "zone_name": "whitelink.site" }
   ],
+  // todo dia: tira o domínio próprio de quem saiu do Diamante
+  "triggers": { "crons": ["23 6 * * *"] },
   "observability": { "enabled": true }
 }

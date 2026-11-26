@@ -10,7 +10,8 @@ export const DEFAULTS = {
   pay_mode: 'pix',
   price_ouro_m: '1990', price_ouro_y: '19990', price_diamante_m: '3990', price_diamante_y: '39990',
   ref_bonus_days: '7', loyalty_every: '3', loyalty_days: '7',
-  gw_provider: 'mercadopago', gw_token: ''
+  gw_provider: 'mercadopago', gw_token: '',
+  cf_token: '', cf_zone: ''
 };
 
 export async function getSettings(env) {

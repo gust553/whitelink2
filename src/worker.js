@@ -27,6 +27,9 @@ import * as accountPhone from '../functions/api/account/phone.js';
 import * as referrals from '../functions/api/referrals.js';
 import * as support from '../functions/api/support.js';
 import * as pagesApi from '../functions/api/pages.js';
+import * as domainApi from '../functions/api/domain.js';
+import { isMainHost, domainOwner, domainCleanup } from './domains.js';
+import { effectivePlan } from './lib.js';
 import * as gwHook from '../functions/api/webhooks/gateway.js';
 import * as admVerify from '../functions/api/admin/verify.js';
 import * as admOverview from '../functions/api/admin/overview.js';
@@ -67,6 +70,7 @@ const ROUTES = [
   [/^\/api\/referrals$/, referrals],
   [/^\/api\/support$/, support],
   [/^\/api\/pages$/, pagesApi],
+  [/^\/api\/domain$/, domainApi],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],
   [/^\/api\/admin\/overview$/, admOverview],
@@ -93,10 +97,12 @@ async function serveStatic(request, env) {
   return new Response(nf.body, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
 
-async function route(request, env, ctx) {
+async function route(request, env, ctx, inner) {
   const url = new URL(request.url);
+  // domínio próprio de um cliente Diamante (ex.: links.lojadamari.com.br)
+  if (!inner && !isMainHost(url.hostname)) return customHost(request, env, ctx, url);
   // www.whitelink.site → whitelink.site
-  if (url.hostname.startsWith('www.')) {
+  if (url.hostname === 'www.whitelink.site') {
     url.hostname = url.hostname.slice(4);
     return Response.redirect(url.toString(), 301);
   }
@@ -117,7 +123,24 @@ async function route(request, env, ctx) {
   return next();
 }
 
+async function customHost(request, env, ctx, url) {
+  const o = await domainOwner(env, url.hostname);
+  if (!o) return Response.redirect('https://whitelink.site/', 302);
+  const p = url.pathname;
+  // a página do cliente fica na raiz do domínio dele; cliques, captura e arquivos funcionam normalmente
+  if (p === '/' || p === '') {
+    if (effectivePlan(o).plan !== 'diamante') return Response.redirect('https://whitelink.site/' + o.handle, 302);
+    const r = new Request(new URL('/' + o.handle, url).toString(), request);
+    return route(r, env, ctx, true);
+  }
+  if (/^\/(go\/|assets\/|api\/lead$|favicon)/.test(p)) return route(request, env, ctx, true);
+  return Response.redirect('https://whitelink.site' + p + url.search, 302);
+}
+
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(domainCleanup(env));
+  },
   async fetch(request, env, ctx) {
     try {
       return await mw.onRequest({ request, env, next: () => route(request, env, ctx) });

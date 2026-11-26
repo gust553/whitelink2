@@ -258,6 +258,7 @@ export async function ensureSchema(env) {
     'CREATE INDEX IF NOT EXISTS idx_order_gw ON order_gw(gw_id)',
     'CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, handle TEXT NOT NULL UNIQUE, title TEXT, bio TEXT, blocks TEXT NOT NULL DEFAULT \'[]\', appearance TEXT NOT NULL DEFAULT \'{}\', created_at INTEGER NOT NULL)',
     'CREATE INDEX IF NOT EXISTS idx_pages_user ON pages(user_id)',
+    'CREATE TABLE IF NOT EXISTS domains (user_id INTEGER PRIMARY KEY, hostname TEXT NOT NULL UNIQUE, cf_id TEXT, status TEXT NOT NULL, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'

@@ -32,23 +32,59 @@
         <label class="fld" style="margin: 0">Descrição<input class="inp" value="{{seoDesc}}" onInput="{{setSeoDesc}}" maxlength="160" placeholder="Uma frase sobre você ou sua loja"></label>
       </div>
 
-      <div class="sec-t" style="display: flex; align-items: center; gap: 8px">Pixel, Analytics e domínio <span class="lk">Diamante</span></div>
+      <div class="sec-t" style="display: flex; align-items: center; gap: 8px">Pixel e Analytics <span class="lk">Diamante</span></div>
       <div class="card" style="padding: 16px">
         <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
           <div>
             <label class="fld">Pixel da Meta (ID)<input class="inp" value="{{pixel}}" onInput="{{setPixel}}" inputmode="numeric" placeholder="Ex.: 123456789012345"></label>
-            <label class="fld">Google Analytics (ID)<input class="inp" value="{{ga}}" onInput="{{setGa}}" placeholder="Ex.: G-ABC123XYZ"></label>
-            <label class="fld" style="margin: 0">Domínio próprio<input class="inp" value="{{domain}}" onInput="{{setDomain}}" placeholder="Ex.: links.seusite.com.br"></label>
-            <sc-if value="{{domain}}" hint-placeholder-val="{{ false }}"><p style="font-size: 13px; color: #9C9CAD; line-height: 1.5; margin: 10px 0 0">Para ligar o domínio, chame a gente no WhatsApp. Nós configuramos com você.</p></sc-if>
+            <label class="fld" style="margin: 0">Google Analytics (ID)<input class="inp" value="{{ga}}" onInput="{{setGa}}" placeholder="Ex.: G-ABC123XYZ"></label>
           </div>
         </sc-if>
         <sc-if value="{{notDia}}" hint-placeholder-val="{{ false }}">
           <div style="display: flex; flex-direction: column; gap: 12px">
-            <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Pixel da Meta, Google Analytics e domínio próprio (seusite.com.br) ficam liberados no Diamante.</span>
+            <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Pixel da Meta, Google Analytics e domínio próprio (ex.: links.seusite.com.br) ficam liberados no Diamante.</span>
             <a class="btn" href="/painel/plano" style="background: #8FE3FF">Conhecer o Diamante</a>
           </div>
         </sc-if>
       </div>
+      <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div class="sec-t" style="display: flex; align-items: center; gap: 8px">Domínio próprio <span class="lk">Diamante</span></div>
+        <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+          <sc-if value="{{dm.off}}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">O domínio próprio está sendo ativado no WhiteLink. Volte em breve ou fale com o suporte.</span></sc-if>
+          <sc-if value="{{dm.ask}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Use um endereço seu, como <b>links.seusite.com.br</b>. Você precisa já ter comprado o domínio (por exemplo no registro.br).</span>
+              <input class="inp" value="{{dm.input}}" onInput="{{dm.setInput}}" placeholder="links.seusite.com.br" autocapitalize="none" aria-label="Seu domínio">
+              <button class="btn full" onClick="{{dm.add}}" disabled="{{dm.busy}}">Conectar domínio</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{dm.has}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <div style="display: flex; align-items: center; gap: 10px"><b style="flex: 1; font-size: 16px; word-break: break-all">{{dm.host}}</b><span class="chip" style="{{dm.chip}}">{{dm.st}}</span></div>
+              <sc-if value="{{dm.waiting}}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">Falta um passo: entre no site onde você comprou o domínio, abra a parte de <b>DNS</b> e crie {{dm.howMany}}:</span>
+                  <sc-for list="{{dm.records}}" as="r" hint-placeholder-count="1">
+                    <div style="border-radius: 14px; background: #0E0E14; border: 1px solid #24242E; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px">
+                      <div><span style="color: #9C9CAD">Tipo:</span> <b>{{r.type}}</b></div>
+                      <div style="display: flex; gap: 8px; align-items: center"><span style="color: #9C9CAD">Nome:</span> <code style="flex: 1; word-break: break-all">{{r.name}}</code><button class="chip" onClick="{{r.copyName}}" style="border: none; cursor: pointer">Copiar</button></div>
+                      <div style="display: flex; gap: 8px; align-items: center"><span style="color: #9C9CAD">Valor:</span> <code style="flex: 1; word-break: break-all">{{r.value}}</code><button class="chip" onClick="{{r.copyValue}}" style="border: none; cursor: pointer">Copiar</button></div>
+                    </div>
+                  </sc-for>
+                  <span style="font-size: 13px; color: #9C9CAD; line-height: 1.5">Depois de criar, pode levar de alguns minutos até algumas horas. O endereço ativa sozinho, com cadeado de segurança. No registro.br, o "Nome" é só a primeira parte (ex.: <b>links</b>).</span>
+                  <sc-if value="{{dm.error}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #F7DFA0">{{dm.error}}</span></sc-if>
+                  <button class="btn full" onClick="{{dm.check}}" disabled="{{dm.busy}}">{{dm.checkLabel}}</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{dm.active}}" hint-placeholder-val="{{ false }}"><a class="btn full" href="{{dm.url}}" target="_blank" rel="noopener">Abrir {{dm.host}}</a></sc-if>
+              <button class="btn ghost full" onClick="{{dm.remove}}">Remover domínio</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{dm.err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px">{{dm.err}}</div></sc-if>
+        </div>
+      </div>
+      </sc-if>
       <sc-if value="{{warn}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: #2B2210; color: #F7DFA0; font-size: 14px">{{warn}}</div></sc-if>
       <button class="btn full" onClick="{{save}}" style="margin-top: 16px">{{saveLabel}}</button>
     </div>
@@ -63,6 +99,41 @@ class Component extends DCLogic {
     const d = await DC.api('settings');
     if (d.status === 401) { location.href = '/entrar'; return; }
     this.setState({ d: d, s: Object.assign({ seo: {} }, d.settings) });
+    if (d.level === 2) this.loadDomain(false);
+  }
+  async loadDomain(check) {
+    this.setState({ dmBusy: true });
+    const r = await DC.api('domain' + (check ? '?check=1' : ''));
+    this.setState({ dm: r.ok ? r : null, dmBusy: false, dmChecked: !!check });
+  }
+  dmVals() {
+    const st = this.state, r = st.dm;
+    const copy = (t) => { try { navigator.clipboard.writeText(t); } catch (e) {} };
+    if (!r) return { off: false, ask: false, has: false, err: st.dmErr || '' };
+    const dmn = r.domain;
+    const base = { busy: !!st.dmBusy, err: st.dmErr || '', input: st.dmInput || '' };
+    if (!r.enabled && !dmn) return Object.assign(base, { off: true });
+    if (!dmn) return Object.assign(base, {
+      ask: true,
+      setInput: (e) => this.setState({ dmInput: e.target.value, dmErr: '' }),
+      add: async () => {
+        this.setState({ dmBusy: true, dmErr: '' });
+        const x = await DC.api('domain', 'POST', { hostname: st.dmInput });
+        if (!x.ok) { this.setState({ dmBusy: false, dmErr: x.error }); return; }
+        this.loadDomain(false);
+      }
+    });
+    const on = dmn.status === 'ativo';
+    return Object.assign(base, {
+      has: true, host: dmn.hostname, active: on, waiting: !on, url: 'https://' + dmn.hostname,
+      st: on ? 'Funcionando' : 'Aguardando', chip: on ? 'background: rgba(74,222,128,.14); color: #4ADE80' : 'background: rgba(242,193,78,.16); color: #F2C14E',
+      howMany: dmn.records.length === 1 ? 'este registro' : 'estes registros',
+      records: dmn.records.map((x) => ({ type: x.type, name: x.name, value: x.value, copyName: () => copy(x.name), copyValue: () => copy(x.value) })),
+      error: st.dmChecked && !on ? (dmn.error ? 'Ainda não ficou pronto: ' + dmn.error : 'Ainda não ficou pronto. Confira o registro e tente de novo em alguns minutos.') : '',
+      checkLabel: st.dmBusy ? 'Verificando…' : 'Já configurei, verificar agora',
+      check: () => this.loadDomain(true),
+      remove: async () => { if (!confirm('Remover o domínio ' + dmn.hostname + '? Sua página continua em whitelink.site.')) return; await DC.api('domain', 'DELETE'); this.setState({ dmInput: '' }); this.loadDomain(false); }
+    });
   }
   set(patch) { this.setState({ s: Object.assign({}, this.state.s, patch), saved: false }); }
   renderVals() {
@@ -77,8 +148,9 @@ class Component extends DCLogic {
       setSeoTitle: (e) => this.set({ seo: Object.assign({}, s.seo, { title: e.target.value }) }),
       setSeoDesc: (e) => this.set({ seo: Object.assign({}, s.seo, { desc: e.target.value }) }),
       dia: d.level === 2, notDia: d.level < 2,
-      pixel: s.pixel || '', ga: s.ga || '', domain: s.domain || '',
-      setPixel: (e) => this.set({ pixel: e.target.value }), setGa: (e) => this.set({ ga: e.target.value }), setDomain: (e) => this.set({ domain: e.target.value }),
+      pixel: s.pixel || '', ga: s.ga || '',
+      setPixel: (e) => this.set({ pixel: e.target.value }), setGa: (e) => this.set({ ga: e.target.value }),
+      dm: this.dmVals(),
       warn: this.state.warn,
       saveLabel: this.state.saved ? 'Salvo ✓' : 'Salvar',
       save: async () => {
