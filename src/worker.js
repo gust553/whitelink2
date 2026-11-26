@@ -28,7 +28,7 @@ import * as referrals from '../functions/api/referrals.js';
 import * as support from '../functions/api/support.js';
 import * as pagesApi from '../functions/api/pages.js';
 import * as domainApi from '../functions/api/domain.js';
-import { isMainHost, domainOwner, domainCleanup } from './domains.js';
+import { isMainHost, domainOwner, domainCleanup, domainSeen } from './domains.js';
 import { effectivePlan } from './lib.js';
 import * as gwHook from '../functions/api/webhooks/gateway.js';
 import * as admVerify from '../functions/api/admin/verify.js';
@@ -130,6 +130,7 @@ async function customHost(request, env, ctx, url) {
   // a página do cliente fica na raiz do domínio dele; cliques, captura e arquivos funcionam normalmente
   if (p === '/' || p === '') {
     if (effectivePlan(o).plan !== 'diamante') return Response.redirect('https://whitelink.site/' + o.handle, 302);
+    if (o.dstatus !== 'ativo' && url.protocol === 'https:') ctx.waitUntil(domainSeen(env, o.user_id));
     const r = new Request(new URL('/' + o.handle, url).toString(), request);
     return route(r, env, ctx, true);
   }

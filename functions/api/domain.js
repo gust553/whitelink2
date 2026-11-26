@@ -5,8 +5,7 @@ import { cleanHostname, domainGet, domainAdd, domainRemove, cfReady, TARGET } fr
 export async function onRequestGet({ request, env }) {
   const u = await currentUser(env, request);
   if (!u) return fail('Entre na sua conta.', 401);
-  const refresh = new URL(request.url).searchParams.get('check') === '1';
-  return json({ ok: true, enabled: !!(await cfReady(env)), target: TARGET, can: effectivePlan(u).plan === 'diamante', domain: await domainGet(env, u.id, refresh) });
+  return json({ ok: true, enabled: !!(await cfReady(env)), target: TARGET, can: effectivePlan(u).plan === 'diamante', domain: await domainGet(env, u.id, true) });
 }
 
 export async function onRequestPost({ request, env }) {

@@ -264,6 +264,8 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
   ];
   for (const q of S) await env.DB.prepare(q).run();
+  // colunas novas em tabelas que já existiam
+  for (const q of ['ALTER TABLE domains ADD COLUMN lost_at INTEGER']) { try { await env.DB.prepare(q).run(); } catch (e) {} }
   schemaReady = true;
 }
 

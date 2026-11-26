@@ -64,9 +64,10 @@ export async function domainAdd(env, userId, hostname) {
   if (!s) return { ok: false, error: 'O domínio próprio ainda não foi ativado no WhiteLink. Fale com o suporte.' };
   const taken = await env.DB.prepare('SELECT user_id FROM domains WHERE hostname = ?').bind(hostname).first();
   if (taken && taken.user_id !== userId) return { ok: false, error: 'Esse domínio já está ligado a outra conta.' };
-  await domainRemove(env, userId);
+  if (taken) return { ok: true, domain: await domainGet(env, userId, true) }; // já é dele
   const r = await cf(s, '', 'POST', { hostname, ssl: { method: 'http', type: 'dv', settings: { min_tls_version: '1.2' } } });
   if (!r.ok) return { ok: false, error: r.code === 1406 ? 'Esse domínio já está em uso na Cloudflare.' : 'Não conseguimos registrar o domínio: ' + r.error };
+  await domainRemove(env, userId); // tira o domínio antigo só agora, que o novo deu certo
   await env.DB.prepare("INSERT INTO domains (user_id, hostname, cf_id, status, created_at) VALUES (?, ?, ?, 'aguardando', ?)").bind(userId, hostname, r.result.id, Date.now()).run();
   return { ok: true, domain: view({ hostname, status: 'aguardando' }, r.result) };
 }
@@ -80,18 +81,26 @@ export async function domainRemove(env, userId) {
 }
 
 // Visitante chegou por um domínio de cliente: descobre de quem é
+export async function domainSeen(env, userId) {
+  await env.DB.prepare("UPDATE domains SET status = 'ativo' WHERE user_id = ? AND status <> 'ativo'").bind(userId).run();
+}
+
 export async function domainOwner(env, host) {
   host = String(host || '').toLowerCase().split(':')[0];
-  return env.DB.prepare('SELECT d.user_id, u.handle, u.plan, u.plan_until, u.trial_until, u.status FROM domains d JOIN users u ON u.id = d.user_id WHERE d.hostname = ?').bind(host).first();
+  return env.DB.prepare('SELECT d.user_id, d.status AS dstatus, u.handle, u.plan, u.plan_until, u.trial_until, u.status FROM domains d JOIN users u ON u.id = d.user_id WHERE d.hostname = ?').bind(host).first();
 }
 
 // Todo dia: tira o domínio de quem saiu do Diamante há mais de 7 dias
 export async function domainCleanup(env) {
-  const r = await env.DB.prepare('SELECT d.user_id, u.plan, u.plan_until, u.trial_until FROM domains d JOIN users u ON u.id = d.user_id').all();
+  const r = await env.DB.prepare('SELECT d.user_id, d.status, d.lost_at, u.plan, u.plan_until, u.trial_until FROM domains d JOIN users u ON u.id = d.user_id').all();
   const week = 7 * 86400000, now = Date.now();
   for (const x of r.results || []) {
-    if (effectivePlan(x).plan === 'diamante') continue;
-    const lost = Math.max(x.plan === 'diamante' ? x.plan_until || 0 : 0, x.trial_until || 0);
-    if (now - lost > week) await domainRemove(env, x.user_id);
+    if (effectivePlan(x).plan === 'diamante') {
+      if (x.lost_at) await env.DB.prepare('UPDATE domains SET lost_at = NULL WHERE user_id = ?').bind(x.user_id).run();
+      if (x.status !== 'ativo') await domainGet(env, x.user_id, true); // atualiza quem ainda está aguardando
+      continue;
+    }
+    if (!x.lost_at) await env.DB.prepare('UPDATE domains SET lost_at = ? WHERE user_id = ?').bind(now, x.user_id).run();
+    else if (now - x.lost_at > week) await domainRemove(env, x.user_id);
   }
 }
