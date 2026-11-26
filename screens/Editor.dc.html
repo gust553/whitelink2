@@ -422,7 +422,7 @@ class Component extends DCLogic {
     return {
       loading: s.loading, ready: !s.loading,
       handle: pgH, instagram: u.instagram, pageUrl: '/' + pgH,
-      customCss: useC && window.WL_customCss ? window.WL_customCss(s.custom) : '',
+      customCss: DC.html(useC && window.WL_customCss ? window.WL_customCss(s.custom) : ''),
       multi: plan === 2 || (s.pages || []).length > 0, isExtra: !!(s.page && s.page.id),
       pageTabs: [{ id: 0, handle: u.handle }].concat(s.pages || []).map((p) => ({ name: '/' + p.handle, sel: (s.page && s.page.id || 0) === p.id, go: () => { if ((s.page && s.page.id || 0) === p.id) return; DC.setPage(p.id, p.handle); location.reload(); } })),
       canNewPage: plan === 2 && (s.pages || []).length < 2,

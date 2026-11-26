@@ -72,6 +72,7 @@ class Component extends DCLogic {
     const days = u.until ? Math.max(0, Math.ceil((u.until - Date.now()) / 86400000)) : 0;
     const ic = (c) => 'color: ' + c;
     const I = {
+      desk: 'M3 4h18v12H3zM8 20h8M12 16v4',
       cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
       gift: 'M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0',
       gear: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 2-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21h-3v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1-2-2 .1-.1A1.7 1.7 0 0 0 4.6 15H3v-3h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1 2-2 .1.1A1.7 1.7 0 0 0 9 4.6V3h3v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1 2 2-.1.1a1.7 1.7 0 0 0 1.2 2.9H21v3h-.2a1.7 1.7 0 0 0-1.4 2.7z',
@@ -98,6 +99,7 @@ class Component extends DCLogic {
         { t: 'Parceiros', d: 'Afiliados que vendem por você, com comissão', href: '/painel/parceiros', icon: I.link, icStyle: ic('#8FE3FF'), h: 'parceiros', tag: lv < 2 ? 'Diamante' : '', tagSt: 'background: rgba(143,227,255,.14); color: #8FE3FF' },
         { t: 'Links programados', d: 'Links que aparecem e somem sozinhos', href: '/painel/agendamentos', icon: I.cal, icStyle: ic('#B9A6FF'), h: 'agendamentos', tag: lv < 1 ? 'Ouro' : '', tagSt: 'background: rgba(242,193,78,.16); color: #F2C14E' },
         { t: 'Aparência e temas', d: '77 temas, cores, fontes e criador de tema', href: '/painel/aparencia', icon: I.palette, icStyle: ic('#FF9AD5'), h: 'temas' },
+        { t: 'Página no computador', d: 'Versão larga, com cara de site, em qualquer tema', href: '/painel/computador', icon: I.desk, icStyle: ic('#7CF5D0'), h: 'computador', tag: lv < 2 ? 'Diamante' : '', tagSt: 'background: rgba(143,227,255,.14); color: #8FE3FF' },
         { t: 'QR code e Google', d: 'QR com sua cara, Pixel, Analytics e domínio', href: 'Configuracoes.dc.html', icon: I.qr, icStyle: ic('#7CF5D0'), h: 'qr' },
         { t: 'Indique e ganhe', d: 'Dias grátis indicando amigos', href: '/painel/indique', icon: I.gift, icStyle: ic('#F2C14E'), h: 'indique' },
         { t: 'Suporte', d: 'Chat com a equipe aqui no app', href: '/painel/suporte', icon: I.chat, icStyle: ic('#B9A6FF'), h: 'onde' }

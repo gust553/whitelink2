@@ -45,7 +45,8 @@ window.WL_PLANOS = {
     'Horários de pico e estatísticas de 90 dias com planilha',
     'Assistente de IA: 500 pedidos por mês e análise da página',
     'Avisos no celular de cada venda, agendamento e apoio',
-    'Os 77 temas, criador de tema e capa em vídeo',
+    'Os 77 temas, criador de tema com foto de fundo e capa em vídeo',
+    'Versão para computador: sua página com cara de site',
     'Domínio próprio, selo de verificado, Pixel e Google Analytics',
     'Suporte prioritário'
   ],
@@ -58,12 +59,4 @@ window.WL_PLANOS = {
   ]
 };
 
-// CSS do tema criado (Diamante) — o mesmo que a página pública usa
-window.WL_customCss = function (c) {
-  c = Object.assign({ bg1: '#1b1035', bg2: '#0b0b10', grad: 1, text: '#f3f3f7', btn: '#d4ff3a', btnText: '#0e0e14', style: 0, radius: 1, font: 0 }, c || {});
-  var F = ['Space Grotesk', 'Inter', 'Playfair Display', 'DM Serif Display', 'Syne', 'Caveat', 'Bebas Neue', 'Outfit'];
-  var g = [c.bg1, 'linear-gradient(180deg,' + c.bg1 + ',' + c.bg2 + ')', 'linear-gradient(135deg,' + c.bg1 + ',' + c.bg2 + ')', 'radial-gradient(circle at 50% 0%,' + c.bg1 + ',' + c.bg2 + ' 70%)'][c.grad];
-  var r = ['6px', '16px', '999px'][c.radius];
-  var btn = ['background:' + c.btn + ';color:' + c.btnText + ';border:1px solid ' + c.btn, 'background:transparent;color:' + c.text + ';border:2px solid ' + c.btn, 'background:rgba(255,255,255,.12);color:' + c.text + ';border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px)'][c.style];
-  return '.t-custom{color:' + c.text + ";font-family:'" + F[c.font] + "',sans-serif}.t-custom .ph-bg{background:" + g + '}.t-custom .ph-bg::before,.t-custom .ph-bg::after{display:none}.t-custom .ph-av{background:rgba(255,255,255,.12);border:2px solid ' + c.btn + ';color:' + c.text + '}.t-custom .ph-btn{' + btn + ';border-radius:' + r + '}.t-custom .ph-btn.main{background:' + c.btn + ';color:' + c.btnText + ';border:1px solid ' + c.btn + '}.t-custom .ph-card{background:rgba(255,255,255,.1);border-radius:' + r + ';color:' + c.text + '}.t-custom .ph-orn,.t-custom .ph-tag{display:none}';
-};
+

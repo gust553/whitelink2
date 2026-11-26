@@ -16,7 +16,7 @@ export async function onRequest({ request, env, next }) {
   const r = new Response(res.body, res);
   r.headers.set('x-content-type-options', 'nosniff');
   r.headers.set('referrer-policy', 'strict-origin-when-cross-origin');
-  r.headers.set('x-frame-options', 'DENY');
+  r.headers.set('x-frame-options', url.searchParams.get('pv') === '1' ? 'SAMEORIGIN' : 'DENY'); // pv=1: prévia do próprio painel
   r.headers.set('permissions-policy', 'camera=(), microphone=(), geolocation=()');
   return r;
 }

@@ -1,5 +1,8 @@
 // WhiteLink — explicações de cada função (abrem no "?")
 window.WL_HELP = {
+  computador: ['Página no computador', 'Quando alguém abre seu link num computador, a página fica larga, com cara de site. Em "Duas colunas" seu perfil fica fixo à esquerda e os links aparecem em grade ao lado. Em "Central larga" o perfil fica em cima. "Igual ao celular" mantém uma coluna no meio. Vale para todos os temas, inclusive os criados por você. No celular nada muda.'],
+  criadorfundo: ['Foto de fundo', 'Use uma foto do seu celular como fundo da página. Ajuste o escurecer para o texto ficar fácil de ler e ligue o desfoque se a foto tiver muitos detalhes. A foto aparece no celular e no computador.'],
+  criadorlayout: ['Posição das informações', 'Escolha onde ficam sua foto, nome e descrição: no centro, à esquerda ou com a foto ao lado do nome. Você também pode colocar o perfil embaixo dos links, mostrar os links em duas colunas, esconder o @ e alinhar o texto dos botões.'],
   // Página
   blocos: ['Blocos da página', 'Cada item da sua página é um bloco: link, texto, vídeo, loja, agenda, quiz e outros. Toque em "Adicionar" para criar, segure e arraste para mudar a ordem, e use o botão ao lado para esconder sem apagar.'],
   destacar: ['Destacar', 'O botão destacado fica no topo, maior e com cor de destaque. Use no link mais importante do momento, como uma promoção ou lançamento.'],
@@ -48,7 +51,7 @@ window.WL_HELP = {
   pixel: ['Pixel e Analytics', 'Conecte o Pixel da Meta e o Google Analytics para medir quem veio dos seus anúncios e criar públicos de remarketing. Plano Diamante.'],
   dominio: ['Domínio próprio', 'Use um endereço seu, como links.suamarca.com.br. Depois de conectar, crie o registro mostrado no site onde comprou o domínio e o endereço ativa sozinho, com cadeado. Plano Diamante.'],
   temas: ['Temas', 'Mudam todo o visual da sua página de uma vez. Prata tem 2 temas, Ouro tem 13 e Diamante tem os 77, inclusive os com movimento.'],
-  criador: ['Criador de tema', 'Monte um tema do zero: cores do fundo, dos botões e do texto, formato dos botões e fonte. A prévia mostra na hora. Plano Diamante.'],
+  criador: ['Criador de tema', 'Monte um tema do zero e salve quantos quiser (até 8). Use uma foto do celular como fundo, escolha cores, textura, onde ficam sua foto, nome e links, formato dos botões e fonte. A prévia muda na hora. Toque em \"Usar este tema\" para aplicar. Funciona no celular e no computador.'],
   indique: ['Indique e ganhe', 'Mande seu link para amigos. Eles ganham 7 dias a mais de teste, e quando assinarem você ganha dias grátis no seu plano, conforme o seu nível.'],
   plano: ['Planos', 'Prata é grátis para sempre. Ouro libera as vendas e as ferramentas básicas. Diamante libera tudo. Agência é para quem cuida de vários clientes. Pagamento só por Pix.']
 };

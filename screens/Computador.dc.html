@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Página no computador — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.opt{display:flex;gap:8px;flex-wrap:wrap}
+.opt button{min-height:46px;padding:8px 16px;border-radius:14px;cursor:pointer;font-size:14px;font-family:inherit;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;text-align:left}
+.opt button[aria-pressed="true"]{border-color:#D4FF3A;background:rgba(212,255,58,.12);color:#F3F3F7;font-weight:600}
+.opt button small{display:block;font-weight:400;font-size:12px;color:#9C9CAD;margin-top:2px}
+.mon{border:1px solid #2A2A36;border-radius:18px;background:#0B0B10;overflow:hidden;position:relative}
+.mon-bar{height:28px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#17171F;font-size:11.5px;color:#9C9CAD}
+.mon-bar i{width:9px;height:9px;border-radius:50%;background:#33333E;display:inline-block}
+.mon-view{position:relative;overflow:hidden}
+.mon-view iframe{position:absolute;left:0;top:0;width:1280px;height:800px;border:0;transform-origin:0 0;pointer-events:none;background:#0B0B10}
+@media (min-width:900px){.cp{display:grid;grid-template-columns:1fr 340px;gap:26px;align-items:start}.cp-side{order:2}}
+</style>
+</helmet>
+<div>
+  <div class="appbar"><a class="icon-btn" href="/painel/aparencia" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Página no computador</h1><button class="hq" data-help="computador" aria-label="Ajuda">?</button><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+      <div class="card" style="padding: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center; margin-top: 10px">
+        <b style="font-size: 18px">Sua página com cara de site no computador</b>
+        <span style="font-size: 14px; color: #C9C9D6; line-height: 1.5">No Diamante, quem abre seu link no computador vê uma página larga, com seu perfil ao lado e os links em grade, em qualquer tema, inclusive os que você criar.</span>
+        <a class="btn full" href="/painel/plano" style="background: #8FE3FF">Conhecer o Diamante</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ok}}" hint-placeholder-val="{{ true }}">
+      <div class="cp">
+        <div>
+          <div class="mon" style="margin-top: 8px"><div class="mon-bar"><i></i><i></i><i></i><span style="margin-left: 8px">whitelink.site/{{handle}}</span></div>
+            <div class="mon-view" style="{{viewSt}}"><iframe src="{{src}}" title="Prévia no computador" style="{{frameSt}}" tabindex="-1"></iframe></div>
+          </div>
+          <a class="btn ghost full" href="{{openHref}}" target="_blank" rel="noopener" style="margin-top: 10px">Abrir em tela cheia</a>
+        </div>
+        <div class="cp-side">
+          <div class="sec-t">Modelo</div>
+          <div class="opt" style="flex-direction: column"><sc-for list="{{models}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}">{{o.name}}<small>{{o.d}}</small></button></sc-for></div>
+          <sc-if value="{{showCols}}" hint-placeholder-val="{{ true }}"><div>
+            <div class="sec-t">Links por linha</div>
+            <div class="opt"><sc-for list="{{cols}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}">{{o.name}}</button></sc-for></div>
+          </div></sc-if>
+          <div class="sec-t">Tema</div>
+          <div class="card" style="padding: 14px 16px; font-size: 14px; color: #C9C9D6; line-height: 1.5">Todos os temas funcionam no computador, inclusive os que você cria. O fundo ocupa a tela inteira.</div>
+          <div style="display: flex; gap: 10px; margin-top: 10px"><a class="btn ghost" href="/painel/temas" style="flex: 1">Trocar tema</a><a class="btn ghost" href="/painel/criador-tema" style="flex: 1">Criar tema</a></div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, saved: '', v: 0, w: 0 }; }
+  async componentDidMount() {
+    const d = await DC.api('editor');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d });
+    this.onR = () => { const el = document.querySelector('.mon-view'); if (el && el.clientWidth !== this.state.w) this.setState({ w: el.clientWidth }); };
+    window.addEventListener('resize', this.onR); setTimeout(this.onR, 30); setTimeout(this.onR, 400);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onR); }
+  async set(p) {
+    const d = this.state.d;
+    d.appearance = Object.assign({}, d.appearance, p);
+    this.setState({ d: d, saved: 'Salvando…' });
+    const r = await DC.api('appearance', 'PUT', { appearance: p });
+    this.setState({ saved: r.ok ? 'Salvo ✓' : 'Não salvou', v: this.state.v + 1 });
+  }
+  renderVals() {
+    const s = this.state, d = s.d;
+    if (!d) return { loading: true };
+    const lvl = { prata: 0, ouro: 1, diamante: 2 }[d.user.plan] || 0;
+    if (lvl < 2) return { loading: false, locked: true };
+    const a = d.appearance || {}, desk = a.desk || 0, dc = a.deskCols || 2;
+    const k = Math.max(0.2, (s.w || 340) / 1280);
+    const h = (d.page && d.page.handle) || d.user.handle;
+    return {
+      loading: false, ok: true, saved: s.saved, handle: h,
+      src: '/' + h + '?pv=1&v=' + s.v, openHref: '/' + h,
+      viewSt: 'height: ' + Math.round(800 * k) + 'px', frameSt: 'transform: scale(' + k.toFixed(4) + ')',
+      models: [['Duas colunas', 'Seu perfil fica fixo à esquerda e os links ao lado'], ['Central larga', 'Perfil em cima e os links em grade embaixo'], ['Igual ao celular', 'Uma coluna no meio da tela']]
+        .map((m, i) => ({ name: m[0], d: m[1], sel: desk === i, pick: () => this.set({ desk: i }) })),
+      showCols: desk !== 2,
+      cols: [1, 2, 3].map((n) => ({ name: n + (n === 1 ? ' link' : ' links'), sel: dc === n, pick: () => this.set({ deskCols: n }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

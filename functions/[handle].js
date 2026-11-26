@@ -64,10 +64,11 @@ export async function onRequestGet(context) {
   const pinned = shown.filter((b) => b.featured || (lvl >= 1 && b.pin));
   shown = pinned.concat(shown.filter((b) => !(b.featured || (lvl >= 1 && b.pin))));
 
-  context.waitUntil(env.DB.prepare(
+  const isPv = new URL(context.request.url).searchParams.get('pv') === '1';
+  if (!isPv) context.waitUntil(env.DB.prepare(
     'INSERT INTO visits (user_id, day, views) VALUES (?, ?, 1) ON CONFLICT(user_id, day) DO UPDATE SET views = views + 1'
   ).bind(u.id, new Date().toISOString().slice(0, 10)).run());
-  context.waitUntil(trackMeta(env, context.request, u.id));
+  if (!isPv) context.waitUntil(trackMeta(env, context.request, u.id));
   // parceiro (afiliado) do criador: ?a=codigo guarda por 30 dias quem indicou
   let affCookie = '';
   const affCode = String(new URL(context.request.url).searchParams.get('a') || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20);
@@ -147,8 +148,9 @@ export async function onRequestGet(context) {
   } else if (lvl >= 1 && a.cover) cover = `<div class="pub-cover"><img src="/m/${a.cover}" alt=""></div>`;
   const av = a.avatar ? `<div class="ph-av has-img"><img src="/m/${a.avatar}" alt="${escapeHtml(title)}"></div>` : `<div class="ph-av">${escapeHtml(initials)}</div>`;
   const anim = lvl >= 1 && a.anim && a.anim !== 'nenhuma' ? (lvl === 2 || ['subir', 'aparecer'].includes(a.anim) ? a.anim : 'subir') : '';
+  const desk = lvl === 2 && a.desk !== 2 ? ' desk desk-' + (a.desk || 0) + ' dc-' + (a.deskCols || 2) : '';
   const body = `
-<div class="ph t-${tk} pub${cover ? ' has-cover' : ''}${anim ? ' anim-' + anim : ''}">
+<div class="ph t-${tk} pub${cover ? ' has-cover' : ''}${anim ? ' anim-' + anim : ''}${desk}">
   <div class="ph-bg"></div>
   ${cover}
   <div class="ph-tag">NOVO!</div>
@@ -225,7 +227,7 @@ html,body{margin:0;background:#0B0B10;min-height:100vh}
 .ph.pub{width:100%;max-width:520px;height:auto;min-height:100vh;margin:0 auto;border:none;border-radius:0}
 .ph.pub .ph-in{height:auto;min-height:100vh;padding:56px 20px 28px;gap:12px}
 .ph.pub .ph-bg{position:absolute}
-.ph.pub a{color:inherit;text-decoration:none}
+:where(.ph.pub) a{color:inherit;text-decoration:none}
 .ph.pub .ph-btn{display:block;font-size:15px;padding:16px 18px}
 .ph.pub .ph-handle{opacity:.75}
 .ph.pub .ph-foot{padding-top:24px;display:block}
@@ -272,6 +274,26 @@ ${Array.from({ length: 30 }, (_, i) => `.ph-in>*:nth-child(${i + 1}){animation-d
 @keyframes fxShake{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-2deg)}92%{transform:rotate(2deg)}95%{transform:rotate(-1deg)}}
 @keyframes fxGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
 .fx-pulse{animation:fxPulse 1.8s ease-out infinite}.fx-shake{animation:fxShake 2.4s ease-in-out infinite}.fx-glow{animation:fxGlow 1.6s ease-in-out infinite}
+@media (min-width:900px){
+.ph.pub.desk{max-width:none}
+.ph.pub.desk .ph-bg{position:fixed;inset:0}
+.ph.pub.desk .ph-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(var(--dc),minmax(0,1fr));align-content:start;column-gap:18px;row-gap:14px;padding:64px 40px 40px}
+.ph.pub.dc-1{--dc:1}.ph.pub.dc-2{--dc:2}.ph.pub.dc-3{--dc:3}
+.ph.pub.desk .ph-in>*{grid-column:1/-1;min-width:0}
+.ph.pub.desk .ph-in>.ph-btn{grid-column:auto;display:flex;align-items:center;justify-content:center;min-height:62px;font-size:16px}
+.ph.pub.desk .ph-av{width:124px;height:124px;font-size:34px}
+.ph.pub.desk .ph-name{font-size:32px}
+.ph.pub.desk .ph-bio{font-size:16px;max-width:560px}
+.ph.pub.desk .pgrid{grid-template-columns:repeat(3,1fr)}
+.ph.pub.desk .pub-cover{height:340px}
+.ph.pub.desk.has-cover .ph-in{padding-top:210px}
+.ph.pub.desk-0 .ph-in{grid-template-columns:minmax(280px,360px) repeat(var(--dc),minmax(0,1fr));column-gap:22px}
+.ph.pub.desk-0 .ph-in>*{grid-column:2/-1}
+.ph.pub.desk-0 .ph-in>.ph-btn{grid-column:auto}
+.ph.pub.desk-0 .ph-in>.ph-head{grid-column:1;grid-row:1/span 80;position:sticky;top:40px;align-self:start;padding:32px 24px;border-radius:28px;background:rgba(127,127,127,.12);border:1px solid rgba(127,127,127,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.ph.pub.desk-1 .ph-in{max-width:980px}
+.ph.pub.desk-1 .ph-in>.ph-head{margin-bottom:18px}
+}
 ${custom}
 </style>
 ${px ? `<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init',${JSON.stringify(px)});fbq('track','PageView');</script>` : ''}

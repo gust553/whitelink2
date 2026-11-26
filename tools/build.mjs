@@ -8,7 +8,7 @@ const soon = (t) => '/painel/em-breve?t=' + encodeURIComponent(t);
 
 export const LINKS = {
   'Main.dc.html': '/', 'Entrar.dc.html': '/entrar', 'Teste.dc.html': '/entrar#cadastro',
-  'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': '/painel/criador-tema',
+  'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': '/painel/criador-tema', 'Computador.dc.html': '/painel/computador',
   'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/clientes',
   'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': '/painel/indique', 'MeuPlano.dc.html': '/painel/plano',
   'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel', 'Pagamento.dc.html': '/pagamento',
@@ -32,6 +32,7 @@ const PAGES = {
   'Conta.dc.html': ['painel/conta.html', true, false, 'mais', null],
   'SuporteCliente.dc.html': ['painel/suporte.html', true, false, 'mais', null],
   'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'pagina', null],
+  'Computador.dc.html': ['painel/computador.html', true, false, 'pagina', null],
   'Vendas.dc.html': ['painel/vendas.html', true, false, 'vendas', null],
   'MidiaKit.dc.html': ['painel/midiakit.html', true, false, 'mais', null],
   'Inteligente.dc.html': ['painel/turbo.html', true, false, 'mais', null],
@@ -69,6 +70,7 @@ export function shellNav(active) {
 
 const PREVIEW_BAR = `<div style="position:sticky;top:0;z-index:50;background:#2B2210;border-bottom:1px solid #4A3A14;color:#F7DFA0;font:500 13px Inter,sans-serif;padding:8px 16px;text-align:center">Prévia: esta tela ainda mostra dados de exemplo. Ela será ligada à sua conta nas próximas atualizações. <a href="/painel" style="color:#D4FF3A">Voltar ao editor</a></div>`;
 
+fs.writeFileSync(path.join(ROOT, 'public/assets/customcss.js'), '// gerado de src/customcss.js\n(function(){\n' + fs.readFileSync(path.join(ROOT, 'src/customcss.js'), 'utf8').replace(/^export /gm, '') + '\nwindow.WL_customCss = customCss; window.WL_cleanCustom = cleanCustom; window.WL_CUSTOM_FONTS = CUSTOM_FONTS; window.WL_CUSTOM_DEF = CUSTOM_DEF;\n})();\n');
 function build(file, [out, login, preview, tab, barTitle]) {
   const src = fs.readFileSync(path.join(ROOT, 'screens', file), 'utf8');
   const helmet = (src.match(/<helmet>([\s\S]*?)<\/helmet>/) || [, ''])[1];
@@ -98,6 +100,7 @@ ${tab && tab !== 'admin' ? shellNav(tab) : ''}
 <script src="/assets/dc.js"></script>
 ${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
 <script src="/assets/planos.js"></script>
+<script src="/assets/customcss.js"></script>
 ${tab ? '<script src="/assets/ajuda.js"></script>' : ''}
 ${out === 'painel.html' ? '<script src="/assets/anuncio.js" defer></script>' : ''}
 <script>

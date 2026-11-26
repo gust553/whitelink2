@@ -14,7 +14,7 @@ export async function onRequestPut({ request, env }) {
   // telas de Aparência/Temas não mandam o tema criado nem foto/capa: guardamos o que já existia.
   // Escolher um tema pronto desliga o tema criado.
   const inA = Object.assign({}, page.appearance || {}, given);
-  if (given.custom === undefined && given.useCustom === undefined) inA.useCustom = false;
+  if (given.custom === undefined && given.useCustom === undefined && (given.tk !== undefined || given.theme !== undefined)) inA.useCustom = false;
   const appearance = cleanAppearance(inA);
   if (!t.main) {
     await env.DB.prepare('UPDATE pages SET appearance = ? WHERE id = ?').bind(JSON.stringify(appearance), t.row.id).run();
