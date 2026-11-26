@@ -128,6 +128,15 @@ export async function onRequestPost({ request, env, params }) {
     return json({ ok: true, code, value: brl(c), pix: creatorPix(st, c, code) });
   }
 
+  if (params.action === 'publi') {
+    if (!name || !phone) return fail('Escreva seu nome e WhatsApp com DDD.');
+    const brand = cleanText(b.brand, 60);
+    const t = await track(env, u.id, { phone, name, kind: 'publi', title: (brand || 'Marca') + (b.budget ? ' · ' + cleanText(b.budget, 40) : '') + (b.message ? ' · ' + cleanText(b.message, 120) : ''), aff });
+    await env.DB.prepare("UPDATE people SET tags = CASE WHEN tags = '' THEN 'marca' WHEN (',' || tags || ',') LIKE '%,marca,%' THEN tags ELSE tags || ',marca' END WHERE id = ?").bind(t.personId).run();
+    await notify(env, u.id, 'publi', 'Proposta de publi: ' + (brand || name), '/painel/clientes');
+    return json({ ok: true });
+  }
+
   if (params.action === 'quiz') {
     const q = (st.quizzes || []).find((x) => x.id === b.quiz);
     if (!q || !q.results.length) return fail('Quiz não encontrado.');

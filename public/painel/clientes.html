@@ -3,9 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Contatos — WhiteLink</title>
+<title>Clientes — WhiteLink</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;scrollbar-width:none}
+.chips button{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:13.5px;cursor:pointer;font-family:inherit}
+.chips button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+.av{width:42px;height:42px;border-radius:50%;background:#1B1B24;display:flex;align-items:center;justify-content:center;font:700 15px 'Space Grotesk';flex:none}
+.tl{border-left:2px solid #26262F;margin-left:8px;padding-left:16px;display:flex;flex-direction:column;gap:12px}
+.tl div{position:relative;font-size:14px;line-height:1.4}.tl div::before{content:"";position:absolute;left:-22px;top:5px;width:10px;height:10px;border-radius:50%;background:#D4FF3A}
+.tl small{display:block;color:#9C9CAD;font-size:12px}
+.tpl{display:flex;flex-direction:column;gap:8px}
+.tpl a{display:block;padding:12px 14px;border-radius:14px;background:#14141B;border:1px solid #24242E;color:#F3F3F7;text-decoration:none;font-size:14px}
+textarea.inp{height:auto;min-height:80px;padding:12px 14px;font-family:inherit}
+select.inp{appearance:none}
+.note{font-size:13px;color:#9C9CAD;line-height:1.5}
+.prog{height:8px;border-radius:999px;background:#26262F;overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:#D4FF3A}
+</style>
 <link rel="stylesheet" href="/assets/shell.css">
 </head>
 <body class="has-shell">
@@ -19,34 +34,91 @@
 <script src="/assets/planos.js"></script>
 <script>
 class Component extends DCLogic {
-  constructor(p) { super(p); this.state = { d: null }; }
+  constructor(p) { super(p); this.state = { d: null, tab: 'pessoas', q: '', stage: '', tag: '', sheet: null, camps: [] }; }
   componentDidMount() { this.load(); }
   async load() {
-    const d = await DC.api('contacts');
+    const s = this.state;
+    const d = await DC.api('crm?q=' + encodeURIComponent(s.q) + '&stage=' + s.stage + '&tag=' + encodeURIComponent(s.tag));
     if (d.status === 401) { location.href = '/entrar'; return; }
-    this.setState({ d: d.ok ? d : { level: 0, contacts: [] } });
+    this.setState({ d: d.ok ? d : { level: 0, people: [], stages: [], tags: [] } });
   }
+  async loadCamps() { const r = await DC.api('campaigns'); if (r.ok) this.setState({ camps: r.campaigns }); }
+  async openPerson(id) { const r = await DC.api('crm?id=' + id); if (r.ok) this.setState({ sheet: { kind: 'p', r: r, stage: r.person.stage, tags: r.person.tags, notes: r.person.notes } }); }
+  async openCamp(id) { const r = await DC.api('campaigns?id=' + id); if (r.ok) this.setState({ sheet: { kind: 'r', r: r } }); }
   renderVals() {
-    const d = this.state.d;
+    const s = this.state, d = s.d;
     if (!d) return { loading: true };
-    const L = d.contacts;
-    const locked = d.level === 0 && L.length === 0;
-    return {
-      loading: false, locked: locked, empty: !locked && L.length === 0, has: L.length > 0,
-      canExport: d.level === 2 && L.length > 0, exportHint: d.level < 2 && L.length > 0,
-      countText: L.length + (L.length === 1 ? ' contato' : ' contatos'),
-      list: L.map((c) => ({
-        ini: ((c.name || '?').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2) || '?').toUpperCase(),
-        name: c.name || 'Sem nome',
-        sub: (c.phone ? '(' + c.phone.slice(-11, -9) + ') ' + c.phone.slice(-9, -4) + '-' + c.phone.slice(-4) : c.email) + ' · ' + new Date(c.created_at).toLocaleDateString('pt-BR'),
-        wa: c.phone ? 'https://wa.me/' + (c.phone.length <= 11 ? '55' : '') + c.phone : '',
-        del: async () => { if (!confirm('Apagar o contato de ' + (c.name || 'sem nome') + '?')) return; await DC.api('contacts?id=' + c.id, 'DELETE'); this.load(); }
-      }))
+    const dia = d.level >= 2;
+    const SN = { novo: 'Novo', conversando: 'Conversando', cliente: 'Cliente', fiel: 'Fiel', perdido: 'Perdido' };
+    const SC = { novo: '#8FE3FF', conversando: '#F2C14E', cliente: '#4ADE80', fiel: '#D4FF3A', perdido: '#6F6F80' };
+    const KN = { contato: 'Deixou o contato', pedido: 'Pedido', agendamento: 'Agendou', apoio: 'Apoio', quiz: 'Quiz', publi: 'Pediu publi', venda_afiliado: 'Venda de parceiro' };
+    const brl = (c) => 'R$ ' + (c / 100).toFixed(2).replace('.', ',');
+    const fmtPh = (p) => p.startsWith('e:') ? p.slice(2) : '(' + p.slice(0, 2) + ') ' + p.slice(2, -4) + '-' + p.slice(-4);
+    const ago = (t) => { const m = Math.floor((Date.now() - t) / 60000); return m < 60 ? 'há ' + Math.max(1, m) + ' min' : m < 1440 ? 'há ' + Math.floor(m / 60) + ' h' : new Date(t).toLocaleDateString('pt-BR'); };
+    const total = d.stages.reduce((a, x) => a + x.n, 0);
+    const v = {
+      loading: false, ready: true, dia, canCsv: dia, upsell: !dia && d.people.length > 0,
+      tabs: [['pessoas', 'Pessoas'], ['campanhas', 'Campanhas']].map((t) => ({ name: t[1], sel: s.tab === t[0], go: () => { this.setState({ tab: t[0] }); if (t[0] === 'campanhas') this.loadCamps(); } })),
+      tPeople: s.tab === 'pessoas', tCamp: s.tab === 'campanhas',
+      q: s.q, setQ: (e) => { this.setState({ q: e.target.value }); clearTimeout(this.qt); this.qt = setTimeout(() => this.load(), 300); },
+      stageChips: [['', 'Todos · ' + total]].concat(Object.keys(SN).map((k) => [k, SN[k] + ' · ' + ((d.stages.find((x) => x.stage === k) || {}).n || 0)])).map((c) => ({ name: c[1], sel: s.stage === c[0], go: () => { this.setState({ stage: c[0] }); setTimeout(() => this.load(), 0); } })),
+      hasTags: dia && d.tags.length > 0,
+      tagChips: d.tags.map((t) => ({ name: t.t, sel: s.tag === t.t, go: () => { this.setState({ tag: s.tag === t.t ? '' : t.t }); setTimeout(() => this.load(), 0); } })),
+      countText: d.people.length + (d.people.length === 1 ? ' pessoa' : ' pessoas'),
+      people: d.people.map((p) => {
+        const last = (p.last || '').split('|');
+        return { ini: ((p.name || '?').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2) || '?').toUpperCase(), name: p.name || fmtPh(p.phone),
+          sub: (KN[last[0]] || 'Contato') + (last[1] ? ': ' + last[1] : '') + ' · ' + ago(p.last_at) + (p.total_cents ? ' · gastou ' + brl(p.total_cents) : ''),
+          stage: dia ? SN[p.stage] : '', chip: 'background: #1B1B24; color: ' + SC[p.stage], open: () => this.openPerson(p.id) };
+      }),
+      empty: d.people.length === 0,
+      close: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation(),
+      camps: s.camps.map((c) => ({ name: c.name, sub: c.sent + ' de ' + c.total + ' enviadas · ' + new Date(c.created_at).toLocaleDateString('pt-BR'), bar: 'width: ' + Math.round(c.sent / Math.max(1, c.total) * 100) + '%', open: () => this.openCamp(c.id) })),
+      noCamps: s.camps.length === 0,
+      newCamp: () => this.setState({ sheet: { kind: 'n', name: '', msg: 'Oi {nome}! ', who: 'all' } })
     };
+    const sh = s.sheet;
+    v.ps = !!(sh && sh.kind === 'p'); v.cn = !!(sh && sh.kind === 'n'); v.cr = !!(sh && sh.kind === 'r');
+    if (v.ps) {
+      const p = sh.r.person, first = String(p.name || '').split(' ')[0] || '';
+      const wa = (t) => p.phone.startsWith('e:') ? 'mailto:' + p.phone.slice(2) : 'https://wa.me/55' + p.phone + '?text=' + encodeURIComponent(t);
+      v.pe = {
+        name: p.name || fmtPh(p.phone), sub: fmtPh(p.phone) + (p.total_cents ? ' · gastou ' + brl(p.total_cents) : '') + ' · desde ' + new Date(p.created_at).toLocaleDateString('pt-BR'),
+        tpls: [['Oi, ' + first + '! Tudo bem? Vi que você passou pela minha página 😊', '👋 Primeiro contato'], ['Oi, ' + first + '! Passando para saber se ficou alguma dúvida.', '💬 Acompanhar'], ['Oi, ' + first + '! Tenho uma condição especial para você hoje.', '🎁 Oferta'], ['Oi, ' + first + '! Muito obrigado pela compra. Me conta o que achou?', '⭐ Pós-venda']].map((t) => ({ t: t[1], href: wa(t[0]) })),
+        stages: Object.keys(SN).map((k) => ({ v: k, n: SN[k], sel: sh.stage === k })), setStage: (e) => this.setState({ sheet: Object.assign({}, sh, { stage: e.target.value }) }),
+        tags: sh.tags, setTags: (e) => this.setState({ sheet: Object.assign({}, sh, { tags: e.target.value }) }),
+        notes: sh.notes, setNotes: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { notes: e.target.value }) }),
+        save: async () => { const r = await DC.api('crm', 'PUT', { id: p.id, stage: this.state.sheet.stage, tags: this.state.sheet.tags, notes: this.state.sheet.notes }); if (r.ok) { this.setState({ sheet: null }); this.load(); } },
+        events: sh.r.events.map((e) => ({ t: (KN[e.kind] || e.kind) + (e.title ? ': ' + e.title : '') + (e.aff ? ' (parceiro ' + e.aff + ')' : ''), at: new Date(e.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) })),
+        del: async () => { if (!confirm('Apagar este contato?')) return; await DC.api('crm?id=' + p.id, 'DELETE'); this.setState({ sheet: null }); this.load(); }
+      };
+    }
+    if (v.cn) {
+      const opts = [['all', 'Todos os contatos'], ['buyers', 'Quem já comprou'], ['k:pedido', 'Quem fez pedido'], ['k:agendamento', 'Quem agendou'], ['k:quiz', 'Quem fez o quiz'], ['k:apoio', 'Quem apoiou']].concat(Object.keys(SN).map((k) => ['s:' + k, 'Etapa: ' + SN[k]])).concat(d.tags.map((t) => ['t:' + t.t, 'Etiqueta: #' + t.t]));
+      v.nc = { name: sh.name, msg: sh.msg, err: sh.err || '', who: opts.map((o) => ({ v: o[0], n: o[1], sel: sh.who === o[0] })),
+        setName: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { name: e.target.value }) }), setMsg: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { msg: e.target.value }) }),
+        setWho: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { who: e.target.value }) }),
+        create: async () => {
+          const w = this.state.sheet.who, f = {};
+          if (w === 'buyers') f.buyers = true; else if (w.startsWith('k:')) f.kind = w.slice(2); else if (w.startsWith('s:')) f.stage = w.slice(2); else if (w.startsWith('t:')) f.tag = w.slice(2);
+          const r = await DC.api('campaigns', 'POST', { name: this.state.sheet.name, message: this.state.sheet.msg, filter: f });
+          if (!r.ok) { this.setState({ sheet: Object.assign({}, this.state.sheet, { err: r.error }) }); return; }
+          this.loadCamps(); this.openCamp(r.id);
+        } };
+    }
+    if (v.cr) {
+      const c = sh.r.campaign, P = sh.r.people, sent = P.filter((p) => p.sent_at).length;
+      v.rc = { name: c.name, progress: sent + ' de ' + P.length + ' enviadas', bar: 'width: ' + Math.round(sent / Math.max(1, P.length) * 100) + '%',
+        people: P.map((p) => ({ name: p.name || fmtPh(p.phone), sub: fmtPh(p.phone), cls: p.sent_at ? 'ghost' : '', btn: p.sent_at ? 'Enviada ✓' : 'Enviar',
+          href: 'https://wa.me/55' + p.phone + '?text=' + encodeURIComponent(c.message.replace(/\{nome\}/gi, String(p.name || '').split(' ')[0] || '')),
+          mark: () => { DC.api('campaigns', 'POST', { campaign: c.id, person: p.id }).then(() => this.openCamp(c.id)); } })),
+        del: async () => { if (!confirm('Apagar esta campanha?')) return; await DC.api('campaigns?id=' + c.id, 'DELETE'); this.setState({ sheet: null }); this.loadCamps(); } };
+    }
+    return v;
   }
 }
 
-DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><h1>Contatos</h1><sc-if value=\"{{canExport}}\" hint-placeholder-val=\"{{ false }}\"><a class=\"icon-btn\" href=\"/api/contacts?csv=1\" aria-label=\"Baixar planilha\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M12 4v11M7 10l5 5 5-5M5 20h14\"/></svg></a></sc-if></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{locked}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"card\" style=\"padding: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center; margin-top: 10px\">\n        <div style=\"width: 64px; height: 64px; border-radius: 22px; background: rgba(242,193,78,.14); color: #F2C14E; display: flex; align-items: center; justify-content: center\"><svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5\"/></svg></div>\n        <b style=\"font-size: 18px\">Junte o WhatsApp de quem visita sua página</b>\n        <span style=\"font-size: 14px; color: #C9C9D6; line-height: 1.5\">Com o bloco de Captura, no Ouro, cada visitante pode deixar o contato para receber suas novidades.</span>\n        <a class=\"btn full\" href=\"/painel/plano\" style=\"background: #F2C14E\">Conhecer o Ouro</a>\n      </div>\n    </sc-if>\n    <sc-if value=\"{{empty}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"card\" style=\"padding: 22px; text-align: center; color: #C9C9D6; font-size: 15px; line-height: 1.5; margin-top: 10px\">Nenhum contato ainda.<br><a href=\"/painel\">Adicione um bloco de Captura</a> na sua página.</div>\n    </sc-if>\n    <sc-if value=\"{{has}}\" hint-placeholder-val=\"{{ true }}\">\n      <div>\n        <div style=\"font-size: 14px; color: #9C9CAD; margin: 4px 4px 12px\">{{countText}}</div>\n        <div class=\"list\">\n          <sc-for list=\"{{list}}\" as=\"c\" hint-placeholder-count=\"4\">\n            <div class=\"row\" style=\"cursor: default\">\n              <span class=\"row-ic\" style=\"font: 700 15px 'Space Grotesk'; color: #F3F3F7\">{{c.ini}}</span>\n              <span class=\"row-tx\"><b>{{c.name}}</b><span>{{c.sub}}</span></span>\n              <sc-if value=\"{{c.wa}}\" hint-placeholder-val=\"{{ true }}\"><a class=\"icon-btn\" href=\"{{c.wa}}\" target=\"_blank\" rel=\"noopener\" aria-label=\"Chamar no WhatsApp\" style=\"color: #25D366\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linejoin=\"round\"><path d=\"M4 20l1.4-4A8 8 0 1 1 8 18.6z\"/></svg></a></sc-if>\n              <button class=\"icon-btn\" onClick=\"{{c.del}}\" aria-label=\"Apagar contato\" style=\"color: #6F6F80\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12\"/></svg></button>\n            </div>\n          </sc-for>\n        </div>\n        <sc-if value=\"{{exportHint}}\" hint-placeholder-val=\"{{ false }}\"><p style=\"text-align: center; font-size: 13px; color: #9C9CAD; margin-top: 14px\">Baixar a lista em planilha é do <a href=\"/painel/plano\">Diamante</a>.</p></sc-if>\n      </div>\n    </sc-if>\n  </div>\n</div>\n", Component, {});
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><h1>Clientes</h1><sc-if value=\"{{canCsv}}\" hint-placeholder-val=\"{{ false }}\"><a class=\"icon-btn\" href=\"/api/crm?csv=1\" aria-label=\"Baixar planilha\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M12 4v11M7 10l5 5 5-5M5 20h14\"/></svg></a></sc-if></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{ready}}\" hint-placeholder-val=\"{{ true }}\">\n    <div>\n      <sc-if value=\"{{dia}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"chips\" role=\"tablist\"><sc-for list=\"{{tabs}}\" as=\"t\" hint-placeholder-count=\"2\"><button onClick=\"{{t.go}}\" aria-pressed=\"{{t.sel}}\">{{t.name}}</button></sc-for></div></sc-if>\n\n      <sc-if value=\"{{tPeople}}\" hint-placeholder-val=\"{{ true }}\">\n      <div>\n        <input class=\"inp\" type=\"search\" placeholder=\"Buscar por nome, WhatsApp ou etiqueta\" value=\"{{q}}\" onInput=\"{{setQ}}\" aria-label=\"Buscar\" style=\"margin-bottom: 12px\">\n        <sc-if value=\"{{dia}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"chips\"><sc-for list=\"{{stageChips}}\" as=\"c\" hint-placeholder-count=\"5\"><button onClick=\"{{c.go}}\" aria-pressed=\"{{c.sel}}\">{{c.name}}</button></sc-for></div></sc-if>\n        <sc-if value=\"{{hasTags}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"chips\"><sc-for list=\"{{tagChips}}\" as=\"c\" hint-placeholder-count=\"3\"><button onClick=\"{{c.go}}\" aria-pressed=\"{{c.sel}}\">#{{c.name}}</button></sc-for></div></sc-if>\n        <div class=\"note\" style=\"margin: 0 4px 10px\">{{countText}}</div>\n        <div class=\"list\">\n          <sc-for list=\"{{people}}\" as=\"p\" hint-placeholder-count=\"4\">\n            <button class=\"row\" onClick=\"{{p.open}}\"><span class=\"av\">{{p.ini}}</span><span class=\"row-tx\"><b>{{p.name}}</b><span>{{p.sub}}</span></span><sc-if value=\"{{p.stage}}\" hint-placeholder-val=\"{{ false }}\"><span class=\"chip\" style=\"{{p.chip}}\">{{p.stage}}</span></sc-if></button>\n          </sc-for>\n          <sc-if value=\"{{empty}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"row\" style=\"cursor: default; color: #9C9CAD; line-height: 1.5\">Ninguém por aqui ainda. Quem deixar o contato, comprar, agendar ou fizer o quiz na sua página aparece aqui.</div></sc-if>\n        </div>\n        <sc-if value=\"{{upsell}}\" hint-placeholder-val=\"{{ false }}\"><a class=\"row card\" href=\"/painel/plano\" style=\"margin-top: 12px; padding: 14px; border-color: #1E3A44\"><span class=\"row-tx\"><b>CRM completo no Diamante</b><span>Etapas do funil, etiquetas, anotações, histórico, campanhas por WhatsApp e planilha.</span></span><span class=\"chev\">›</span></a></sc-if>\n      </div>\n      </sc-if>\n\n      <sc-if value=\"{{tCamp}}\" hint-placeholder-val=\"{{ false }}\">\n      <div>\n        <button class=\"btn full\" onClick=\"{{newCamp}}\">+ Nova campanha</button>\n        <p class=\"note\" style=\"text-align: center\">Escolha um grupo, escreva a mensagem e envie um por um no WhatsApp, com um toque. Ninguém fica de fora e nada é enviado duas vezes.</p>\n        <div class=\"list\">\n          <sc-for list=\"{{camps}}\" as=\"c\" hint-placeholder-count=\"2\"><button class=\"row\" onClick=\"{{c.open}}\"><span class=\"row-tx\"><b>{{c.name}}</b><span>{{c.sub}}</span><div class=\"prog\"><i style=\"{{c.bar}}\"></i></div></span><span class=\"chev\">›</span></button></sc-for>\n          <sc-if value=\"{{noCamps}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"row\" style=\"cursor: default; color: #9C9CAD\">Nenhuma campanha ainda.</div></sc-if>\n        </div>\n      </div>\n      </sc-if>\n    </div>\n    </sc-if>\n  </div>\n\n  <!-- PESSOA -->\n  <sc-if value=\"{{ps}}\" hint-placeholder-val=\"{{ false }}\">\n    <div class=\"scrim\" onClick=\"{{close}}\"><div class=\"sheet\" onClick=\"{{stop}}\">\n      <div class=\"grab\"></div>\n      <h2>{{pe.name}}</h2>\n      <div class=\"note\" style=\"margin: -6px 0 12px\">{{pe.sub}}</div>\n      <div class=\"sec-t\" style=\"margin-top: 0\">Mandar mensagem</div>\n      <div class=\"tpl\"><sc-for list=\"{{pe.tpls}}\" as=\"t\" hint-placeholder-count=\"3\"><a href=\"{{t.href}}\" target=\"_blank\" rel=\"noopener\">{{t.t}}</a></sc-for></div>\n      <sc-if value=\"{{dia}}\" hint-placeholder-val=\"{{ false }}\">\n        <div>\n          <div class=\"grid2\" style=\"margin-top: 14px\"><label class=\"fld\"><span>Etapa</span><select class=\"inp\" onChange=\"{{pe.setStage}}\"><sc-for list=\"{{pe.stages}}\" as=\"o\" hint-placeholder-count=\"5\"><option value=\"{{o.v}}\" selected=\"{{o.sel}}\">{{o.n}}</option></sc-for></select></label><label class=\"fld\">Etiquetas<input class=\"inp\" value=\"{{pe.tags}}\" onInput=\"{{pe.setTags}}\" placeholder=\"vip, sp\"></label></div>\n          <label class=\"fld\">Anotações<textarea class=\"inp\" onInput=\"{{pe.setNotes}}\" placeholder=\"Ex.: prefere entrega à tarde\">{{pe.notes}}</textarea></label>\n          <button class=\"btn full\" onClick=\"{{pe.save}}\">Salvar</button>\n        </div>\n      </sc-if>\n      <div class=\"sec-t\">Histórico</div>\n      <div class=\"tl\"><sc-for list=\"{{pe.events}}\" as=\"e\" hint-placeholder-count=\"3\"><div>{{e.t}}<small>{{e.at}}</small></div></sc-for></div>\n      <button class=\"btn ghost full\" onClick=\"{{pe.del}}\" style=\"margin-top: 18px; color: #FF8A8E\">Apagar contato</button>\n    </div></div>\n  </sc-if>\n\n  <!-- NOVA CAMPANHA -->\n  <sc-if value=\"{{cn}}\" hint-placeholder-val=\"{{ false }}\">\n    <div class=\"scrim\" onClick=\"{{close}}\"><div class=\"sheet\" onClick=\"{{stop}}\">\n      <div class=\"grab\"></div>\n      <h2>Nova campanha</h2>\n      <label class=\"fld\">Nome<input class=\"inp\" value=\"{{nc.name}}\" onInput=\"{{nc.setName}}\" placeholder=\"Ex.: Promoção de Natal\"></label>\n      <label class=\"fld\"><span>Para quem</span><select class=\"inp\" onChange=\"{{nc.setWho}}\"><sc-for list=\"{{nc.who}}\" as=\"o\" hint-placeholder-count=\"6\"><option value=\"{{o.v}}\" selected=\"{{o.sel}}\">{{o.n}}</option></sc-for></select></label>\n      <label class=\"fld\">Mensagem<textarea class=\"inp\" onInput=\"{{nc.setMsg}}\" placeholder=\"Oi {nome}! Tenho uma novidade para você…\">{{nc.msg}}</textarea></label>\n      <p class=\"note\" style=\"margin: -4px 0 12px\">Use <b>{nome}</b> para colocar o primeiro nome de cada pessoa.</p>\n      <sc-if value=\"{{nc.err}}\" hint-placeholder-val=\"{{ false }}\"><div role=\"alert\" style=\"padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 10px\">{{nc.err}}</div></sc-if>\n      <button class=\"btn full\" onClick=\"{{nc.create}}\">Criar campanha</button>\n    </div></div>\n  </sc-if>\n\n  <!-- ENVIAR CAMPANHA -->\n  <sc-if value=\"{{cr}}\" hint-placeholder-val=\"{{ false }}\">\n    <div class=\"scrim\" onClick=\"{{close}}\"><div class=\"sheet\" onClick=\"{{stop}}\">\n      <div class=\"grab\"></div>\n      <h2>{{rc.name}}</h2>\n      <div class=\"note\" style=\"margin: -6px 0 6px\">{{rc.progress}}</div>\n      <div class=\"prog\" style=\"margin-bottom: 14px\"><i style=\"{{rc.bar}}\"></i></div>\n      <div class=\"list\">\n        <sc-for list=\"{{rc.people}}\" as=\"p\" hint-placeholder-count=\"3\"><div class=\"row\" style=\"cursor: default\"><span class=\"row-tx\"><b>{{p.name}}</b><span>{{p.sub}}</span></span><a class=\"btn {{p.cls}}\" href=\"{{p.href}}\" target=\"_blank\" rel=\"noopener\" onClick=\"{{p.mark}}\" style=\"height: 38px; padding: 0 14px; font-size: 13.5px\">{{p.btn}}</a></div></sc-for>\n      </div>\n      <button class=\"btn ghost full\" onClick=\"{{rc.del}}\" style=\"margin-top: 16px; color: #FF8A8E\">Apagar campanha</button>\n    </div></div>\n  </sc-if>\n</div>\n", Component, {});
 (async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar?next='+encodeURIComponent(location.pathname+location.search);})();
 </script>
 </body>

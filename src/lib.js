@@ -274,6 +274,10 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS sales (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, kind TEXT NOT NULL, code TEXT NOT NULL, person_id INTEGER, name TEXT, phone TEXT, items TEXT, cents INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL, start_ts INTEGER, service TEXT, message TEXT, aff TEXT, created_at INTEGER NOT NULL)',
     'CREATE INDEX IF NOT EXISTS idx_sales_user ON sales(user_id, kind, created_at)',
     'CREATE INDEX IF NOT EXISTS idx_sales_slot ON sales(user_id, start_ts)',
+    'CREATE TABLE IF NOT EXISTS campaigns (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, name TEXT NOT NULL, message TEXT NOT NULL, total INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS campaign_sends (campaign_id INTEGER NOT NULL, person_id INTEGER NOT NULL, sent_at INTEGER, PRIMARY KEY (campaign_id, person_id))',
+    'CREATE TABLE IF NOT EXISTS affiliates (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, code TEXT NOT NULL, name TEXT NOT NULL, phone TEXT, pct INTEGER NOT NULL DEFAULT 10, token TEXT NOT NULL, created_at INTEGER NOT NULL, UNIQUE(user_id, code))',
+    'CREATE TABLE IF NOT EXISTS aff_stats (user_id INTEGER NOT NULL, code TEXT NOT NULL, day TEXT NOT NULL, visits INTEGER NOT NULL DEFAULT 0, clicks INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, code, day))',
     'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'

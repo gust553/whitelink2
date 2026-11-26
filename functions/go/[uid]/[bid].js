@@ -21,5 +21,8 @@ export async function onRequestGet({ request, env, params, waitUntil }) {
   const p = env.DB.prepare('INSERT INTO clicks (user_id, block_id, day, n) VALUES (?, ?, ?, 1) ON CONFLICT(user_id, block_id, day) DO UPDATE SET n = n + 1')
     .bind(uid, key, new Date().toISOString().slice(0, 10)).run();
   if (waitUntil) waitUntil(p); else await p;
+  // clique veio de alguém indicado por um parceiro
+  const ck = (request.headers.get('cookie') || '').match(new RegExp('(?:^|; )wl_a' + uid + '=([a-z0-9]+)'));
+  if (ck) { const q = env.DB.prepare('INSERT INTO aff_stats (user_id, code, day, visits, clicks) VALUES (?, ?, ?, 0, 1) ON CONFLICT(user_id, code, day) DO UPDATE SET clicks = clicks + 1').bind(uid, ck[1], new Date().toISOString().slice(0, 10)).run(); if (waitUntil) waitUntil(q); else await q; }
   return Response.redirect(b.url, 302);
 }

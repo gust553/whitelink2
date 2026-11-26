@@ -63,6 +63,16 @@ export async function onRequestGet(context) {
     'INSERT INTO visits (user_id, day, views) VALUES (?, ?, 1) ON CONFLICT(user_id, day) DO UPDATE SET views = views + 1'
   ).bind(u.id, new Date().toISOString().slice(0, 10)).run());
   context.waitUntil(trackMeta(env, context.request, u.id));
+  // parceiro (afiliado) do criador: ?a=codigo guarda por 30 dias quem indicou
+  let affCookie = '';
+  const affCode = String(new URL(context.request.url).searchParams.get('a') || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20);
+  if (affCode && lvl === 2) {
+    const af = await env.DB.prepare('SELECT code FROM affiliates WHERE user_id = ? AND code = ?').bind(u.id, affCode).first();
+    if (af) {
+      affCookie = `wl_a${u.id}=${af.code}; Path=/; Max-Age=2592000; SameSite=Lax; Secure`;
+      context.waitUntil(env.DB.prepare('INSERT INTO aff_stats (user_id, code, day, visits, clicks) VALUES (?, ?, ?, 1, 0) ON CONFLICT(user_id, code, day) DO UPDATE SET visits = visits + 1').bind(u.id, af.code, new Date().toISOString().slice(0, 10)).run());
+    }
+  }
 
   // dados das vendas (só se a página usa esses blocos)
   const kinds = new Set(shown.map((b) => b.kind));
@@ -161,7 +171,9 @@ ${kinds.has('store') || kinds.has('booking') || kinds.has('support') || kinds.ha
   const cfgRow = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(u.id).first();
   let cfg = {}; try { cfg = JSON.parse((cfgRow && cfgRow.data) || '{}'); } catch (e) {}
   if (extra) cfg = Object.assign({}, cfg, { seo: {} }); // título do Google é só da página principal
-  return html(title + ' | WhiteLink', body, tk, custom, 200, cfg, lvl, cfont);
+  const res = html(title + ' | WhiteLink', body, tk, custom, 200, cfg, lvl, cfont);
+  if (affCookie) res.headers.append('set-cookie', affCookie);
+  return res;
 }
 
 async function trackMeta(env, request, userId) {

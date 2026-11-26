@@ -34,6 +34,11 @@ import * as bizApi from '../functions/api/biz.js';
 import * as productsApi from '../functions/api/products.js';
 import * as salesApi from '../functions/api/sales.js';
 import * as pubApi from '../functions/api/pub.js';
+import * as crmApi from '../functions/api/crm.js';
+import * as campApi from '../functions/api/campaigns.js';
+import * as mkApi from '../functions/api/mediakit.js';
+import * as affApi from '../functions/api/affiliates.js';
+import * as subPage from '../functions/[handle]/[sub].js';
 import { isMainHost, domainOwner, domainCleanup, domainSeen } from './domains.js';
 import { effectivePlan } from './lib.js';
 import * as gwHook from '../functions/api/webhooks/gateway.js';
@@ -81,7 +86,11 @@ const ROUTES = [
   [/^\/api\/biz$/, bizApi],
   [/^\/api\/products$/, productsApi],
   [/^\/api\/sales$/, salesApi],
-  [/^\/api\/pub\/(?<action>order|slots|book|support|quiz|goal)$/, pubApi],
+  [/^\/api\/crm$/, crmApi],
+  [/^\/api\/campaigns$/, campApi],
+  [/^\/api\/mediakit$/, mkApi],
+  [/^\/api\/affiliates$/, affApi],
+  [/^\/api\/pub\/(?<action>order|slots|book|support|quiz|goal|publi)$/, pubApi],
   [/^\/m\/(?<id>[a-f0-9]{8,40})$/, mediaGet],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],
@@ -97,6 +106,7 @@ const ROUTES = [
   [/^\/api\/admin\/orders\/(?<code>[A-Za-z0-9]+)$/, adminOrderOne],
   [/^\/go\/(?<uid>x?\d+)\/(?<bid>\d+)$/, goBlock],
   [/^\/go\/(?<id>\d+)$/, go],
+  [/^\/(?<handle>[a-z0-9._]{3,30})\/(?<sub>[a-z0-9-]{2,40})$/i, subPage],
   [/^\/(?<handle>[^/]+)$/, profile]
 ];
 

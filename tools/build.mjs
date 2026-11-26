@@ -33,6 +33,8 @@ const PAGES = {
   'SuporteCliente.dc.html': ['painel/suporte.html', true, false, 'mais', null],
   'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'pagina', null],
   'Vendas.dc.html': ['painel/vendas.html', true, false, 'vendas', null],
+  'MidiaKit.dc.html': ['painel/midiakit.html', true, false, 'mais', null],
+  'Parceiros.dc.html': ['painel/parceiros.html', true, false, 'mais', null],
   'Admin.dc.html': ['admin.html', true, false, 'admin', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
   'Recibo.dc.html': ['painel/recibo.html', true, false, 'mais', null],

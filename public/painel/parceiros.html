@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parceiros — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.chips{display:flex;gap:8px;margin-bottom:12px}
+.chips button{height:38px;padding:0 14px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:13.5px;cursor:pointer;font-family:inherit}
+.chips button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+.af{background:#14141B;border:1px solid #22222B;border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.af .n{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.af .n div{background:#0E0E14;border-radius:12px;padding:8px;text-align:center}.af .n b{display:block;font:700 15px 'Space Grotesk';white-space:nowrap}.af .n span{font-size:11px;color:#9C9CAD}
+.note{font-size:13px;color:#9C9CAD;line-height:1.5}
+.lnk{display:flex;gap:8px;align-items:center;background:#0E0E14;border-radius:12px;padding:8px 8px 8px 12px;font-size:13px;color:#C9C9D6}
+.lnk span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+<link rel="stylesheet" href="/assets/shell.css">
+</head>
+<body class="has-shell">
+
+<div id="root"></div>
+<nav class="rail" aria-label="Menu"><a class="rail-logo" href="/painel" aria-label="WhiteLink">W</a><a class="rail-i" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="rail-i" href="/painel/vendas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/></svg></span>Vendas</a><a class="rail-i" href="/painel/clientes"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Clientes</a><a class="rail-i" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Números</a><a class="rail-i on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<nav class="tabbar" aria-label="Menu"><a class="tab" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="tab" href="/painel/vendas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/></svg></span>Vendas</a><a class="tab" href="/painel/clientes"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Clientes</a><a class="tab" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Números</a><a class="tab on" href="/painel/mais" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Aparencia.dc.html":"/painel/aparencia","Temas.dc.html":"/painel/temas","CriadorTema.dc.html":"/painel/criador-tema","Agenda.dc.html":"/painel/agendamentos","Stats.dc.html":"/painel/estatisticas","Contatos.dc.html":"/painel/clientes","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/indique","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/conta","EditarLink.dc.html":"/painel","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/painel/suporte","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
+<script src="/assets/dc.js"></script>
+<script src="/assets/temas-list.js"></script>
+<script src="/assets/planos.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null, days: 30, nf: { name: '', phone: '', pct: '10' }, err: '', toast: '' }; }
+  componentDidMount() { this.load(); }
+  async load() {
+    const d = await DC.api('affiliates?d=' + this.state.days);
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d.ok ? d : { locked: true } });
+  }
+  renderVals() {
+    const s = this.state, d = s.d;
+    if (!d) return { loading: true };
+    if (d.locked) return { loading: false, locked: true };
+    const brl = (c) => 'R$ ' + (c / 100).toFixed(2).replace('.', ',');
+    const nf = s.nf;
+    return {
+      loading: false, ready: true, err: s.err, toast: s.toast, nf: nf,
+      periods: [7, 30, 90].map((n) => ({ n: n + ' dias', sel: s.days === n, go: () => { this.setState({ days: n }); setTimeout(() => this.load(), 0); } })),
+      list: d.affiliates.map((a) => {
+        const link = 'https://whitelink.site/' + d.handle + '?a=' + a.code;
+        const panel = 'https://whitelink.site/' + d.handle + '/parceiro?c=' + a.code + '&k=' + a.token;
+        return { name: a.name, pct: a.pct + '%', visits: a.visits, clicks: a.clicks, leads: a.leads, sales: a.sales, cents: brl(a.cents), comm: brl(Math.round(a.cents * a.pct / 100)), link: link,
+          copy: () => { try { navigator.clipboard.writeText(link); } catch (e) {} this.setState({ toast: 'Link copiado ✓' }); setTimeout(() => this.setState({ toast: '' }), 1500); },
+          wa: 'https://wa.me/' + (a.phone ? (a.phone.length <= 11 ? '55' : '') + a.phone : '') + '?text=' + encodeURIComponent('Oi ' + a.name.split(' ')[0] + '! Seu link de parceiro: ' + link + '\nAcompanhe seus números aqui: ' + panel),
+          del: async () => { if (!confirm('Remover ' + a.name + '?')) return; await DC.api('affiliates?id=' + a.id, 'DELETE'); this.load(); } };
+      }),
+      empty: d.affiliates.length === 0,
+      setName: (e) => this.setState({ nf: Object.assign({}, nf, { name: e.target.value }) }), setPhone: (e) => this.setState({ nf: Object.assign({}, nf, { phone: e.target.value }) }), setPct: (e) => this.setState({ nf: Object.assign({}, nf, { pct: e.target.value }) }),
+      create: async () => { const r = await DC.api('affiliates', 'POST', nf); if (!r.ok) { this.setState({ err: r.error }); return; } this.setState({ nf: { name: '', phone: '', pct: '10' }, err: '' }); this.load(); }
+    };
+  }
+}
+
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><a class=\"icon-btn\" href=\"/painel/mais\" aria-label=\"Voltar\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></a><h1>Parceiros</h1></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{locked}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"card\" style=\"padding: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center; margin-top: 10px\">\n        <b style=\"font-size: 19px\">Seu próprio time de vendas</b>\n        <span style=\"font-size: 14px; color: #C9C9D6; line-height: 1.55\">Dê um link para cada parceiro, fã ou revendedor divulgar. Você vê quantas visitas, contatos e vendas cada um trouxe e quanto deve de comissão. O parceiro também acompanha os próprios números.</span>\n        <a class=\"btn full\" href=\"/painel/plano\" style=\"background: #8FE3FF\">Liberar no Diamante</a>\n      </div>\n    </sc-if>\n    <sc-if value=\"{{ready}}\" hint-placeholder-val=\"{{ true }}\">\n    <div>\n      <div class=\"chips\"><sc-for list=\"{{periods}}\" as=\"p\" hint-placeholder-count=\"3\"><button onClick=\"{{p.go}}\" aria-pressed=\"{{p.sel}}\">{{p.n}}</button></sc-for></div>\n      <sc-for list=\"{{list}}\" as=\"a\" hint-placeholder-count=\"2\">\n        <div class=\"af\">\n          <div style=\"display: flex; justify-content: space-between; align-items: center\"><b style=\"font-size: 16px\">{{a.name}}</b><span class=\"chip\">{{a.pct}}</span></div>\n          <div class=\"n\"><div><b>{{a.visits}}</b><span>visitas</span></div><div><b>{{a.leads}}</b><span>contatos</span></div><div><b>{{a.sales}}</b><span>vendas</span></div><div><b>{{a.comm}}</b><span>comissão</span></div></div>\n          <div class=\"note\" style=\"margin-bottom: 8px\">Vendido: <b style=\"color: #F3F3F7\">{{a.cents}}</b> · {{a.clicks}} cliques</div>\n          <div class=\"lnk\"><span>{{a.link}}</span><button class=\"btn\" onClick=\"{{a.copy}}\" style=\"height: 34px; padding: 0 12px; font-size: 13px\">Copiar</button></div>\n          <div style=\"display: flex; gap: 8px; margin-top: 10px\">\n            <a class=\"btn ghost\" href=\"{{a.wa}}\" target=\"_blank\" rel=\"noopener\" style=\"flex: 1; height: 40px; font-size: 13.5px\">Enviar pro parceiro</a>\n            <button class=\"btn ghost\" onClick=\"{{a.del}}\" style=\"height: 40px; font-size: 13.5px; color: #FF8A8E\">Remover</button>\n          </div>\n        </div>\n      </sc-for>\n      <sc-if value=\"{{empty}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"card\" style=\"padding: 18px; color: #9C9CAD; font-size: 14px; line-height: 1.5; margin-bottom: 12px\">Nenhum parceiro ainda. Crie o primeiro abaixo e mande o link dele.</div></sc-if>\n      <div class=\"sec-t\">Novo parceiro</div>\n      <div class=\"card\" style=\"padding: 16px\">\n        <label class=\"fld\">Nome<input class=\"inp\" value=\"{{nf.name}}\" onInput=\"{{setName}}\" placeholder=\"Ex.: Júlia (revendedora)\"></label>\n        <div class=\"grid2\"><label class=\"fld\">WhatsApp<input class=\"inp\" inputmode=\"tel\" value=\"{{nf.phone}}\" onInput=\"{{setPhone}}\"></label><label class=\"fld\">Comissão %<input class=\"inp\" inputmode=\"numeric\" value=\"{{nf.pct}}\" onInput=\"{{setPct}}\"></label></div>\n        <sc-if value=\"{{err}}\" hint-placeholder-val=\"{{ false }}\"><div role=\"alert\" style=\"padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 10px\">{{err}}</div></sc-if>\n        <button class=\"btn full\" onClick=\"{{create}}\">Criar parceiro</button>\n      </div>\n      <p class=\"note\" style=\"text-align: center\">Quem entrar pelo link do parceiro fica marcado por 30 dias. Contatos, agendamentos e vendas pagas contam para ele.</p>\n    </div>\n    </sc-if>\n  </div>\n  <sc-if value=\"{{toast}}\" hint-placeholder-val=\"{{ false }}\"><div class=\"toast\" role=\"status\">{{toast}}</div></sc-if>\n</div>\n", Component, {});
+(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar?next='+encodeURIComponent(location.pathname+location.search);})();
+</script>
+</body>
+</html>
