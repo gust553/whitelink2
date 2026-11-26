@@ -15,10 +15,9 @@
       "database_id": "40a16f0f-e146-4000-9d56-8a241dff9bfe"
     }
   ],
-  "routes": [
-    { "pattern": "whitelink.site", "custom_domain": true },
-    { "pattern": "www.whitelink.site", "custom_domain": true }
-  ],
+  // Os endereços (whitelink.site, www e a rota */* dos domínios dos clientes) ficam no painel da Cloudflare,
+  // assim a publicação automática não mexe neles.
+  "workers_dev": false,
   // todo dia: tira o domínio próprio de quem saiu do Diamante
   "triggers": { "crons": ["23 6 * * *"] },
   "observability": { "enabled": true }
