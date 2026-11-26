@@ -1,7 +1,6 @@
 // WhiteLink — app no celular: recebe avisos e abre o painel
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch', () => {});
 self.addEventListener('push', (e) => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data && e.data.text() }; }

@@ -26,7 +26,8 @@ const db = new DatabaseSync(':memory:');
 db.exec(fs.readFileSync(path.join(ROOT, 'schema-console.sql'), 'utf8'));
 const DB = { prepare(sql) { const st = { args: [], bind(...a) { st.args = a.map((x) => (x === undefined ? null : x)); return st; },
   async first() { return db.prepare(sql).get(...st.args) ?? null; }, async all() { return { results: db.prepare(sql).all(...st.args) }; },
-  async run() { const r = db.prepare(sql).run(...st.args); return { meta: { last_row_id: Number(r.lastInsertRowid) } }; } }; return st; } };
+  async run() { const r = db.prepare(sql).run(...st.args); return { meta: { last_row_id: Number(r.lastInsertRowid) } }; } }; return st; },
+  async batch(list) { const out = []; db.exec('BEGIN'); try { for (const st of list) out.push(await st.run()); db.exec('COMMIT'); } catch (e) { db.exec('ROLLBACK'); throw e; } return out; } };
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png' };
 const ASSETS = { async fetch(u) {
   let p = decodeURIComponent(new URL(typeof u === 'string' ? u : (u.url || String(u))).pathname);

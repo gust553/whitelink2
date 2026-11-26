@@ -71,6 +71,14 @@ export function shellNav(active) {
 const PREVIEW_BAR = `<div style="position:sticky;top:0;z-index:50;background:#2B2210;border-bottom:1px solid #4A3A14;color:#F7DFA0;font:500 13px Inter,sans-serif;padding:8px 16px;text-align:center">Prévia: esta tela ainda mostra dados de exemplo. Ela será ligada à sua conta nas próximas atualizações. <a href="/painel" style="color:#D4FF3A">Voltar ao editor</a></div>`;
 
 fs.writeFileSync(path.join(ROOT, 'public/assets/customcss.js'), '// gerado de src/customcss.js\n(function(){\n' + fs.readFileSync(path.join(ROOT, 'src/customcss.js'), 'utf8').replace(/^export /gm, '') + '\nwindow.WL_customCss = customCss; window.WL_cleanCustom = cleanCustom; window.WL_CUSTOM_FONTS = CUSTOM_FONTS; window.WL_CUSTOM_DEF = CUSTOM_DEF;\n})();\n');
+// versão de cada arquivo de /assets (o navegador guarda por 1 ano e só baixa de novo quando muda)
+import crypto from 'node:crypto';
+const VER = {};
+export function ver(f) { if (!(f in VER)) { try { VER[f] = crypto.createHash('sha1').update(fs.readFileSync(path.join(ROOT, 'public/assets', f))).digest('hex').slice(0, 10); } catch (e) { VER[f] = ''; } } return VER[f]; }
+const versioned = (html) => html.replace(/(["'])\/assets\/([\w\/.-]+\.(?:js|css))\1/g, (m, q, f) => (ver(f) ? q + '/assets/' + f + '?v=' + ver(f) + q : m));
+// fontes do Google sem travar a tela (aparece com a fonte do sistema e troca quando chegar)
+const asyncFonts = (h) => h.replace(/<link rel="stylesheet" href="(https:\/\/fonts\.googleapis\.com[^"]+)">/g, '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="$1" media="print" onload="this.media=\'all\'">');
+const SPEC = '<script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/painel*"},{"not":{"href_matches":"/painel/avisos*"}},{"not":{"href_matches":"/painel/suporte*"}}]},"eagerness":"moderate"}]}</script>';
 function build(file, [out, login, preview, tab, barTitle]) {
   const src = fs.readFileSync(path.join(ROOT, 'screens', file), 'utf8');
   const helmet = (src.match(/<helmet>([\s\S]*?)<\/helmet>/) || [, ''])[1];
@@ -88,7 +96,7 @@ function build(file, [out, login, preview, tab, barTitle]) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${title}</title>
 ${login ? '<meta name="robots" content="noindex">' : ''}
-${helmet.trim()}
+${asyncFonts(helmet.trim())}
 ${tab ? '<link rel="stylesheet" href="/assets/shell.css">' : ''}
 <link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0B0B10"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" href="/assets/icons/icon-192.png">
 </head>
@@ -103,6 +111,7 @@ ${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
 <script src="/assets/customcss.js"></script>
 ${tab ? '<script src="/assets/ajuda.js"></script>' : ''}
 ${out === 'painel.html' ? '<script src="/assets/anuncio.js" defer></script>' : ''}
+${tab && tab !== 'admin' ? SPEC : ''}
 <script>
 ${code.replace(/<\/script/gi, '<\\/script')}
 ${tab ? "if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});" : ''}
@@ -114,13 +123,18 @@ ${guard}
 `;
   const dest = path.join(ROOT, 'public', out);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.writeFileSync(dest, html);
+  fs.writeFileSync(dest, versioned(html));
   console.log('ok', file, '→', out);
 }
 
 if (process.argv[1] && process.argv[1].endsWith('build.mjs')) {
   const { TEMAS } = await import(path.join(ROOT, 'src/temas.js'));
   fs.writeFileSync(path.join(ROOT, 'public/assets/temas-list.js'), 'window.WL_TEMAS=' + JSON.stringify(TEMAS) + ';\n');
+  // CSS de cada tema separado (a página pública manda só o do tema usado) + versões dos arquivos usados pelo servidor
+  const { splitTemas } = await import('./split-temas.mjs');
+  const sp = splitTemas(fs.readFileSync(path.join(ROOT, 'public/assets/temas.css'), 'utf8'));
+  const AV = {}; for (const f of ['pub.js', 'live.js', 'temas.css', 'dc.js']) AV[f] = ver(f);
+  fs.writeFileSync(path.join(ROOT, 'src/gerado.js'), '// gerado pelo tools/build.mjs — não editar\nexport const TEMA_BASE = ' + JSON.stringify(sp.base) + ';\nexport const TEMA_CSS = ' + JSON.stringify(sp.themes) + ';\nexport const ASSET_V = ' + JSON.stringify(AV) + ';\n');
 }
 if (process.argv[1] && process.argv[1].endsWith('build.mjs')) for (const [f, cfg] of Object.entries(PAGES)) {
   if (fs.existsSync(path.join(ROOT, 'screens', f))) build(f, cfg);

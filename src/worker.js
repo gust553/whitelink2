@@ -126,7 +126,14 @@ const METHOD = { GET: 'onRequestGet', POST: 'onRequestPost', PUT: 'onRequestPut'
 
 async function serveStatic(request, env) {
   const res = await env.ASSETS.fetch(request);
-  if (res.status !== 404) return res;
+  if (res.status !== 404) {
+    const u = new URL(request.url);
+    if (!u.pathname.startsWith('/assets/') || res.status !== 200) return res;
+    // arquivo com ?v= nunca muda: o navegador guarda por 1 ano. Sem ?v=: guarda 1 hora.
+    const r = new Response(res.body, res);
+    r.headers.set('cache-control', u.searchParams.get('v') ? 'public, max-age=31536000, immutable' : 'public, max-age=3600');
+    return r;
+  }
   const nf = await env.ASSETS.fetch(new URL('/404.html', request.url));
   return new Response(nf.body, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }

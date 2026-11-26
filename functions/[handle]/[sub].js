@@ -87,7 +87,7 @@ async function report(env, u) {
 
 function page(title, body, status = 200) {
   return new Response(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${e(title)}</title><meta name="robots" content="noindex">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" media="print" onload="this.media='all'">
 <style>body{margin:0;background:#0B0B10;color:#F3F3F7;font:15px/1.55 Inter,system-ui,sans-serif}main{max-width:640px;margin:0 auto;padding:32px 20px 60px}
 h1{font:700 32px/1.15 'Space Grotesk',sans-serif;margin:4px 0 12px}h2{font:700 19px 'Space Grotesk',sans-serif;margin:30px 0 12px}.m{color:#A7A7B8;font-size:14px}a{color:#D4FF3A}
 .ph{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #D4FF3A;display:block}

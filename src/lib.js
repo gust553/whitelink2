@@ -287,9 +287,17 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
   ];
-  for (const q of S) await env.DB.prepare(q).run();
+  // Rápido: 1 consulta só. Se o banco já está na versão atual, não recria nada.
+  const V = String(S.length) + ':' + S.join('').length;
+  try {
+    const r = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'schema_v'").first();
+    if (r && r.value === V) { schemaReady = true; return; }
+  } catch (e) {}
+  // Primeira vez (ou tabelas novas): tudo numa ida só ao banco
+  await env.DB.batch(S.map((q) => env.DB.prepare(q)));
   // colunas novas em tabelas que já existiam
   for (const q of ['ALTER TABLE domains ADD COLUMN lost_at INTEGER']) { try { await env.DB.prepare(q).run(); } catch (e) {} }
+  await env.DB.prepare("INSERT INTO app_settings (key, value) VALUES ('schema_v', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").bind(V).run();
   schemaReady = true;
 }
 

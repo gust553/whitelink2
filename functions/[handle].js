@@ -1,3 +1,4 @@
+import { TEMA_BASE, TEMA_CSS, ASSET_V } from '../src/gerado.js';
 import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, parsePageRow, BLOCK_NEED, PLAN_LEVEL, themeFor, customCss, cleanCustom, CUSTOM_FONTS } from '../src/lib.js';
 import { TEMA_FONTS } from '../src/temas.js';
 import { agendaCfg, brl } from '../src/biz.js';
@@ -174,8 +175,8 @@ export async function onRequestGet(context) {
   document.querySelectorAll('form.lead').forEach(function(f){f.onsubmit=function(e){e.preventDefault();var m=f.querySelector('.msg');fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({h:${JSON.stringify(h)},name:f.name.value,phone:f.phone.value,source:f.dataset.src})}).then(function(r){return r.json()}).then(function(d){if(d.ok){f.innerHTML='<b>Pronto! Você vai receber as novidades.</b>';}else{m.textContent=d.error||'Tente de novo.';}}).catch(function(){m.textContent='Sem conexão.';});};});
 })();
 </script>
-${lvl === 2 && liveCfg && (liveCfg.viewers || liveCfg.sales) ? `<script>window.WL_LIVE=${JSON.stringify({ h, v: !!liveCfg.viewers, s: !!liveCfg.sales })}</script><script src="/assets/live.js" defer></script>` : ''}
-${kinds.has('store') || kinds.has('booking') || kinds.has('support') || kinds.has('quiz') ? `<script type="application/json" id="wl-data">${JSON.stringify(pubData).replace(/</g, '\\u003c')}</script><script src="/assets/pub.js" defer></script>` : ''}`;
+${lvl === 2 && liveCfg && (liveCfg.viewers || liveCfg.sales) ? `<script>window.WL_LIVE=${JSON.stringify({ h, v: !!liveCfg.viewers, s: !!liveCfg.sales })}</script><script src="/assets/live.js?v=${ASSET_V['live.js']}" defer></script>` : ''}
+${kinds.has('store') || kinds.has('booking') || kinds.has('support') || kinds.has('quiz') ? `<script type="application/json" id="wl-data">${JSON.stringify(pubData).replace(/</g, '\\u003c')}</script><script src="/assets/pub.js?v=${ASSET_V['pub.js']}" defer></script>` : ''}`;
   const cfgRow = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(u.id).first();
   let cfg = {}; try { cfg = JSON.parse((cfgRow && cfgRow.data) || '{}'); } catch (e) {}
   if (extra) cfg = Object.assign({}, cfg, { seo: {} }); // título do Google é só da página principal
@@ -220,8 +221,8 @@ function html(title, body, tk, custom, status, a, lvl, cfont) {
 <title>${escapeHtml(seo.title || title)}</title>
 ${seo.desc ? `<meta name="description" content="${escapeHtml(seo.desc)}">` : ''}
 <meta property="og:title" content="${escapeHtml(seo.title || title)}">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="${fontUrl.replace(/:ital,wght@0,400;0,700;1,400/g, '')}">
-<link rel="stylesheet" href="/assets/temas.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${fontUrl.replace(/:ital,wght@0,400;0,700;1,400/g, '')}" media="print" onload="this.media='all'">
+<style>${TEMA_BASE}${TEMA_CSS[tk] || ''}</style>
 <style>
 html,body{margin:0;background:#0B0B10;min-height:100vh}
 .ph.pub{width:100%;max-width:520px;height:auto;min-height:100vh;margin:0 auto;border:none;border-radius:0}
