@@ -132,6 +132,34 @@
     mount,
     html: (s) => ({ __html: String(s) }), // HTML fixo do próprio código (ícones), nunca dados do usuário
     // chamadas para o servidor do WhiteLink
+    // Escolhe uma foto no aparelho, reduz e envia. opts: { max: 1200, square: false }
+    pickImage(opts) {
+      opts = opts || {};
+      return new Promise((resolve) => {
+        const inp = document.createElement('input');
+        inp.type = 'file'; inp.accept = 'image/*';
+        inp.onchange = () => {
+          const f = inp.files && inp.files[0];
+          if (!f) return resolve(null);
+          const img = new Image();
+          img.onload = async () => {
+            const max = opts.max || 1200;
+            let sx = 0, sy = 0, sw = img.width, sh = img.height;
+            if (opts.square) { const m = Math.min(sw, sh); sx = (sw - m) / 2; sy = (sh - m) / 2; sw = sh = m; }
+            const k = Math.min(1, max / Math.max(sw, sh));
+            const c = document.createElement('canvas'); c.width = Math.round(sw * k); c.height = Math.round(sh * k);
+            c.getContext('2d').drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
+            let q = 0.85, data = c.toDataURL('image/jpeg', q);
+            while (data.length > 1000000 && q > 0.4) { q -= 0.15; data = c.toDataURL('image/jpeg', q); }
+            URL.revokeObjectURL(img.src);
+            resolve(await this.api('media', 'POST', { data: data }));
+          };
+          img.onerror = () => resolve({ ok: false, error: 'Não consegui abrir essa foto.' });
+          img.src = URL.createObjectURL(f);
+        };
+        inp.click();
+      });
+    },
     // página que está sendo editada (Diamante pode ter até 3). 0 = principal.
     page() { try { return parseInt(localStorage.getItem('wl_page'), 10) || 0; } catch (e) { return 0; } },
     setPage(id, handle) { try { if (id) { localStorage.setItem('wl_page', String(id)); localStorage.setItem('wl_page_h', handle || ''); } else { localStorage.removeItem('wl_page'); localStorage.removeItem('wl_page_h'); } } catch (e) {} },

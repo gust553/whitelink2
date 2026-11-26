@@ -28,6 +28,8 @@ import * as referrals from '../functions/api/referrals.js';
 import * as support from '../functions/api/support.js';
 import * as pagesApi from '../functions/api/pages.js';
 import * as domainApi from '../functions/api/domain.js';
+import * as mediaApi from '../functions/api/media.js';
+import * as mediaGet from '../functions/m/[id].js';
 import { isMainHost, domainOwner, domainCleanup, domainSeen } from './domains.js';
 import { effectivePlan } from './lib.js';
 import * as gwHook from '../functions/api/webhooks/gateway.js';
@@ -71,6 +73,8 @@ const ROUTES = [
   [/^\/api\/support$/, support],
   [/^\/api\/pages$/, pagesApi],
   [/^\/api\/domain$/, domainApi],
+  [/^\/api\/media$/, mediaApi],
+  [/^\/m\/(?<id>[a-f0-9]{8,40})$/, mediaGet],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],
   [/^\/api\/admin\/overview$/, admOverview],
@@ -134,7 +138,7 @@ async function customHost(request, env, ctx, url) {
     const r = new Request(new URL('/' + o.handle, url).toString(), request);
     return route(r, env, ctx, true);
   }
-  if (/^\/(go\/|assets\/|api\/lead$|favicon)/.test(p)) return route(request, env, ctx, true);
+  if (/^\/(go\/|assets\/|m\/|api\/lead$|api\/pub\/|favicon)/.test(p)) return route(request, env, ctx, true);
   return Response.redirect('https://whitelink.site' + p + url.search, 302);
 }
 

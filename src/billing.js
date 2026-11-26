@@ -8,7 +8,7 @@ export const DEFAULTS = {
   whatsapp: '5511993931841',
   order_hours: '24',
   pay_mode: 'pix',
-  price_ouro_m: '1990', price_ouro_y: '19990', price_diamante_m: '3990', price_diamante_y: '39990',
+  price_ouro_m: '1990', price_ouro_y: '19990', price_diamante_m: '3990', price_diamante_y: '39990', price_agencia_m: '9990', price_agencia_y: '99990',
   ref_bonus_days: '7', loyalty_every: '3', loyalty_days: '7',
   gw_provider: 'mercadopago', gw_token: '',
   cf_token: '', cf_zone: ''
@@ -80,7 +80,7 @@ export async function uniqueCents(env, base) {
 }
 
 export function orderView(o, s, gwPix) {
-  const PN = { ouro: 'Ouro', diamante: 'Diamante' };
+  const PN = { ouro: 'Ouro', diamante: 'Diamante', agencia: 'Agência' };
   return {
     code: o.code, plan: o.plan, planName: PN[o.plan] || o.plan, period: o.period, periodName: o.period === 'y' ? 'anual' : 'mensal',
     cents: o.cents, value: brl(o.cents), status: o.status, method: o.method,

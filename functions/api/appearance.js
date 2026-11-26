@@ -10,9 +10,11 @@ export async function onRequestPut({ request, env }) {
   const t = await pageTarget(env, u, request);
   if (t.missing) return fail('Página não encontrada.', 404);
   const page = t.main ? await loadPage(env, u.id) : parsePageRow(t.row);
-  const inA = b.appearance || {};
-  // telas de Aparência/Temas não mandam o tema criado: guardamos o que já existia
-  if (inA.custom === undefined) { inA.custom = page.appearance && page.appearance.custom; if (inA.useCustom === undefined) inA.useCustom = false; }
+  const given = b.appearance || {};
+  // telas de Aparência/Temas não mandam o tema criado nem foto/capa: guardamos o que já existia.
+  // Escolher um tema pronto desliga o tema criado.
+  const inA = Object.assign({}, page.appearance || {}, given);
+  if (given.custom === undefined && given.useCustom === undefined) inA.useCustom = false;
   const appearance = cleanAppearance(inA);
   if (!t.main) {
     await env.DB.prepare('UPDATE pages SET appearance = ? WHERE id = ?').bind(JSON.stringify(appearance), t.row.id).run();

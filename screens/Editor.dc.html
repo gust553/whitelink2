@@ -29,6 +29,17 @@
 .drag{color:#5E5E6E;cursor:grab;display:flex;padding:6px 0 6px 2px;flex:none}
 .drag svg{width:18px;height:18px;fill:currentColor;stroke:none}
 .row.over{background:#1F2410}
+.pf-media{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.pf-av{width:84px;height:84px;border-radius:50%;border:2px dashed #3A3A46;background:#14141B center/cover no-repeat;color:#9C9CAD;font-size:12px;cursor:pointer;flex:none;font-family:inherit}
+.pf-cover{width:100%;height:110px;border-radius:16px;border:2px dashed #3A3A46;background:#14141B center/cover no-repeat;color:#9C9CAD;font-size:14px;cursor:pointer;font-family:inherit}
+.link-btn{background:none;border:none;color:#FF8A8E;font-size:13.5px;cursor:pointer;padding:4px 0;font-family:inherit;text-align:left}
+.anims{display:flex;gap:8px;flex-wrap:wrap}
+.anims button{height:40px;padding:0 14px;border-radius:12px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.anims button[aria-pressed="true"]{border-color:#D4FF3A;background:rgba(212,255,58,.12);color:#F3F3F7;font-weight:600}
+.phone .ph-av.has-img{padding:0;overflow:hidden}.phone .ph-av.has-img img{width:100%;height:100%;object-fit:cover;display:block}
+.phone .pv-cover{position:absolute;left:0;right:0;top:0;height:170px;background:center/cover no-repeat}
+.phone .pv-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.55))}
+.phone .has-cover .ph-in{padding-top:110px;position:relative;z-index:1}
 .pgs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;scrollbar-width:none}
 .pgs button{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
 .pgs button[aria-selected="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
@@ -55,7 +66,7 @@
       </sc-if>
       <div class="card">
         <button class="prof" onClick="{{openProfile}}" style="width: 100%; background: transparent; border: none; color: inherit; text-align: left; cursor: pointer">
-          <div class="av" style="background: #1B1B24; border: 2px solid {{accent}}; color: #F3F3F7">{{initials}}</div>
+          <div class="av" style="background: #1B1B24 center/cover no-repeat; border: 2px solid {{accent}}; color: #F3F3F7; {{avCardStyle}}">{{avCardText}}</div>
           <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
             <b style="font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{pageTitle}}</b>
             <span style="font-size: 14px; color: #9C9CAD">whitelink.site/{{handle}}</span>
@@ -88,8 +99,8 @@
     <aside class="ed-side">
       <div class="phone">
         <style>{{customCss}}</style>
-        <div class="ph {{tcls}}" style="{{phStyle}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in">
-          <div class="ph-head"><div class="ph-av">{{initials}}</div><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
+        <div class="ph {{tcls}} {{pvCls}}" style="{{phStyle}}"><div class="ph-bg"></div><sc-if value="{{hasPvCover}}" hint-placeholder-val="{{ false }}"><div class="pv-cover" style="{{pvCover}}"></div></sc-if><div class="ph-tag">NOVO!</div><div class="ph-in">
+          <div class="ph-head"><sc-if value="{{avImg}}" hint-placeholder-val="{{ false }}"><div class="ph-av has-img"><img src="{{avImg}}" alt=""></div></sc-if><sc-if value="{{noAvImg}}" hint-placeholder-val="{{ true }}"><div class="ph-av">{{initials}}</div></sc-if><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
           <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div class="{{v.cls}}" style="{{v.pStyle}}">{{v.title}}</div></sc-for>
           <sc-if value="{{showBrand}}" hint-placeholder-val="{{ true }}"><div class="ph-foot">Crie a sua com WhiteLink</div></sc-if>
         </div></div>
@@ -149,7 +160,21 @@
       <div class="sheet" onClick="{{stop}}">
         <div class="grab"></div>
         <h2>Seu perfil</h2>
-        <label class="fld">Nome<input class="inp" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60"></label>
+        <div class="pf-media">
+          <button class="pf-av" onClick="{{pickAvatar}}" aria-label="Trocar foto de perfil" style="{{avStyle}}">{{avLabel}}</button>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+            <button class="btn ghost" onClick="{{pickAvatar}}" style="height: 40px; font-size: 14px">{{avBtn}}</button>
+            <sc-if value="{{hasAvatar}}" hint-placeholder-val="{{ false }}"><button class="link-btn" onClick="{{removeAvatar}}">Tirar foto</button></sc-if>
+          </div>
+        </div>
+        <div class="sec-t" style="margin-top: 4px; display: flex; gap: 8px; align-items: center">Capa <span class="chip" style="background: rgba(242,193,78,.16); color: #F2C14E">Ouro</span></div>
+        <button class="pf-cover" onClick="{{pickCover}}" style="{{coverStyle}}">{{coverLabel}}</button>
+        <sc-if value="{{hasCover}}" hint-placeholder-val="{{ false }}"><button class="link-btn" onClick="{{removeCover}}" style="margin-top: 6px">Tirar capa</button></sc-if>
+        <label class="fld" style="margin-top: 12px">Vídeo de capa (YouTube ou .mp4) <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span><input class="inp" value="{{coverVideo}}" onInput="{{setCoverVideo}}" placeholder="https://youtube.com/watch?v=..." disabled="{{noVideo}}"></label>
+        <div class="sec-t" style="display: flex; gap: 8px; align-items: center">Animação de entrada <span class="chip" style="background: rgba(242,193,78,.16); color: #F2C14E">Ouro</span></div>
+        <div class="anims"><sc-for list="{{anims}}" as="a" hint-placeholder-count="5"><button onClick="{{a.pick}}" aria-pressed="{{a.sel}}" style="{{a.st}}">{{a.name}}</button></sc-for></div>
+        <sc-if value="{{pfErr}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin: 10px 0">{{pfErr}}</div></sc-if>
+        <label class="fld" style="margin-top: 14px">Nome<input class="inp" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60"></label>
         <label class="fld">Bio<input class="inp" value="{{bio}}" onInput="{{setBio}}" maxlength="160" placeholder="Ex.: Moda feminina com entrega para todo o Brasil"></label>
         <button class="btn full" onClick="{{closeSheet}}">Salvar</button>
         <sc-if value="{{isExtra}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{deletePage}}" style="margin-top: 10px; color: #FF8A8E">Apagar esta página</button></sc-if>
@@ -177,8 +202,8 @@
         <div class="grab"></div>
         <div class="phone">
         <style>{{customCss}}</style>
-        <div class="ph {{tcls}}" style="{{phStyle}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in">
-          <div class="ph-head"><div class="ph-av">{{initials}}</div><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
+        <div class="ph {{tcls}} {{pvCls}}" style="{{phStyle}}"><div class="ph-bg"></div><sc-if value="{{hasPvCover}}" hint-placeholder-val="{{ false }}"><div class="pv-cover" style="{{pvCover}}"></div></sc-if><div class="ph-tag">NOVO!</div><div class="ph-in">
+          <div class="ph-head"><sc-if value="{{avImg}}" hint-placeholder-val="{{ false }}"><div class="ph-av has-img"><img src="{{avImg}}" alt=""></div></sc-if><sc-if value="{{noAvImg}}" hint-placeholder-val="{{ true }}"><div class="ph-av">{{initials}}</div></sc-if><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
           <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div class="{{v.cls}}" style="{{v.pStyle}}">{{v.title}}</div></sc-for>
           <sc-if value="{{showBrand}}" hint-placeholder-val="{{ true }}"><div class="ph-foot">Crie a sua com WhiteLink</div></sc-if>
         </div></div>
@@ -207,7 +232,7 @@ class Component extends DCLogic {
     this.uid = d.blocks.reduce((m, b) => Math.max(m, b.id || 0), 0) + 1;
     this.setState({ loading: false, user: d.user, blocks: d.blocks, title: d.profile.title || '', bio: d.profile.bio || '',
       theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '',
-      custom: a.custom || null, useCustom: !!a.useCustom, page: d.page || { id: 0, handle: d.user.handle }, pages: d.pages || [], np: {} });
+      custom: a.custom || null, useCustom: !!a.useCustom, avatar: a.avatar || '', cover: a.cover || '', coverVideo: a.coverVideo || '', anim: a.anim || 'subir', page: d.page || { id: 0, handle: d.user.handle }, pages: d.pages || [], np: {} });
   }
   flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
   change(patch) {
@@ -220,7 +245,7 @@ class Component extends DCLogic {
     const s = this.state;
     this.setState({ saved: 'saving' });
     const d = await DC.api('editor', 'PUT', { blocks: s.blocks, title: s.title, bio: s.bio,
-      appearance: { theme: s.theme, tk: s.tk, font: s.font, shape: s.shape, acc: s.acc } });
+      appearance: { theme: s.theme, tk: s.tk, font: s.font, shape: s.shape, acc: s.acc, avatar: s.avatar, cover: s.cover, coverVideo: s.coverVideo, anim: s.anim } });
     if (d.status === 401) { location.href = '/entrar'; return; }
     this.setState({ saved: d.ok ? 'saved' : 'error', err: d.error });
   }
@@ -350,6 +375,19 @@ class Component extends DCLogic {
         create: () => this.createPage()
       }),
       deletePage: () => this.deletePage(),
+      hasAvatar: !!s.avatar, avStyle: s.avatar ? "background-image: url('/m/" + s.avatar + "'); border-style: solid" : '', avLabel: s.avatar ? '' : 'Sua foto',
+      avBtn: s.avatar ? 'Trocar foto' : 'Colocar foto de perfil',
+      pickAvatar: async () => { const r = await DC.pickImage({ max: 512, square: true }); if (!r) return; if (!r.ok) { this.setState({ pfErr: r.error }); return; } this.change({ avatar: r.id, pfErr: '' }); },
+      removeAvatar: () => this.change({ avatar: '' }),
+      hasCover: !!s.cover, coverStyle: s.cover ? "background-image: url('/m/" + s.cover + "'); border-style: solid" : '', coverLabel: s.cover ? '' : (plan >= 1 ? '+ Colocar foto de capa' : 'Capa é do plano Ouro'),
+      pickCover: async () => { if (plan < 1) { this.flash('A capa é do plano Ouro. Veja em Mais › Meu plano.'); return; } const r = await DC.pickImage({ max: 1400 }); if (!r) return; if (!r.ok) { this.setState({ pfErr: r.error }); return; } this.change({ cover: r.id, pfErr: '' }); },
+      removeCover: () => this.change({ cover: '' }),
+      coverVideo: s.coverVideo, noVideo: plan < 2, setCoverVideo: (e) => this.change({ coverVideo: e.target.value.trim() }),
+      pfErr: s.pfErr || '',
+      anims: [['subir', 'Subir', 1], ['aparecer', 'Aparecer', 1], ['zoom', 'Zoom', 2], ['cascata', 'Cascata', 2], ['nenhuma', 'Nenhuma', 0]].map((x) => ({ name: x[1] + (x[2] > plan ? ' 🔒' : ''), sel: s.anim === x[0], st: x[2] > plan ? 'opacity: .55' : '', pick: () => { if (x[2] > plan) { this.flash(x[2] === 1 ? 'Animações são do plano Ouro.' : 'Essa animação é do Diamante.'); return; } this.change({ anim: x[0] }); } })),
+      pvCover: plan >= 1 && s.cover ? "background-image: url('/m/" + s.cover + "')" : '', hasPvCover: plan >= 1 && !!s.cover,
+      avCardStyle: s.avatar ? "background-image: url('/m/" + s.avatar + "')" : '', avCardText: s.avatar ? '' : (title.split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2) || 'WL').toUpperCase(),
+      avImg: s.avatar ? '/m/' + s.avatar : '', noAvImg: !s.avatar, pvCls: plan >= 1 && s.cover ? 'has-cover' : '',
       planLabel: u.trial ? 'Teste Diamante · ' + days + (days === 1 ? ' dia' : ' dias') : ['Prata grátis', 'Plano Ouro', 'Plano Diamante'][plan],
       planColor: tierC[plan], planBg: ['rgba(201,205,214,.12)', 'rgba(242,193,78,.14)', 'rgba(143,227,255,.14)'][plan],
       limitText: limit ? links + ' de ' + limit + ' links' : links + (links === 1 ? ' link' : ' links') + ' · ilimitados',

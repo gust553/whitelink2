@@ -29,7 +29,7 @@ export async function onRequestPut({ request, env }) {
   if (b.gw_token !== undefined && !String(b.gw_token).startsWith('••••')) patch.gw_token = String(b.gw_token).trim().slice(0, 300);
   if (b.cf_token !== undefined && !String(b.cf_token).startsWith('••••')) patch.cf_token = String(b.cf_token).trim().slice(0, 200);
   if (b.cf_zone !== undefined) { const z = String(b.cf_zone).trim().toLowerCase(); if (z && !/^[a-f0-9]{32}$/.test(z)) return fail('O ID da zona tem 32 letras e números. Confira se copiou certo.'); patch.cf_zone = z; }
-  for (const k of ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y']) {
+  for (const k of ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y']) {
     if (b[k] !== undefined) { const c = Math.round(parseFloat(String(b[k]).replace(/\./g, '').replace(',', '.')) * 100); if (!(c >= 100 && c <= 10000000)) return fail('Preço inválido.'); patch[k] = String(c); }
   }
   for (const k of ['order_hours', 'ref_bonus_days', 'loyalty_every', 'loyalty_days']) {

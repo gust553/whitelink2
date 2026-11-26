@@ -1,11 +1,11 @@
-import { json, fail, readJson, currentUser, ensureSchema, cleanHandle, effectivePlan, handleTaken, listPages, EXTRA_PAGES, rateLimit } from '../../src/lib.js';
+import { json, fail, readJson, currentUser, ensureSchema, cleanHandle, effectivePlan, handleTaken, listPages, maxExtraPages, rateLimit } from '../../src/lib.js';
 
 // Páginas extras (Diamante): listar, criar, apagar
 export async function onRequestGet({ request, env }) {
   await ensureSchema(env);
   const u = await currentUser(env, request);
   if (!u) return fail('Entre na sua conta.', 401);
-  return json({ ok: true, main: u.handle, pages: await listPages(env, u), max: EXTRA_PAGES + 1, can: effectivePlan(u).plan === 'diamante' });
+  return json({ ok: true, main: u.handle, pages: await listPages(env, u), max: maxExtraPages(u) + 1, can: effectivePlan(u).plan === 'diamante' });
 }
 
 export async function onRequestPost({ request, env }) {
@@ -17,7 +17,8 @@ export async function onRequestPost({ request, env }) {
   const h = cleanHandle(b.handle);
   if (!h) return fail('Endereço inválido. Use de 3 a 30 letras, números, ponto ou _.');
   const mine = await listPages(env, u);
-  if (mine.length >= EXTRA_PAGES) return fail('Você já tem as ' + (EXTRA_PAGES + 1) + ' páginas do Diamante.');
+  const mx = maxExtraPages(u);
+  if (mine.length >= mx) return fail('Você já tem as ' + (mx + 1) + ' páginas do seu plano.' + (mx < 19 ? ' No plano Agência são até 20.' : ''));
   if (!(await rateLimit(env, 'page:' + u.id, 10, 3600000))) return fail('Muitas tentativas. Espere um pouco.', 429);
   if (await handleTaken(env, h)) return fail('whitelink.site/' + h + ' já está em uso. Tente outro.');
   const title = String(b.title || '').trim().slice(0, 60) || h;

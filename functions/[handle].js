@@ -100,13 +100,23 @@ export async function onRequestGet(context) {
   if (!useC && lvl >= 1 && a.acc) custom += `.pub .ph-btn.main{background:${a.acc};border-color:${a.acc}}.pub .ph-av{border-color:${a.acc}}`;
   if (!useC && lvl >= 1 && BASIC.includes(tk)) custom += `.pub{font-family:${FONTS[a.font || 0]}}.pub .ph-btn{border-radius:${RADII[a.shape == null ? 1 : a.shape]}}`;
   const verified = lvl === 2 && !ep.trial ? ' <span class="ver" title="Verificado">✓</span>' : '';
+  // capa (foto no Ouro, vídeo no Diamante), foto de perfil e animação de entrada
+  let cover = '';
+  if (lvl === 2 && a.coverVideo) {
+    const yt = youtubeId(a.coverVideo);
+    cover = yt ? `<div class="pub-cover vid-cover"><iframe src="https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&mute=1&loop=1&playlist=${yt}&controls=0&playsinline=1&modestbranding=1" title="" allow="autoplay; encrypted-media" tabindex="-1" aria-hidden="true"></iframe></div>`
+      : `<div class="pub-cover"><video src="${escapeHtml(a.coverVideo)}" autoplay muted loop playsinline aria-hidden="true"></video></div>`;
+  } else if (lvl >= 1 && a.cover) cover = `<div class="pub-cover"><img src="/m/${a.cover}" alt=""></div>`;
+  const av = a.avatar ? `<div class="ph-av has-img"><img src="/m/${a.avatar}" alt="${escapeHtml(title)}"></div>` : `<div class="ph-av">${escapeHtml(initials)}</div>`;
+  const anim = lvl >= 1 && a.anim && a.anim !== 'nenhuma' ? (lvl === 2 || ['subir', 'aparecer'].includes(a.anim) ? a.anim : 'subir') : '';
   const body = `
-<div class="ph t-${tk} pub">
+<div class="ph t-${tk} pub${cover ? ' has-cover' : ''}${anim ? ' anim-' + anim : ''}">
   <div class="ph-bg"></div>
+  ${cover}
   <div class="ph-tag">NOVO!</div>
   <div class="ph-in">
     <div class="ph-head">
-      <div class="ph-av">${escapeHtml(initials)}</div>
+      ${av}
       <div class="ph-name">${escapeHtml(title)}${verified}</div>
       <a class="ph-handle" href="https://instagram.com/${escapeHtml(u.instagram)}" target="_blank" rel="noopener">@${escapeHtml(u.instagram)}</a>
       ${prof.bio ? `<div class="ph-bio">${escapeHtml(prof.bio)}</div>` : ''}
@@ -185,6 +195,23 @@ html,body{margin:0;background:#0B0B10;min-height:100vh}
 .lead button,.pix button{border:none;cursor:pointer;font-family:inherit;width:100%}
 .pixk code{word-break:break-all;font-size:13px;opacity:.85}
 .hide{display:none!important}.msg{color:#FF8A6B;font-size:13px}
+.ph-av.has-img{padding:0;overflow:hidden;background:none}.ph-av.has-img img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.pub-cover{position:absolute;left:0;right:0;top:0;height:230px;overflow:hidden;z-index:0}
+.pub-cover img,.pub-cover video{width:100%;height:100%;object-fit:cover;display:block}
+.pub-cover iframe{position:absolute;left:50%;top:50%;width:177.78vh;min-width:100%;height:56.25vw;min-height:100%;transform:translate(-50%,-50%) scale(1.35);border:0;pointer-events:none}
+.pub-cover{-webkit-mask-image:linear-gradient(180deg,#000 50%,transparent);mask-image:linear-gradient(180deg,#000 50%,transparent)}
+.ph.pub.has-cover .ph-in{padding-top:150px;position:relative;z-index:1}
+.ph.pub.has-cover .ph-av{width:104px;height:104px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+@keyframes wlUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes wlFade{from{opacity:0}to{opacity:1}}
+@keyframes wlZoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+@keyframes wlSide{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
+.anim-subir .ph-in>*{animation:wlUp .55s cubic-bezier(.2,.8,.2,1) both}
+.anim-aparecer .ph-in>*{animation:wlFade .7s ease both}
+.anim-zoom .ph-in>*{animation:wlZoom .5s cubic-bezier(.2,.8,.2,1) both}
+.anim-cascata .ph-in>*{animation:wlSide .55s cubic-bezier(.2,.8,.2,1) both}
+${Array.from({ length: 30 }, (_, i) => `.ph-in>*:nth-child(${i + 1}){animation-delay:${i * 65}ms}`).join('')}
+@media (prefers-reduced-motion:reduce){.ph-in>*{animation:none!important}}
 .ver{display:inline-flex;width:20px;height:20px;border-radius:50%;background:#8FE3FF;color:#06222B;font-size:12px;align-items:center;justify-content:center;vertical-align:middle;-webkit-text-fill-color:#06222B;text-shadow:none}
 @keyframes fxPulse{0%{box-shadow:0 0 0 0 rgba(212,255,58,.55)}70%{box-shadow:0 0 0 12px rgba(212,255,58,0)}100%{box-shadow:0 0 0 0 rgba(212,255,58,0)}}
 @keyframes fxShake{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-2deg)}92%{transform:rotate(2deg)}95%{transform:rotate(-1deg)}}

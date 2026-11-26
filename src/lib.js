@@ -162,6 +162,8 @@ export async function currentUser(env, request) {
 // Plano que vale agora: teste Diamante > plano pago em dia > Prata
 export function effectivePlan(u, now = Date.now()) {
   if (u.trial_until && u.trial_until > now) return { plan: 'diamante', trial: true, until: u.trial_until };
+  // Agência: tudo do Diamante + extras de agência (mais páginas, relatórios para marcas)
+  if (u.plan === 'agencia' && u.plan_until && u.plan_until > now) return { plan: 'diamante', agency: true, trial: false, until: u.plan_until };
   if (u.plan !== 'prata' && u.plan_until && u.plan_until > now) return { plan: u.plan, trial: false, until: u.plan_until };
   return { plan: 'prata', trial: false, until: null };
 }
@@ -171,7 +173,7 @@ export function publicUser(u) {
   return {
     name: u.name, email: u.email, handle: u.handle, instagram: u.instagram,
     phoneEnd: String(u.phone).slice(-4),
-    plan: p.plan, trial: p.trial, until: p.until,
+    plan: p.plan, trial: p.trial, until: p.until, agency: !!p.agency,
     limit: PLAN_LIMITS[p.plan], refCode: u.ref_code, isAdmin: !!u.is_admin
   };
 }
@@ -259,6 +261,14 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, handle TEXT NOT NULL UNIQUE, title TEXT, bio TEXT, blocks TEXT NOT NULL DEFAULT \'[]\', appearance TEXT NOT NULL DEFAULT \'{}\', created_at INTEGER NOT NULL)',
     'CREATE INDEX IF NOT EXISTS idx_pages_user ON pages(user_id)',
     'CREATE TABLE IF NOT EXISTS domains (user_id INTEGER PRIMARY KEY, hostname TEXT NOT NULL UNIQUE, cf_id TEXT, status TEXT NOT NULL, created_at INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS media (id TEXT PRIMARY KEY, user_id INTEGER NOT NULL, mime TEXT NOT NULL, data TEXT NOT NULL, size INTEGER NOT NULL, created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_media_user ON media(user_id)',
+    'CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, phone TEXT NOT NULL, name TEXT, email TEXT, stage TEXT NOT NULL DEFAULT \'novo\', tags TEXT NOT NULL DEFAULT \'\', notes TEXT NOT NULL DEFAULT \'\', aff TEXT, total_cents INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL, last_at INTEGER NOT NULL, UNIQUE(user_id, phone))',
+    'CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, person_id INTEGER, kind TEXT NOT NULL, title TEXT, cents INTEGER NOT NULL DEFAULT 0, ref TEXT, aff TEXT, created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_events_user ON events(user_id, created_at)',
+    'CREATE INDEX IF NOT EXISTS idx_events_person ON events(person_id)',
+    'CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, kind TEXT NOT NULL, text TEXT NOT NULL, url TEXT, created_at INTEGER NOT NULL, read_at INTEGER)',
+    'CREATE INDEX IF NOT EXISTS idx_notif_user ON notifications(user_id, id)',
     'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
@@ -289,6 +299,8 @@ export async function loadPage(env, userId) {
 
 // Páginas extras do Diamante (até 3 no total: a principal + 2)
 export const EXTRA_PAGES = 2;
+export const AGENCY_EXTRA_PAGES = 19; // Agência: até 20 páginas
+export function maxExtraPages(u) { const p = effectivePlan(u); return p.agency ? AGENCY_EXTRA_PAGES : p.plan === 'diamante' ? EXTRA_PAGES : 0; }
 export async function handleTaken(env, h) {
   if (RESERVED.has(h)) return true;
   const a = await env.DB.prepare('SELECT 1 AS x FROM users WHERE handle = ?').bind(h).first();
@@ -340,7 +352,11 @@ export function cleanAppearance(a) {
   const theme = n(a.theme, 3);
   const tk = TEMA_TIER[a.tk] !== undefined ? a.tk : ['noite', 'papel', 'oceano', 'brasa'][theme];
   return { tk, theme, font: n(a.font, 2), shape: a.shape == null ? 1 : n(a.shape, 2), acc: /^#[0-9a-f]{6}$/i.test(a.acc || '') ? a.acc : '',
-    custom: cleanCustom(a.custom), useCustom: !!a.useCustom };
+    custom: cleanCustom(a.custom), useCustom: !!a.useCustom,
+    avatar: /^[a-f0-9]{24}$/.test(a.avatar || '') ? a.avatar : '',
+    cover: /^[a-f0-9]{24}$/.test(a.cover || '') ? a.cover : '',
+    coverVideo: /^(https:\/\/(www\.)?(youtube\.com|youtu\.be)\/\S+|https:\/\/\S+\.mp4)$/i.test(a.coverVideo || '') ? String(a.coverVideo).slice(0, 300) : '',
+    anim: ['subir', 'aparecer', 'zoom', 'cascata', 'nenhuma'].includes(a.anim) ? a.anim : 'subir' };
 }
 
 // Tema criado pelo cliente (Diamante)
@@ -394,4 +410,16 @@ export async function requireAdmin(env, request, opts = {}) {
 
 export async function adminLog(env, adminId, action, target) {
   await env.DB.prepare('INSERT INTO admin_log (admin_id, action, target, created_at) VALUES (?, ?, ?, ?)').bind(adminId, action, String(target || ''), Date.now()).run();
+}
+
+// Configurações do cliente (um JSON por conta). setUserSettings mistura com o que já existe.
+export async function getUserSettings(env, userId) {
+  const r = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(userId).first();
+  try { return JSON.parse((r && r.data) || '{}') || {}; } catch (e) { return {}; }
+}
+export async function setUserSettings(env, userId, patch) {
+  const d = Object.assign(await getUserSettings(env, userId), patch);
+  await env.DB.prepare('INSERT INTO user_settings (user_id, data, updated_at) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at')
+    .bind(userId, JSON.stringify(d), Date.now()).run();
+  return d;
 }

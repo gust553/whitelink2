@@ -28,10 +28,8 @@ export async function onRequestPut({ request, env }) {
   const t = await pageTarget(env, u, request);
   if (t.missing) return fail('Página não encontrada.', 404);
   const old = t.main ? (await loadPage(env, u.id)).appearance : parsePageRow(t.row).appearance;
-  const inA = Object.assign({}, b.appearance || {});
-  // o editor não manda o tema criado: guarda o que já existia
-  if (inA.custom === undefined) inA.custom = old.custom;
-  if (inA.useCustom === undefined) inA.useCustom = !!old.useCustom;
+  // o que o editor não mandar (tema criado, foto, capa...) continua como estava
+  const inA = Object.assign({}, old || {}, b.appearance || {});
   const appearance = cleanAppearance(inA);
   const now = Date.now();
   if (!t.main) {

@@ -1,4 +1,5 @@
-import { json, fail, readJson, ensureSchema, cleanText, cleanEmail, rateLimit, clientIp, effectivePlan, PLAN_LEVEL } from '../../src/lib.js';
+import { json, fail, readJson, ensureSchema, cleanText, cleanEmail, rateLimit, clientIp, effectivePlan, PLAN_LEVEL, getCookie } from '../../src/lib.js';
+import { track, notify } from '../../src/crm.js';
 
 // Captura de contato feita na página pública de um cliente
 export async function onRequestPost({ request, env }) {
@@ -16,5 +17,8 @@ export async function onRequestPost({ request, env }) {
   if (phone.length < 10 && !email) return fail('Escreva seu WhatsApp com DDD.');
   await env.DB.prepare('INSERT INTO contacts (user_id, name, phone, email, source, created_at) VALUES (?, ?, ?, ?, ?, ?)')
     .bind(u.id, name, phone, email, cleanText(b.source, 80), Date.now()).run();
+  const aff = String(getCookie(request, 'wl_a' + u.id) || '').replace(/[^a-z0-9]/gi, '').slice(0, 20);
+  await track(env, u.id, { phone, name, email, kind: 'contato', title: cleanText(b.source, 80) || 'Deixou o contato', aff });
+  await notify(env, u.id, 'contato', 'Novo contato: ' + (name || phone), '/painel/clientes');
   return json({ ok: true });
 }

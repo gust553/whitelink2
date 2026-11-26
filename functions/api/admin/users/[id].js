@@ -20,7 +20,7 @@ export async function onRequestGet({ request, env, params }) {
   const fraud = await env.DB.prepare('SELECT kind, detail, created_at FROM fraud_log WHERE user_id = ? ORDER BY id DESC LIMIT 10').bind(u.id).all();
   return json({ ok: true, user: {
     id: u.id, name: u.name, email: u.email, phone: u.phone, instagram: u.instagram, handle: u.handle, status: u.status, admin: !!u.is_admin,
-    plan: p.plan, trial: p.trial, until: p.until, paidPlan: u.plan, paidUntil: u.plan_until, trialUntil: u.trial_until, createdAt: u.created_at,
+    plan: p.agency ? 'agencia' : p.plan, trial: p.trial, until: p.until, paidPlan: u.plan, paidUntil: u.plan_until, trialUntil: u.trial_until, createdAt: u.created_at,
     visits: v.n, referrals: refs.n, referredBy: by ? by.name + ' (@' + by.handle + ')' : ''
   }, orders: (orders.results || []).map((o) => orderView(o, s)), fraud: fraud.results || [] });
 }
@@ -34,7 +34,7 @@ export async function onRequestPost({ request, env, params }) {
   const b = (await readJson(request)) || {};
   const now = Date.now(), DAY = 86400000;
   if (b.action === 'plan') {
-    const plan = ['prata', 'ouro', 'diamante'].includes(b.plan) ? b.plan : null;
+    const plan = ['prata', 'ouro', 'diamante', 'agencia'].includes(b.plan) ? b.plan : null;
     if (!plan) return fail('Plano inválido.');
     const days = Math.max(1, Math.min(3650, parseInt(b.days, 10) || 30));
     if (plan === 'prata') await env.DB.prepare("UPDATE users SET plan = 'prata', plan_until = NULL, trial_until = CASE WHEN trial_until > ? THEN ? ELSE trial_until END WHERE id = ?").bind(now, now, u.id).run();

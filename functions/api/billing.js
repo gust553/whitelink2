@@ -15,7 +15,7 @@ export async function onRequestGet({ request, env }) {
   const hist = await env.DB.prepare("SELECT * FROM orders WHERE user_id = ? AND status = 'liberado' ORDER BY id DESC LIMIT 24").bind(u.id).all();
   const paid = (hist.results || []).length;
   const prices = {};
-  for (const p of ['ouro', 'diamante']) for (const per of ['m', 'y']) prices[p + '_' + per] = { cents: priceOf(s, p, per), label: brl(priceOf(s, p, per)) };
+  for (const p of ['ouro', 'diamante', 'agencia']) for (const per of ['m', 'y']) prices[p + '_' + per] = { cents: priceOf(s, p, per), label: brl(priceOf(s, p, per)) };
   return json({
     ok: true, user: publicUser(u), prices,
     open: open ? orderView(open, s, open.method === 'gateway' ? ((await env.DB.prepare('SELECT pix FROM order_gw WHERE order_id = ?').bind(open.id).first()) || {}).pix : '') : null,

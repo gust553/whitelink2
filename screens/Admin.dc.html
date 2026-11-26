@@ -152,7 +152,8 @@ textarea.inp{height:auto;min-height:90px;padding:12px 14px;resize:vertical;font-
           <div class="sec-t" style="margin-top: 4px">Preços (R$)</div>
           <div class="card" style="padding: 16px">
             <div class="grid2"><label class="fld">Ouro mensal<input class="inp" inputmode="decimal" value="{{p.ouro_m}}" onInput="{{set_ouro_m}}"></label><label class="fld">Ouro anual<input class="inp" inputmode="decimal" value="{{p.ouro_y}}" onInput="{{set_ouro_y}}"></label></div>
-            <div class="grid2"><label class="fld" style="margin: 0">Diamante mensal<input class="inp" inputmode="decimal" value="{{p.diamante_m}}" onInput="{{set_diamante_m}}"></label><label class="fld" style="margin: 0">Diamante anual<input class="inp" inputmode="decimal" value="{{p.diamante_y}}" onInput="{{set_diamante_y}}"></label></div>
+            <div class="grid2"><label class="fld">Diamante mensal<input class="inp" inputmode="decimal" value="{{p.diamante_m}}" onInput="{{set_diamante_m}}"></label><label class="fld">Diamante anual<input class="inp" inputmode="decimal" value="{{p.diamante_y}}" onInput="{{set_diamante_y}}"></label></div>
+            <div class="grid2"><label class="fld" style="margin: 0">Agência mensal<input class="inp" inputmode="decimal" value="{{p.agencia_m}}" onInput="{{set_agencia_m}}"></label><label class="fld" style="margin: 0">Agência anual<input class="inp" inputmode="decimal" value="{{p.agencia_y}}" onInput="{{set_agencia_y}}"></label></div>
           </div>
           <div class="sec-t">Fidelidade</div>
           <div class="card" style="padding: 16px"><div class="grid2"><label class="fld" style="margin: 0">A cada quantas renovações<input class="inp" inputmode="numeric" value="{{s.loyalty_every}}" onInput="{{set_loyalty_every}}"></label><label class="fld" style="margin: 0">Dias grátis<input class="inp" inputmode="numeric" value="{{s.loyalty_days}}" onInput="{{set_loyalty_days}}"></label></div></div>
@@ -350,7 +351,7 @@ class Component extends DCLogic {
   }
   async saveCfg() {
     const c = this.state.cfg;
-    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp'] : this.state.sub === 'dominios' ? ['cf_token', 'cf_zone'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'loyalty_every', 'loyalty_days'];
+    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp'] : this.state.sub === 'dominios' ? ['cf_token', 'cf_zone'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y', 'loyalty_every', 'loyalty_days'];
     const body = {};
     for (const k of keys) body[k] = k.startsWith('price_') ? (c['_' + k] !== undefined ? c['_' + k] : (c[k] / 100).toFixed(2).replace('.', ',')) : c[k];
     const r = await DC.api('admin/settings', 'PUT', body);
@@ -393,8 +394,8 @@ class Component extends DCLogic {
     const b = s.badges || {};
     const fmtD = (t) => t ? new Date(t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
     const fmtDay = (t) => t ? new Date(t).toLocaleDateString('pt-BR') : '—';
-    const PN = { prata: 'Prata', ouro: 'Ouro', diamante: 'Diamante' };
-    const PC = { prata: 'background: #26262F; color: #C9C9D6', ouro: 'background: rgba(242,193,78,.16); color: #F2C14E', diamante: 'background: rgba(143,227,255,.14); color: #8FE3FF' };
+    const PN = { prata: 'Prata', ouro: 'Ouro', diamante: 'Diamante', agencia: 'Agência' };
+    const PC = { prata: 'background: #26262F; color: #C9C9D6', ouro: 'background: rgba(242,193,78,.16); color: #F2C14E', diamante: 'background: rgba(143,227,255,.14); color: #8FE3FF', agencia: 'background: rgba(212,255,58,.14); color: #D4FF3A' };
     const SUBT = { dominios: 'Domínio próprio', pagto: 'Formas de pagamento', precos: 'Planos e preços', indicacoes: 'Indicações', antifraude: 'Antifraude' };
     const sec = s.sec, sub = s.sub, ready = !s.loading;
     const v = {
@@ -430,7 +431,7 @@ class Component extends DCLogic {
     if (v.cli) {
       v.q = s.q;
       v.setQ = (e) => { this.setState({ q: e.target.value }); clearTimeout(this.qt); this.qt = setTimeout(() => this.go('clientes'), 350); };
-      v.cliTabs = [['todos', 'Todos'], ['teste', 'Em teste'], ['ouro', 'Ouro'], ['diamante', 'Diamante'], ['prata', 'Prata'], ['bloqueado', 'Bloqueados']].map((t) => ({ name: t[1], sel: s.f === t[0], go: () => { this.setState({ f: t[0] }); setTimeout(() => this.go('clientes'), 0); } }));
+      v.cliTabs = [['todos', 'Todos'], ['teste', 'Em teste'], ['ouro', 'Ouro'], ['diamante', 'Diamante'], ['agencia', 'Agência'], ['prata', 'Prata'], ['bloqueado', 'Bloqueados']].map((t) => ({ name: t[1], sel: s.f === t[0], go: () => { this.setState({ f: t[0] }); setTimeout(() => this.go('clientes'), 0); } }));
       v.users = (d.users || []).map((u) => ({ name: u.name + (u.admin ? ' · admin' : ''), sub: '@' + u.handle + ' · ' + u.email + (u.status === 'bloqueado' ? ' · BLOQUEADO' : ''), plan: u.trial ? 'Teste' : PN[u.plan], chip: u.status === 'bloqueado' ? 'background: rgba(255,90,95,.14); color: #FF8A8E' : u.trial ? 'background: rgba(185,166,255,.16); color: #C8BCFF' : PC[u.plan], open: () => this.openUser(u.id) }));
       v.noUsers = !v.users.length;
     }
@@ -455,12 +456,12 @@ class Component extends DCLogic {
       v.modePix = () => this.setCfg('pay_mode', 'pix'); v.modeGw = () => this.setCfg('pay_mode', 'gateway');
       v.modeText = c.pay_mode === 'gateway' ? 'Gateway ligado: o cliente paga o Pix gerado pelo Mercado Pago e o plano libera sozinho, sem comprovante.' : 'Pix direto: o cliente paga na sua chave Pix, envia o comprovante e você libera em Pagamentos.';
       v.p = {};
-      for (const k of ['ouro_m', 'ouro_y', 'diamante_m', 'diamante_y']) {
+      for (const k of ['ouro_m', 'ouro_y', 'diamante_m', 'diamante_y', 'agencia_m', 'agencia_y']) {
         v.p[k] = c['_price_' + k] !== undefined ? c['_price_' + k] : (c['price_' + k] / 100).toFixed(2).replace('.', ',');
         v['set_' + k] = ((kk) => (e) => this.setCfg('_price_' + kk, e.target.value))(k);
       }
       const WP = window.WL_PLANOS || {};
-      v.planInfo = [['Prata (grátis)', 'prata'], ['Ouro', 'ouro'], ['Diamante', 'diamante']].map((r) => ({ t: r[0], d: (WP[r[1]] || []).join(' · ') }));
+      v.planInfo = [['Prata (grátis)', 'prata'], ['Ouro', 'ouro'], ['Diamante', 'diamante'], ['Agência', 'agencia']].map((r) => ({ t: r[0], d: (WP[r[1]] || []).join(' · ') }));
     }
     if (v.refs) {
       v.refKpis = [{ v: d.signups, l: 'cadastros por indicação' }, { v: (d.rewards || []).filter((r) => r.status === 'aguardando').length, l: 'prêmios aguardando' }];
@@ -499,7 +500,7 @@ class Component extends DCLogic {
       v.ud = {
         name: u.name,
         kv: [['Plano', planTxt], ['E-mail', u.email], ['Celular', u.phone], ['Instagram', '@' + u.instagram], ['Página', 'whitelink.site/' + u.handle], ['Visitas', String(u.visits)], ['Cadastro', fmtD(u.createdAt)], ['Indicou', u.referrals + ' amigos'], ['Indicado por', u.referredBy || '—'], ['Situação', u.status]].map((x) => ({ k: x[0], v: x[1] })),
-        planOpts: [['ouro', 'Ouro'], ['diamante', 'Diamante'], ['prata', 'Prata']].map((p) => ({ v: p[0], n: p[1], sel: sh.plan === p[0] })),
+        planOpts: [['ouro', 'Ouro'], ['diamante', 'Diamante'], ['agencia', 'Agência'], ['prata', 'Prata']].map((p) => ({ v: p[0], n: p[1], sel: sh.plan === p[0] })),
         setPlan: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { plan: e.target.value }) }),
         days: sh.days, setDays: (e) => this.setState({ sheet: Object.assign({}, this.state.sheet, { days: e.target.value }) }),
         applyPlan: () => this.userAct({ action: 'plan', plan: sh.plan, days: sh.days }, sh.plan === 'prata' ? 'Passar para o Prata agora?' : 'Dar ' + PN[sh.plan] + ' por ' + sh.days + ' dias a partir de hoje?'),

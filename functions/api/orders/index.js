@@ -8,7 +8,7 @@ export async function onRequestPost({ request, env }) {
   const u = await currentUser(env, request);
   if (!u) return fail('Entre na sua conta.', 401);
   const b = (await readJson(request)) || {};
-  const plan = ['ouro', 'diamante'].includes(b.plan) ? b.plan : null;
+  const plan = ['ouro', 'diamante', 'agencia'].includes(b.plan) ? b.plan : null;
   const period = b.period === 'y' ? 'y' : 'm';
   if (!plan) return fail('Escolha o plano.');
   if (!(await rateLimit(env, 'order:' + u.id, 10, 3600000))) return fail('Muitos pedidos em pouco tempo. Tente mais tarde.', 429);
