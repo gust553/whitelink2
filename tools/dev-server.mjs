@@ -63,7 +63,8 @@ function mockGW(url, o) {
   return res({ message: 'not found' }, 404);
 }
 // IA de teste (só no servidor local)
-const MOCK_AI = { run: async (m, o) => ({ response: JSON.stringify(['Sugestão 1 para: ' + o.messages[1].content.slice(0, 30), 'Sugestão 2', 'Sugestão 3']) }) };
+// como na Cloudflare de hoje: modelos antigos (desativados em 30/05/2026) dão erro
+const MOCK_AI = { run: async (m, o) => { if (!['@cf/meta/llama-3.3-70b-instruct-fp8-fast', '@cf/meta/llama-3.1-8b-instruct-fast'].includes(m)) throw new Error('5028: model deprecated ' + m); if (m.includes('70b') && /FALHA70/.test(o.messages[1].content)) throw new Error('capacidade'); return ({ response: JSON.stringify(['Sugestão 1 para: ' + o.messages[1].content.slice(0, 30), 'Sugestão 2', 'Sugestão 3']) }); } };
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const db = new DatabaseSync(':memory:');
 db.exec(fs.readFileSync(path.join(ROOT, 'schema-console.sql'), 'utf8'));

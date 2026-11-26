@@ -47,7 +47,7 @@ export async function onRequestPut({ request, env }) {
   if (b.cf_token !== undefined && !String(b.cf_token).startsWith('••••')) patch.cf_token = String(b.cf_token).trim().slice(0, 200);
   if (b.cf_zone !== undefined) { const z = String(b.cf_zone).trim().toLowerCase(); if (z && !/^[a-f0-9]{32}$/.test(z)) return fail('O ID da zona tem 32 letras e números. Confira se copiou certo.'); patch.cf_zone = z; }
   for (const k of ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y']) {
-    if (b[k] !== undefined) { const c = Math.round(parseFloat(String(b[k]).replace(/\./g, '').replace(',', '.')) * 100); if (!(c >= 100 && c <= 10000000)) return fail('Preço inválido.'); patch[k] = String(c); }
+    if (b[k] !== undefined) { const c = Math.round(parseFloat(String(b[k]).replace(/\./g, '').replace(',', '.')) * 100); if (!(c >= 1 && c <= 10000000)) return fail('Preço inválido: use de R$ 0,01 a R$ 100.000,00.'); patch[k] = String(c); }
   }
   for (const k of ['order_hours', 'ref_bonus_days', 'loyalty_every', 'loyalty_days']) {
     if (b[k] !== undefined) { const n = parseInt(b[k], 10); if (!(n >= 0 && n <= 999)) return fail('Número inválido.'); patch[k] = String(n); }

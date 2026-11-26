@@ -3,7 +3,8 @@ import { statsData } from './stats.js';
 
 // Assistente de IA (Cloudflare Workers AI). Ouro: 20 usos por mês. Diamante: 500.
 const LIMIT = [0, 20, 500];
-const MODEL = '@cf/meta/llama-3.1-8b-instruct';
+// modelos ativos na Cloudflare (o llama-3.1-8b-instruct foi desativado em 30/05/2026). Tenta o 1º; se falhar, o 2º.
+const MODELS = ['@cf/meta/llama-3.3-70b-instruct-fp8-fast', '@cf/meta/llama-3.1-8b-instruct-fast'];
 
 const TASKS = {
   bio: (i) => `Escreva 4 opções de descrição curta (até 150 caracteres cada) para a página de links de um criador brasileiro. Sobre a pessoa: "${i}". Tom próximo, com no máximo 1 emoji por opção.`,
@@ -46,18 +47,36 @@ export async function onRequestPost({ request, env }) {
     if (!input) return fail('Escreva um pouco sobre o que você quer.');
     prompt = TASKS[b.task](input);
   } else return fail('Pedido inválido.');
-  let out;
-  try {
-    const r = await env.AI.run(MODEL, { messages: [
-      { role: 'system', content: 'Responda sempre em português do Brasil. Responda APENAS com um array JSON de strings, sem texto antes ou depois.' },
-      { role: 'user', content: prompt }
-    ], max_tokens: 600, temperature: 0.8 });
-    const txt = String((r && (r.response || r.result)) || '');
-    const m = txt.match(/\[[\s\S]*\]/);
-    out = m ? JSON.parse(m[0]) : txt.split('\n').map((x) => x.replace(/^\s*[-*\d.)"]+\s*/, '').replace(/"$/, '').trim()).filter(Boolean);
-    out = out.map((x) => String(typeof x === 'object' ? Object.values(x).join(' ') : x).trim()).filter(Boolean).slice(0, 6);
-  } catch (e) { return fail('A IA não conseguiu responder agora. Tente de novo.', 502); }
+  let out = [], lastErr = '';
+  for (const MODEL of MODELS) {
+    try {
+      const r = await env.AI.run(MODEL, { messages: [
+        { role: 'system', content: 'Responda sempre em português do Brasil. Responda APENAS com um array JSON de strings, sem texto antes ou depois.' },
+        { role: 'user', content: prompt }
+      ], max_tokens: 600, temperature: 0.8 });
+      out = parseAI(r);
+      if (out.length) break;
+      lastErr = MODEL + ': resposta vazia';
+    } catch (e) { lastErr = MODEL + ': ' + String((e && e.message) || e).slice(0, 200); }
+  }
+  if (!out.length) console.log('IA falhou', lastErr);
   if (!out.length) return fail('A IA não conseguiu responder agora. Tente de novo.', 502);
   await env.DB.prepare('INSERT INTO ai_usage (user_id, month, n) VALUES (?, ?, 1) ON CONFLICT(user_id, month) DO UPDATE SET n = n + 1').bind(u.id, month).run();
   return json({ ok: true, items: out, left: LIMIT[lvl] - used - 1 });
+}
+
+// Lê a resposta da IA em qualquer formato (texto com JSON, JSON pronto, lista com marcadores)
+export function parseAI(r) {
+  let v = r && (r.response !== undefined ? r.response : r.result !== undefined ? r.result : r);
+  if (v && typeof v === 'object' && !Array.isArray(v)) v = v.items || v.options || v.response || Object.values(v).find(Array.isArray) || JSON.stringify(v);
+  let list;
+  if (Array.isArray(v)) list = v;
+  else {
+    const txt = String(v || '');
+    const m = txt.match(/\[[\s\S]*\]/);
+    if (m) { try { list = JSON.parse(m[0]); } catch (e) { list = null; } }
+    if (!list && /\[\s*"/.test(txt)) { const q = [...txt.matchAll(/"([^"\n]{3,})"/g)].map((x) => x[1]); if (q.length) list = q; }
+    if (!list) list = txt.split('\n').map((x) => x.replace(/^\s*[-*\d.)"\[\]]+\s*/, '').replace(/",?\s*$/, '').trim()).filter((x) => x.length > 2);
+  }
+  return list.map((x) => String(x && typeof x === 'object' ? Object.values(x).join(' ') : x).trim()).filter(Boolean).slice(0, 6);
 }
