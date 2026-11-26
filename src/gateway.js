@@ -4,6 +4,17 @@ import { releaseOrder } from './billing.js';
 
 const MP = 'https://api.mercadopago.com/v1/payments';
 
+// Confere o token no Mercado Pago (quem é a conta). Devolve { ok, account } ou { ok:false, error, offline }
+export async function gatewayCheck(token) {
+  try {
+    const r = await fetch('https://api.mercadopago.com/users/me', { headers: { authorization: 'Bearer ' + token } });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 401 || r.status === 403) return { ok: false, error: 'O Mercado Pago recusou este token. Confira se copiou o Access Token de produção inteiro.' };
+    if (!r.ok) return { ok: false, offline: true, error: 'O Mercado Pago não respondeu agora. Tente de novo em alguns minutos.' };
+    return { ok: true, account: [d.nickname, d.email].filter(Boolean).join(' · ') || 'Conta ' + (d.id || '') };
+  } catch (e) { return { ok: false, offline: true, error: 'Sem conexão com o Mercado Pago agora.' }; }
+}
+
 export function gatewayReady(s) {
   return s.pay_mode === 'gateway' && s.gw_provider === 'mercadopago' && String(s.gw_token || '').length > 20;
 }
@@ -21,7 +32,7 @@ async function create(env, s, o, u) {
       payment_method_id: 'pix',
       external_reference: o.code,
       notification_url: 'https://whitelink.site/api/webhooks/gateway',
-      date_of_expiration: new Date(o.expires_at).toISOString().replace('Z', '-00:00'),
+      date_of_expiration: new Date(o.expires_at).toISOString().replace(/\.\d+Z$/, '.000-00:00'),
       payer: { email: u.email, first_name: String(u.name).split(' ')[0] }
     })
   });

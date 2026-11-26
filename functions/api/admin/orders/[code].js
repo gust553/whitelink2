@@ -1,4 +1,4 @@
-import { json, fail, readJson, requireAdmin, cleanText } from '../../../../src/lib.js';
+import { json, fail, readJson, requireAdmin, cleanText, adminLog } from '../../../../src/lib.js';
 import { getSettings, orderView, releaseOrder } from '../../../../src/billing.js';
 
 async function load(env, params) {
@@ -31,11 +31,12 @@ export async function onRequestGet({ request, env, params }) {
 
 // Liberar, recusar ou bloquear
 export async function onRequestPost({ request, env, params }) {
-  const [, err] = await requireAdmin(env, request);
+  const [admin, err] = await requireAdmin(env, request);
   if (err) return err;
   const o = await load(env, params);
   if (!o) return fail('Pedido não encontrado.', 404);
   const b = (await readJson(request)) || {};
+  if (['approve', 'reject', 'block'].includes(b.action)) await adminLog(env, admin.id, { approve: 'liberou', reject: 'recusou', block: 'bloqueou (fraude)' }[b.action] + ' pedido ' + o.code, o.user_id);
   if (b.action === 'approve') {
     if (!['conferir', 'aguardando', 'recusado'].includes(o.status)) return fail('Este pedido não pode ser liberado.');
     await releaseOrder(env, o);
@@ -46,6 +47,8 @@ export async function onRequestPost({ request, env, params }) {
     return json({ ok: true });
   }
   if (b.action === 'block') {
+    const tu = await env.DB.prepare('SELECT is_admin FROM users WHERE id = ?').bind(o.user_id).first();
+    if (tu && tu.is_admin) return fail('Não dá para bloquear um admin.');
     await env.DB.prepare("UPDATE orders SET status = 'bloqueado', note = ? WHERE id = ?").bind(cleanText(b.note, 200) || 'Pagamento com indício de fraude.', o.id).run();
     await env.DB.prepare("UPDATE users SET status = 'bloqueado' WHERE id = ?").bind(o.user_id).run();
     await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(o.user_id).run();
