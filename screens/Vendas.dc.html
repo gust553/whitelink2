@@ -26,6 +26,8 @@
 .gbar{height:12px;border-radius:999px;background:#26262F;overflow:hidden;margin:8px 0}.gbar i{display:block;height:100%;background:linear-gradient(90deg,#D4FF3A,#7CF5D0)}
 .note{font-size:13px;color:#9C9CAD;line-height:1.5}
 select.inp{appearance:none}
+.grid2>*{min-width:0}input[type=time].inp{width:100%;min-width:0;-webkit-appearance:none;appearance:none}
+.onpage{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin-bottom:12px}.onpage b{font-size:15px}.onpage p{margin:4px 0 0;font-size:13.5px;color:#C9C9D6;line-height:1.5}.onpage.off{border-color:#4A3A14;background:#1D1A10}
 textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
 </style>
 </helmet>
@@ -43,6 +45,21 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
     <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
     <div>
       <div class="chips" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button role="tab" onClick="{{t.go}}" aria-pressed="{{t.sel}}">{{t.name}}</button></sc-for></div>
+
+      <sc-if value="{{op}}" hint-placeholder-val="{{ false }}">
+        <div class="{{op.cls}}" role="status">
+          <span style="font-size: 22px; line-height: 1">{{op.icon}}</span>
+          <div style="flex: 1; min-width: 0">
+            <b>{{op.title}}</b>
+            <p>{{op.text}}</p>
+            <p style="color: #9C9CAD"><b style="font-size: 13px; color: #C9C9D6">Como o cliente usa:</b> {{op.how}}</p>
+            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap">
+              <sc-if value="{{op.off}}" hint-placeholder-val="{{ false }}"><button class="btn mini" onClick="{{op.show}}" style="height: 40px; padding: 0 16px">{{op.btn}}</button></sc-if>
+              <a class="btn ghost mini" href="{{op.href}}" target="_blank" rel="noopener" style="height: 40px; padding: 0 16px">Ver minha página</a>
+            </div>
+          </div>
+        </div>
+      </sc-if>
 
       <!-- PEDIDOS -->
       <sc-if value="{{tPed}}" hint-placeholder-val="{{ true }}">
@@ -110,7 +127,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
             <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}"><label class="fld" style="margin: 0">Dias bloqueados (folgas, feriados)<input class="inp" value="{{blockedText}}" onInput="{{setBlocked}}" placeholder="25/12, 01/01"></label></sc-if>
           </div>
           <button class="btn full" onClick="{{saveAgenda}}" style="margin-top: 14px">Salvar agenda</button>
-          <p class="note" style="text-align: center">Depois, adicione o bloco <b>Agenda</b> na sua página.</p>
+          
         </div>
       </sc-if>
 
@@ -214,7 +231,16 @@ class Component extends DCLogic {
     this.state = { d: null, tab: ['pedidos', 'loja', 'agenda', 'apoios', 'quiz'].includes(h) ? h : 'pedidos', kind: '', sales: [], sums: [], sheet: null, saved: '', err: '', toast: '' };
   }
   async componentDidMount() { await this.load(); this.loadSales(); }
+  async loadPage() { const e = await DC.api('editor'); if (e.ok) this.setState({ pblocks: e.blocks || [], phandle: (e.page && e.page.handle) || e.user.handle }); }
+  // põe o bloco na página (se ainda não estiver) e avisa
+  async showOnPage(kind, quiet) {
+    const r = await DC.api('editor', 'POST', { show: kind });
+    if (!r.ok) { this.setState({ err: r.error }); return; }
+    await this.loadPage();
+    if (r.added || !quiet) this.flash(quiet ? 'Salvo ✓ e já está na sua página' : 'Pronto! Já aparece na sua página ✓');
+  }
   async load() {
+    this.loadPage();
     const d = await DC.api('biz');
     if (d.status === 401) { location.href = '/entrar'; return; }
     if (!d.ok) return;
@@ -226,10 +252,10 @@ class Component extends DCLogic {
   }
   async loadSales() { const r = await DC.api('sales' + (this.state.kind ? '?k=' + this.state.kind : '')); if (r.ok) this.setState({ sales: r.sales, sums: r.sums }); }
   flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
-  async put(body, msg) {
+  async put(body, msg, kind) {
     const r = await DC.api('biz', 'PUT', body);
     this.setState({ err: r.ok ? '' : r.error });
-    if (r.ok) { this.flash(msg || 'Salvo ✓'); await this.load(); }
+    if (r.ok) { this.flash(msg || 'Salvo ✓'); await this.load(); if (kind) await this.showOnPage(kind, true); }
   }
   ph(k, v) { this.setState({ pay: Object.assign({}, this.state.pay, { [k]: v }) }); }
   agSet(p) { this.setState({ ag: Object.assign({}, this.state.ag, p) }); }
@@ -249,6 +275,23 @@ class Component extends DCLogic {
       loading: false, ready: true, saved: s.saved, err: s.err, toast: s.toast, dia: dia, notDia: !dia,
       tabs: [['pedidos', 'Pedidos'], ['loja', 'Loja'], ['agenda', 'Agenda'], ['apoios', 'Apoios'], ['quiz', 'Quiz']].map((t) => ({ name: t[1], sel: tab === t[0], go: () => { history.replaceState(null, '', '#' + t[0]); this.setState({ tab: t[0], err: '' }); } })),
       tabHelp: { pedidos: 'pedidos', loja: 'loja', agenda: 'agenda', apoios: 'apoio', quiz: 'quiz' }[tab],
+      op: (() => {
+        const K = { loja: 'store', agenda: 'booking', apoios: 'support', quiz: 'quiz' }[tab];
+        if (!K || !s.pblocks) return '';
+        const N = { store: 'a Loja', booking: 'a Agenda', support: 'os Apoios', quiz: 'o Quiz' }[K];
+        const HOW = { store: 'na sua página aparece o botão da loja. O cliente escolhe os produtos, paga por Pix e o pedido chega aqui em Pedidos.', booking: 'o cliente toca em "Agendar horário", escolhe o serviço, o dia e um horário livre. O agendamento chega em Pedidos e no seu WhatsApp.', support: 'o cliente vê a barra da meta, escolhe um valor e apoia por Pix. Quando você confirma o Pix em Pedidos, o valor entra na barra.', quiz: 'o cliente toca no botão, responde as perguntas e no fim recebe o resultado com o botão de compra que você escolheu.' }[K];
+        const b = s.pblocks.find((x) => x.kind === K), on = !!(b && b.on !== false), h = s.phandle || d.handle;
+        // o que falta para o botão aparecer de verdade na página
+        const qok = (d.quizzes || []).some((q) => (q.questions || []).length && (q.results || []).some((r) => r && r.title));
+        const miss = { store: (d.products || []).some((p) => p.active !== 0 && p.active !== false) ? '' : 'Cadastre pelo menos 1 produto (toque em + Novo produto).',
+          booking: (d.agenda.services || []).length ? '' : 'Cadastre pelo menos 1 serviço: toque em + Serviço, preencha e toque em Salvar agenda.',
+          support: d.pay && d.pay.key ? '' : 'Cadastre sua chave Pix em Pedidos › Recebimentos por Pix (é para onde os apoios vão).',
+          quiz: qok ? '' : 'Preencha pelo menos 1 resultado e 1 pergunta com respostas e toque em Salvar quiz.' }[K];
+        const base = { how: HOW, href: '/' + h, show: () => this.showOnPage(K), btn: 'Mostrar na minha página' };
+        if (on && !miss) return Object.assign(base, { cls: 'card onpage', icon: '✅', title: 'Aparece na sua página', text: 'O botão "' + (b.title || '') + '" está em whitelink.site/' + h + '. Para mudar o texto ou a posição, vá em Página.', off: false });
+        if (on) return Object.assign(base, { cls: 'card onpage off', icon: '⚠️', title: 'Quase lá: ainda fica escondido', text: 'Já está na sua página, mas só aparece para os clientes quando estiver completo. Falta: ' + miss, off: false });
+        return Object.assign(base, { cls: 'card onpage off', icon: '👀', title: 'Ainda não aparece na sua página', text: miss ? 'Falta: ' + miss + ' Ao salvar, já colocamos na sua página.' : 'Seus clientes só veem ' + N + ' depois que ' + { store: 'ela entra', booking: 'ela entra', support: 'eles entram', quiz: 'ele entra' }[K] + ' na página. É só tocar no botão abaixo.', off: !miss });
+      })(),
       tPed: tab === 'pedidos', tLoja: tab === 'loja', tAg: tab === 'agenda', tAp: tab === 'apoios', tQz: tab === 'quiz',
       close: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation()
     };
@@ -296,7 +339,7 @@ class Component extends DCLogic {
       v.saveAgenda = () => {
         const yr = new Date().getFullYear();
         const blocked = String(v.blockedText || '').split(/[,\s]+/).filter(Boolean).map((x) => { const m = x.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?$/); if (!m) return ''; let y = +(m[3] || yr); const iso = y + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); if (!m[3] && iso < new Date().toISOString().slice(0, 10)) y++; return y + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); }).filter(Boolean);
-        this.put({ agenda: { services: ag.services, days: ag.days, from: ag.from, to: ag.to, step: ag.step, blocked } }, 'Agenda salva ✓');
+        this.put({ agenda: { services: ag.services, days: ag.days, from: ag.from, to: ag.to, step: ag.step, blocked } }, 'Agenda salva ✓', ag.services.length ? 'booking' : '');
       };
     }
     if (tab === 'apoios') {
@@ -305,7 +348,7 @@ class Component extends DCLogic {
       v.supText = brl(s.sup.raised) + ' de ' + brl(s.sup.cents) + ' · ' + s.sup.count + (s.sup.count === 1 ? ' apoio confirmado' : ' apoios confirmados');
       v.setSupTitle = (e) => this.setState({ sup: Object.assign({}, s.sup, { title: e.target.value }) });
       v.setSupGoal = (e) => this.setState({ sup: Object.assign({}, s.sup, { goal: e.target.value }) });
-      v.saveSupport = () => this.put({ support: { title: s.sup.title, goal: s.sup.goal } }, 'Meta salva ✓');
+      v.saveSupport = () => this.put({ support: { title: s.sup.title, goal: s.sup.goal } }, 'Meta salva ✓', 'support');
       v.resetSupport = () => { if (confirm('Começar uma meta nova? O valor arrecadado volta para zero (os apoios continuam no histórico).')) this.put({ support: { title: s.sup.title, goal: s.sup.goal, reset: true } }, 'Meta nova começou ✓'); };
     }
     if (tab === 'quiz') {
@@ -327,7 +370,7 @@ class Component extends DCLogic {
       v.quizFull = Q.length >= (dia ? 30 : 1);
       v.addQuizLabel = v.quizFull && !dia ? 'Mais quizzes só no Diamante' : '+ Novo quiz';
       v.addQuiz = () => this.qz((a) => { a.push({ title: '', intro: '', askContact: true, results: [{ title: '', text: '', btn: '', url: '' }, { title: '', text: '', btn: '', url: '' }], questions: [{ q: '', options: [{ t: '', r: 0 }, { t: '', r: 1 }] }] }); });
-      v.saveQuiz = () => this.put({ quizzes: Q }, 'Quiz salvo ✓');
+      v.saveQuiz = () => this.put({ quizzes: Q }, 'Quiz salvo ✓', 'quiz');
     }
     const sh = s.sheet;
     v.ps = !!(sh && sh.kind === 'prod'); v.ss = !!(sh && sh.kind === 'sale');
@@ -339,7 +382,7 @@ class Component extends DCLogic {
         aiLabel: p.aiBusy ? 'Pensando…' : 'Escrever descrição com IA', aiItems: (p.aiItems || []).map((t) => ({ t, use: () => up({ descr: t.slice(0, 300), aiItems: null }) })),
         ai: async () => { if (!p.name) { up({ err: 'Escreva o nome do produto primeiro.' }); return; } up({ aiBusy: true, err: '' }); const r = await DC.ai('product', p.name + (p.price ? ' — R$ ' + p.price : '')); const cur = this.state.sheet.p; this.setState({ sheet: { kind: 'prod', p: Object.assign({}, cur, { aiBusy: false, aiItems: r.ok ? r.items : null, err: r.ok ? '' : r.error }) } }); },
         setName: (e) => up({ name: e.target.value }), setPrice: (e) => up({ price: e.target.value }), setStock: (e) => up({ stock: e.target.value }), setDescr: (e) => up({ descr: e.target.value }),
-        save: async () => { const r = await DC.api('products', 'POST', p); if (!r.ok) { up({ err: r.error }); return; } this.setState({ sheet: null }); this.flash('Produto salvo ✓'); this.load(); },
+        save: async () => { if (this.saving) return; this.saving = true; const r = await DC.api('products', 'POST', p); this.saving = false; if (!r.ok) { up({ err: r.error }); return; } this.setState({ sheet: null }); this.flash('Produto salvo ✓'); this.load(); this.showOnPage('store', true); },
         del: async () => { if (!confirm('Apagar este produto?')) return; await DC.api('products?id=' + p.id, 'DELETE'); this.setState({ sheet: null }); this.load(); } };
     }
     if (v.ss) {

@@ -47,3 +47,29 @@ export async function onRequestPut({ request, env }) {
   ).bind(u.id, cleanText(b.title, 60), cleanText(b.bio, 160), now).run();
   return json({ ok: true });
 }
+
+// Vendas › "Mostrar na minha página": põe (ou religa) o bloco da Loja, Agenda, Apoio ou Quiz, sem mexer no resto
+const SHOW = { store: 'Minha loja', booking: 'Agendar horário', support: 'Quero apoiar', quiz: 'Faça o quiz' };
+export async function onRequestPost({ request, env }) {
+  await ensureSchema(env);
+  const u = await currentUser(env, request);
+  if (!u) return fail('Entre na sua conta.', 401);
+  const b = (await readJson(request)) || {};
+  if (!SHOW[b.show]) return fail('Pedido inválido.');
+  const t = await pageTarget(env, u, request);
+  if (t.missing) return fail('Página não encontrada.', 404);
+  const cur = t.main ? await loadPage(env, u.id) : parsePageRow(t.row);
+  const blocks = cur.blocks;
+  const list = Array.isArray(blocks) ? blocks.slice() : [];
+  let blk = list.find((x) => x.kind === b.show), added = false;
+  if (blk) { if (blk.on === false) blk.on = true; else if (!b.force) return json({ ok: true, added: false, block: blk }); }
+  else {
+    blk = { id: list.reduce((m, x) => Math.max(m, +x.id || 0), 0) + 1, kind: b.show, title: SHOW[b.show], url: '', on: true };
+    list.unshift(blk); added = true; // no topo, para aparecer logo
+  }
+  const clean = cleanBlocks(list);
+  if (!clean) return fail('Não deu para salvar.');
+  if (t.main) await env.DB.prepare('INSERT INTO page_data (user_id, blocks, appearance, updated_at) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET blocks = excluded.blocks, updated_at = excluded.updated_at').bind(u.id, JSON.stringify(clean), JSON.stringify(cleanAppearance(cur.appearance || {})), Date.now()).run();
+  else await env.DB.prepare('UPDATE pages SET blocks = ? WHERE id = ?').bind(JSON.stringify(clean), t.row.id).run();
+  return json({ ok: true, added, block: blk });
+}
