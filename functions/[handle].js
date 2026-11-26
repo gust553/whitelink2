@@ -1,5 +1,8 @@
 import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, parsePageRow, BLOCK_NEED, PLAN_LEVEL, themeFor, customCss, cleanCustom, CUSTOM_FONTS } from '../src/lib.js';
 import { TEMA_FONTS } from '../src/temas.js';
+import { agendaCfg, brl } from '../src/biz.js';
+import { goalView } from './api/pub.js';
+import { getUserSettings as gus } from '../src/lib.js';
 
 const BASIC = ['noite', 'papel', 'oceano', 'brasa'];
 const FONTS = ["'Space Grotesk', Inter, sans-serif", 'Inter, system-ui, sans-serif', 'Georgia, serif'];
@@ -61,6 +64,21 @@ export async function onRequestGet(context) {
   ).bind(u.id, new Date().toISOString().slice(0, 10)).run());
   context.waitUntil(trackMeta(env, context.request, u.id));
 
+  // dados das vendas (só se a página usa esses blocos)
+  const kinds = new Set(shown.map((b) => b.kind));
+  const st = kinds.has('store') || kinds.has('booking') || kinds.has('support') || kinds.has('quiz') ? await gus(env, u.id) : {};
+  const pubData = { h, lvl };
+  if (kinds.has('store')) {
+    const pr = await env.DB.prepare('SELECT id, name, cents, image, descr, stock FROM products WHERE user_id = ? AND active = 1 ORDER BY position, id LIMIT ?').bind(u.id, lvl >= 2 ? 500 : 10).all();
+    pubData.products = (pr.results || []).map((p) => ({ id: p.id, name: p.name, cents: p.cents, price: brl(p.cents), image: p.image ? '/m/' + p.image : '', descr: p.descr || '', out: p.stock === 0 }));
+    pubData.coupons = lvl >= 2 && ((st.shop && st.shop.coupons) || []).length > 0;
+    pubData.ship = lvl >= 2 ? (st.shop && st.shop.shipping) || 0 : 0;
+    pubData.pix = lvl >= 2 && !!(st.pay && st.pay.key);
+  }
+  if (kinds.has('booking')) pubData.services = agendaCfg(st).services.slice(0, lvl >= 2 ? 30 : 1).map((x) => ({ id: x.id, name: x.name, minutes: x.minutes, price: x.cents ? brl(x.cents) : '', deposit: lvl >= 2 && x.deposit ? brl(x.deposit) : '' }));
+  if (kinds.has('booking')) pubData.days = agendaCfg(st).days;
+  if (kinds.has('support')) { pubData.goal = await goalView(env, { u, lvl, st }); pubData.supportPix = !!(st.pay && st.pay.key); }
+  if (kinds.has('quiz')) pubData.quizzes = (st.quizzes || []).map((q) => ({ id: q.id, title: q.title, intro: q.intro, askContact: q.askContact, questions: q.questions }));
   const go = (b, v) => `/go/${extra ? 'x' + extra.id : u.id}/${b.id}${v ? '?v=b' : ''}`;
   const parts = shown.map((b) => {
     const useB = lvl === 2 && b.titleB ? Math.random() * 100 >= (b.split || 50) : false;
@@ -88,6 +106,11 @@ export async function onRequestGet(context) {
         return `<div class="ph-card pub-col timer" data-end="${end}"><b>${t}</b><div class="tm"><span><b>--</b>dias</span><span><b>--</b>horas</span><span><b>--</b>min</span><span><b>--</b>seg</span></div></div>`;
       }
       case 'lead': return `<form class="ph-card pub-col lead" data-src="${t}"><b>${t}</b><input name="name" placeholder="Seu nome" maxlength="60" aria-label="Seu nome"><input name="phone" placeholder="Seu WhatsApp com DDD" inputmode="tel" aria-label="Seu WhatsApp" required><button type="submit" class="ph-btn main">Quero receber</button><span class="msg"></span></form>`;
+      case 'store': return pubData.products && pubData.products.length ? `<section class="pub-store"><b class="pub-sec">${t}</b><div class="pgrid">${pubData.products.map((p) => `<div class="pcard${p.out ? ' out' : ''}">${p.image ? `<img src="${p.image}" alt="" loading="lazy">` : '<div class="pimg"></div>'}<div class="pinfo"><span class="pname">${escapeHtml(p.name)}</span><span class="pprice">${p.price}</span></div><button type="button" class="padd" data-add="${p.id}"${p.out ? ' disabled' : ''}>${p.out ? 'Esgotado' : 'Adicionar'}</button></div>`).join('')}</div></section>` : '';
+      case 'booking': return pubData.services && pubData.services.length ? `<button type="button" class="ph-btn main${fx}" data-open="booking">📅 ${t}</button>` : '';
+      case 'support': { const g = pubData.goal; if (!g || !pubData.supportPix) return ''; return `<div class="ph-card pub-col goal"><b>${escapeHtml(g.title)}</b><div class="gbar"><i style="width:${g.pct}%"></i></div><div class="gnum"><span><b>${g.raisedLabel}</b> de ${g.goalLabel}</span><span>${g.count} ${g.count === 1 ? 'apoio' : 'apoios'}</span></div>${g.ranking && g.ranking.length ? `<div class="grank">${g.ranking.map((r, i) => `<span>${['🥇', '🥈', '🥉', '4º', '5º'][i]} ${escapeHtml(r.name)} <b>${r.value}</b></span>`).join('')}</div>` : ''}${g.messages && g.messages.length ? `<div class="gmsg">${g.messages.map((m) => `<p>“${escapeHtml(m.text)}” <span>— ${escapeHtml(m.name)}, ${m.value}</span></p>`).join('')}</div>` : ''}<button type="button" class="ph-btn main" data-open="support">💛 ${t}</button></div>`; }
+      case 'quiz': { const q = (pubData.quizzes || []).find((x) => x.id === b.url) || (pubData.quizzes || [])[0]; return q && q.questions.length ? `<button type="button" class="ph-btn main${fx}" data-quiz="${q.id}">✨ ${t}</button>` : ''; }
+      case 'mediakit': return lvl >= 1 ? `<a class="ph-btn${fx}" href="/${h}/midiakit">📊 ${t}</a>` : '';
       case 'pix': return b.url ? `<div class="pub-col pix"><button type="button" class="ph-btn pixb">${t}</button><div class="ph-card pub-col pixk hide"><code>${escapeHtml(b.url)}</code><button type="button" class="ph-btn main" data-k="${escapeHtml(b.url)}">Copiar chave Pix</button></div></div>` : '';
       default: return '';
     }
@@ -133,7 +156,8 @@ export async function onRequestGet(context) {
   document.querySelectorAll('[data-k]').forEach(function(btn){btn.onclick=function(){try{navigator.clipboard.writeText(btn.dataset.k);}catch(e){}btn.textContent='Chave copiada!';};});
   document.querySelectorAll('form.lead').forEach(function(f){f.onsubmit=function(e){e.preventDefault();var m=f.querySelector('.msg');fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({h:${JSON.stringify(h)},name:f.name.value,phone:f.phone.value,source:f.dataset.src})}).then(function(r){return r.json()}).then(function(d){if(d.ok){f.innerHTML='<b>Pronto! Você vai receber as novidades.</b>';}else{m.textContent=d.error||'Tente de novo.';}}).catch(function(){m.textContent='Sem conexão.';});};});
 })();
-</script>`;
+</script>
+${kinds.has('store') || kinds.has('booking') || kinds.has('support') || kinds.has('quiz') ? `<script type="application/json" id="wl-data">${JSON.stringify(pubData).replace(/</g, '\\u003c')}</script><script src="/assets/pub.js" defer></script>` : ''}`;
   const cfgRow = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(u.id).first();
   let cfg = {}; try { cfg = JSON.parse((cfgRow && cfgRow.data) || '{}'); } catch (e) {}
   if (extra) cfg = Object.assign({}, cfg, { seo: {} }); // título do Google é só da página principal
@@ -212,6 +236,18 @@ html,body{margin:0;background:#0B0B10;min-height:100vh}
 .anim-cascata .ph-in>*{animation:wlSide .55s cubic-bezier(.2,.8,.2,1) both}
 ${Array.from({ length: 30 }, (_, i) => `.ph-in>*:nth-child(${i + 1}){animation-delay:${i * 65}ms}`).join('')}
 @media (prefers-reduced-motion:reduce){.ph-in>*{animation:none!important}}
+.pub-store{display:flex;flex-direction:column;gap:10px}.pub-sec{font-size:15px;opacity:.9;padding:4px 2px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcard{border-radius:16px;overflow:hidden;background:rgba(127,127,127,.12);display:flex;flex-direction:column;backdrop-filter:blur(6px)}
+.pcard img,.pcard .pimg{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:rgba(127,127,127,.18)}
+.pinfo{padding:10px 10px 4px;display:flex;flex-direction:column;gap:2px;min-height:58px}.pname{font-size:13.5px;line-height:1.3;opacity:.95}.pprice{font-weight:700;font-size:15px}
+.padd{margin:6px 10px 10px;height:38px;border-radius:12px;border:none;font-weight:600;font-size:13.5px;font-family:inherit;cursor:pointer;background:rgba(127,127,127,.24);color:inherit}
+.padd.in{background:#D4FF3A;color:#0E0E14}
+.pcard.out{opacity:.55}
+.goal .gbar{height:12px;border-radius:999px;background:rgba(127,127,127,.25);overflow:hidden}.goal .gbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#D4FF3A,#7CF5D0)}
+.goal .gnum{display:flex;justify-content:space-between;font-size:13px;opacity:.9}.grank{display:flex;flex-direction:column;gap:4px;font-size:13.5px}.grank span{display:flex;justify-content:space-between}
+.gmsg p{margin:6px 0 0;font-size:13.5px;line-height:1.45}.gmsg span{opacity:.7;font-size:12px}
+
 .ver{display:inline-flex;width:20px;height:20px;border-radius:50%;background:#8FE3FF;color:#06222B;font-size:12px;align-items:center;justify-content:center;vertical-align:middle;-webkit-text-fill-color:#06222B;text-shadow:none}
 @keyframes fxPulse{0%{box-shadow:0 0 0 0 rgba(212,255,58,.55)}70%{box-shadow:0 0 0 12px rgba(212,255,58,0)}100%{box-shadow:0 0 0 0 rgba(212,255,58,0)}}
 @keyframes fxShake{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-2deg)}92%{transform:rotate(2deg)}95%{transform:rotate(-1deg)}}

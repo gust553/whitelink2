@@ -48,6 +48,7 @@
 <div>
   <div class="appbar">
     <h1>Minha página</h1>
+    <a class="icon-btn" href="/painel/aparencia" aria-label="Aparência e temas"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/></svg></a>
     <button class="icon-btn only-mobile" onClick="{{openPreview}}" aria-label="Ver prévia"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
     <a class="icon-btn" href="{{pageUrl}}" target="_blank" rel="noopener" aria-label="Abrir minha página"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
     <button class="icon-btn" onClick="{{share}}" aria-label="Compartilhar link"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.4M8.3 13.2l7.4 4.4"/></svg></button>
@@ -136,6 +137,8 @@
         <div class="grab"></div>
         <h2>{{ed.kindLabel}}</h2>
         <label class="fld">{{ed.titleLabel}}<input class="inp" value="{{ed.title}}" onInput="{{ed.setTitle}}" maxlength="300"></label>
+        <sc-if value="{{ed.cfg}}" hint-placeholder-val="{{ false }}"><a class="row card" href="{{ed.cfgHref}}" style="margin: 0 0 12px; padding: 12px 14px; text-decoration: none; color: inherit; font-size: 14px"><span class="row-tx"><span>{{ed.cfg}}</span></span><span class="chev">›</span></a></sc-if>
+        <sc-if value="{{ed.quizzes}}" hint-placeholder-val="{{ false }}"><div class="anims" style="margin-bottom: 12px"><sc-for list="{{ed.quizzes}}" as="q" hint-placeholder-count="2"><button onClick="{{q.pick}}" aria-pressed="{{q.sel}}">{{q.name}}</button></sc-for></div></sc-if>
         <sc-if value="{{ed.hasUrl}}" hint-placeholder-val="{{ true }}">
           <label class="fld">{{ed.urlLabel}}<input class="inp" value="{{ed.url}}" onInput="{{ed.setUrl}}" placeholder="{{ed.urlHint}}" inputmode="url"></label>
         </sc-if>
@@ -230,6 +233,7 @@ class Component extends DCLogic {
     if (!d.ok) { this.setState({ loading: false, saved: 'error', err: d.error }); return; }
     const a = d.appearance || {};
     this.uid = d.blocks.reduce((m, b) => Math.max(m, b.id || 0), 0) + 1;
+    if ({ ouro: 1, diamante: 1 }[d.user.plan]) DC.api('biz').then((z) => { if (z.ok) this.setState({ quizzes: z.quizzes }); });
     this.setState({ loading: false, user: d.user, blocks: d.blocks, title: d.profile.title || '', bio: d.profile.bio || '',
       theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '',
       custom: a.custom || null, useCustom: !!a.useCustom, avatar: a.avatar || '', cover: a.cover || '', coverVideo: a.coverVideo || '', anim: a.anim || 'subir', page: d.page || { id: 0, handle: d.user.handle }, pages: d.pages || [], np: {} });
@@ -258,7 +262,12 @@ class Component extends DCLogic {
       timer: { svg: 'M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 9v4l2.5 2M9 2h6', label: 'Contagem', ic: 'Ct', hint: 'Urgência para ofertas', t: 'Texto', u: 'Termina em (AAAA-MM-DD HH:MM)', uh: '2026-12-31 23:59' },
       lead: { svg: 'M4 20l1.4-4A8 8 0 1 1 8 18.6zM9 11h6M9 14h4', label: 'Captura', ic: 'Cc', hint: 'Pegue o WhatsApp', t: 'Texto', u: '', uh: '' },
       pix: { svg: 'M12 3l9 9-9 9-9-9z', label: 'Pix', ic: 'Px', hint: 'Doação ou pagamento', t: 'Nome do botão', u: 'Sua chave Pix', uh: 'e-mail, celular ou chave aleatória' },
-      gallery: { svg: 'M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M15 9h.01', label: 'Galeria', ic: 'Gl', hint: 'Link para álbum', t: 'Título', u: 'Link do álbum', uh: '' }
+      gallery: { svg: 'M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M15 9h.01', label: 'Galeria', ic: 'Gl', hint: 'Link para álbum', t: 'Título', u: 'Link do álbum', uh: '' },
+      store: { svg: 'M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6', label: 'Loja', ic: 'Lj', hint: 'Produtos com carrinho', t: 'Título da loja', u: '', uh: '', cfg: 'Cadastre os produtos em Vendas › Loja.', def: 'Minha loja' },
+      booking: { svg: 'M5 6h14v14H5zM5 10h14M9 3v4M15 3v4M9 14h2', label: 'Agenda', ic: 'Ag', hint: 'Agendar horário', t: 'Texto do botão', u: '', uh: '', cfg: 'Configure serviços e horários em Vendas › Agenda.', def: 'Agendar horário' },
+      support: { svg: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z', label: 'Apoio', ic: 'Ap', hint: 'Meta de doações', t: 'Texto do botão', u: '', uh: '', cfg: 'Configure a meta em Vendas › Apoios.', def: 'Quero apoiar' },
+      quiz: { svg: 'M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17.2v.1M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', label: 'Quiz', ic: 'Qz', hint: 'Indica produto', t: 'Texto do botão', u: '', uh: '', cfg: 'Crie o quiz em Vendas › Quiz.', def: 'Faça o quiz' },
+      mediakit: { svg: 'M4 20V10M10 20V4M16 20v-7M22 20H2', label: 'Mídia kit', ic: 'Mk', hint: 'Para marcas', t: 'Texto do botão', u: '', uh: '', cfg: 'Preencha o mídia kit em Mais › Mídia kit.', def: 'Mídia kit para marcas' }
     };
   }
   async createPage() {
@@ -301,7 +310,7 @@ class Component extends DCLogic {
     const fonts = ["'Space Grotesk', Inter, sans-serif", 'Inter, system-ui, sans-serif', 'Georgia, serif'];
     const radius = ['5px', '13px', '999px'][plan >= 1 ? s.shape : 1];
     const list = s.blocks;
-    const NEED = { link: 0, video: 1, text: 0, gallery: 1, timer: 1, shop: 1, lead: 1, pix: 1 };
+    const NEED = { link: 0, video: 1, text: 0, gallery: 1, timer: 1, shop: 1, lead: 1, pix: 1, store: 1, booking: 1, support: 1, quiz: 1, mediakit: 1 };
     const limit = u.limit || 0;
     const links = list.filter((b) => b.kind === 'link').length;
     const full = limit > 0 && links >= limit;
@@ -330,6 +339,8 @@ class Component extends DCLogic {
     const eb = list[idx];
     const ek = eb ? (K[eb.kind] || K.link) : K.link;
     const ed = eb ? {
+      cfg: ek.cfg || '', cfgHref: eb.kind === 'mediakit' ? '/painel/midiakit' : '/painel/vendas#' + ({ store: 'loja', booking: 'agenda', support: 'apoios', quiz: 'quiz' }[eb.kind] || ''),
+      quizzes: eb.kind === 'quiz' && (s.quizzes || []).length > 1 ? s.quizzes.map((q) => ({ name: q.title, sel: (eb.url || s.quizzes[0].id) === q.id, pick: () => this.update(eb.id, { url: q.id }) })) : '',
       kindLabel: ek.label, title: eb.title, url: eb.url || '', titleLabel: ek.t, urlLabel: ek.u, urlHint: ek.uh, hasUrl: !!ek.u,
       canFeature: eb.kind === 'link', featured: !!eb.featured, featSw: sw(!!eb.featured), featKnob: knob(!!eb.featured),
       first: idx === 0, last: idx === list.length - 1,
@@ -353,7 +364,7 @@ class Component extends DCLogic {
     const basic = ['noite', 'papel', 'oceano', 'brasa'].indexOf(tk) >= 0;
     const visible = shown.map((b) => ({
       title: b.title,
-      cls: b.kind === 'text' ? 'ph-bio' : (b.kind === 'shop' || b.kind === 'lead' || b.kind === 'timer' || b.kind === 'video' ? 'ph-card' : 'ph-btn' + (b.featured ? ' main' : '')),
+      cls: b.kind === 'text' ? 'ph-bio' : (['shop', 'lead', 'timer', 'video', 'store', 'support'].includes(b.kind) ? 'ph-card' : 'ph-btn' + (b.featured || ['booking', 'quiz'].includes(b.kind) ? ' main' : '')),
       pStyle: (b.kind === 'text' ? 'text-align: center; max-width: none' : '') + (plan >= 1 && basic && b.kind !== 'text' ? '; border-radius: ' + radius : '') + (plan >= 1 && s.acc && b.featured ? '; background: ' + s.acc + '; border-color: ' + s.acc : '')
     }));
     const saveMap = { idle: ['Tudo salvo', '#6F6F80'], dirty: ['Salvando em instantes…', '#F2C14E'], saving: ['Salvando…', '#9C9CAD'], saved: ['Tudo salvo ✓', '#D4FF3A'], error: [s.err || 'Não salvou. Confira a internet.', '#FF8A6B'] };
@@ -425,7 +436,7 @@ class Component extends DCLogic {
           add: () => {
             if (locked) { this.flash(lim ? 'Você chegou ao limite de ' + limit + ' links do seu plano. Veja os planos em Mais › Meu plano.' : K[key].label + ' é do plano Ouro. Veja em Mais › Meu plano.'); return; }
             const id = this.uid++;
-            const nb = { id: id, kind: key, title: key === 'text' ? 'Escreva seu texto aqui' : K[key].label, url: '', on: true };
+            const nb = { id: id, kind: key, title: key === 'text' ? 'Escreva seu texto aqui' : (K[key].def || K[key].label), url: '', on: true };
             this.change({ blocks: list.concat([nb]), sheet: 'edit', editing: id });
           }
         });

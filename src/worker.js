@@ -30,6 +30,10 @@ import * as pagesApi from '../functions/api/pages.js';
 import * as domainApi from '../functions/api/domain.js';
 import * as mediaApi from '../functions/api/media.js';
 import * as mediaGet from '../functions/m/[id].js';
+import * as bizApi from '../functions/api/biz.js';
+import * as productsApi from '../functions/api/products.js';
+import * as salesApi from '../functions/api/sales.js';
+import * as pubApi from '../functions/api/pub.js';
 import { isMainHost, domainOwner, domainCleanup, domainSeen } from './domains.js';
 import { effectivePlan } from './lib.js';
 import * as gwHook from '../functions/api/webhooks/gateway.js';
@@ -74,6 +78,10 @@ const ROUTES = [
   [/^\/api\/pages$/, pagesApi],
   [/^\/api\/domain$/, domainApi],
   [/^\/api\/media$/, mediaApi],
+  [/^\/api\/biz$/, bizApi],
+  [/^\/api\/products$/, productsApi],
+  [/^\/api\/sales$/, salesApi],
+  [/^\/api\/pub\/(?<action>order|slots|book|support|quiz|goal)$/, pubApi],
   [/^\/m\/(?<id>[a-f0-9]{8,40})$/, mediaGet],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],

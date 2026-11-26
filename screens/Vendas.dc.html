@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Vendas — WhiteLink</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<style>
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none}
+.chips button{flex:none;height:40px;padding:0 15px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.chips button[aria-pressed="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kp .card{padding:12px;display:flex;flex-direction:column;gap:3px}.kp b{font:700 20px 'Space Grotesk'}.kp span{font-size:12px;color:#9C9CAD}
+.prod{display:flex;gap:12px;align-items:center}
+.pimg{width:56px;height:56px;border-radius:14px;background:#1B1B24 center/cover no-repeat;flex:none}
+.lock{padding:22px;display:flex;flex-direction:column;gap:12px;text-align:center;align-items:center}
+.dw{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dw button{height:42px;border-radius:12px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:13px;cursor:pointer;font-family:inherit}
+.dw button[aria-pressed="true"]{background:#D4FF3A;color:#0E0E14;border-color:#D4FF3A;font-weight:700}
+.svc{border:1px solid #24242E;border-radius:16px;padding:12px;margin-bottom:10px;background:#0E0E14}
+.qbox{border:1px solid #24242E;border-radius:16px;padding:12px;margin-bottom:10px;background:#0E0E14}
+.mini{height:36px;padding:0 12px;font-size:13px}
+.gbar{height:12px;border-radius:999px;background:#26262F;overflow:hidden;margin:8px 0}.gbar i{display:block;height:100%;background:linear-gradient(90deg,#D4FF3A,#7CF5D0)}
+.note{font-size:13px;color:#9C9CAD;line-height:1.5}
+select.inp{appearance:none}
+textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
+</style>
+</helmet>
+<div>
+  <div class="appbar"><h1>Vendas</h1><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
+  <div class="app-main">
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
+    <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+      <div class="card lock" style="margin-top: 10px">
+        <b style="font-size: 19px">Venda direto pela sua página</b>
+        <span style="font-size: 14px; color: #C9C9D6; line-height: 1.55">Loja com carrinho, agenda de horários, apoios com meta e quiz que indica produto. Tudo chega organizado aqui e no seu WhatsApp.</span>
+        <a class="btn full" href="/painel/plano" style="background: #F2C14E">Liberar no plano Ouro</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div class="chips" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><button role="tab" onClick="{{t.go}}" aria-pressed="{{t.sel}}">{{t.name}}</button></sc-for></div>
+
+      <!-- PEDIDOS -->
+      <sc-if value="{{tPed}}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div class="kp"><sc-for list="{{kpis}}" as="k" hint-placeholder-count="3"><div class="card"><b>{{k.v}}</b><span>{{k.l}}</span></div></sc-for></div>
+          <sc-if value="{{noPix}}" hint-placeholder-val="{{ false }}"><a class="row card" href="#recebimentos" onClick="{{goPay}}" style="margin-bottom: 12px; border-color: #4A3A14; padding: 14px"><span class="row-tx"><b>Cadastre sua chave Pix</b><span>Para receber pedidos, sinais e apoios direto na sua conta.</span></span><span class="chev">›</span></a></sc-if>
+          <div class="chips"><sc-for list="{{kinds}}" as="t" hint-placeholder-count="4"><button onClick="{{t.go}}" aria-pressed="{{t.sel}}">{{t.name}}</button></sc-for></div>
+          <div class="list">
+            <sc-for list="{{sales}}" as="x" hint-placeholder-count="3"><button class="row" onClick="{{x.open}}"><span class="row-tx"><b>{{x.title}}</b><span>{{x.sub}}</span></span><span class="chip" style="{{x.chip}}">{{x.st}}</span></button></sc-for>
+            <sc-if value="{{noSales}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nada por aqui ainda. Adicione os blocos de Loja, Agenda ou Apoio na sua página.</div></sc-if>
+          </div>
+          <div class="sec-t" id="recebimentos">Recebimentos por Pix</div>
+          <div class="card" style="padding: 16px">
+            <label class="fld">Sua chave Pix<input class="inp" value="{{pay.key}}" onInput="{{setPayKey}}" placeholder="CPF, celular, e-mail ou chave aleatória"></label>
+            <div class="grid2"><label class="fld">Nome do recebedor<input class="inp" value="{{pay.name}}" onInput="{{setPayName}}" maxlength="25" placeholder="Como está no banco"></label><label class="fld">Cidade<input class="inp" value="{{pay.city}}" onInput="{{setPayCity}}" maxlength="15" placeholder="São Paulo"></label></div>
+            <label class="fld" style="margin: 0">WhatsApp que recebe os pedidos<input class="inp" value="{{pay.wa}}" onInput="{{setPayWa}}" inputmode="tel" placeholder="{{phoneHint}}"></label>
+            <p class="note" style="margin: 10px 0 0">O dinheiro cai direto na sua conta. O WhiteLink não cobra taxa sobre suas vendas.</p>
+            <button class="btn full" onClick="{{savePay}}" style="margin-top: 12px">Salvar recebimentos</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- LOJA -->
+      <sc-if value="{{tLoja}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="note" style="margin: 0 4px 10px">{{prodCount}}</div>
+          <div class="list">
+            <sc-for list="{{products}}" as="p" hint-placeholder-count="3"><button class="row" onClick="{{p.open}}"><span class="pimg" style="{{p.img}}"></span><span class="row-tx"><b>{{p.name}}</b><span>{{p.sub}}</span></span><span class="chev">›</span></button></sc-for>
+          </div>
+          <button class="btn full" onClick="{{newProduct}}" style="margin-top: 12px">+ Novo produto</button>
+          <div class="sec-t">Frete e cupons <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span></div>
+          <div class="card" style="padding: 16px">
+            <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
+              <div>
+                <label class="fld">Frete fixo (R$)<input class="inp" inputmode="decimal" value="{{shop.ship}}" onInput="{{setShip}}" placeholder="0,00 = grátis"></label>
+                <div class="note" style="margin-bottom: 8px">Cupons de desconto</div>
+                <sc-for list="{{coupons}}" as="c" hint-placeholder-count="1"><div class="grid2" style="align-items: end"><label class="fld">Código<input class="inp" value="{{c.code}}" onInput="{{c.setCode}}" placeholder="BEMVINDO"></label><label class="fld">Desconto %<input class="inp" inputmode="numeric" value="{{c.pct}}" onInput="{{c.setPct}}"></label></div></sc-for>
+                <button class="btn ghost mini" onClick="{{addCoupon}}">+ Cupom</button>
+                <button class="btn full" onClick="{{saveShop}}" style="margin-top: 12px">Salvar loja</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{notDia}}" hint-placeholder-val="{{ false }}"><p class="note" style="margin: 0">No Ouro o pedido chega no seu WhatsApp. No Diamante o cliente paga com Pix na hora, e você tem cupons, frete e produtos ilimitados.</p></sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- AGENDA -->
+      <sc-if value="{{tAg}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="sec-t" style="margin-top: 0">Serviços</div>
+          <sc-for list="{{services}}" as="v" hint-placeholder-count="1">
+            <div class="svc">
+              <label class="fld">Nome<input class="inp" value="{{v.name}}" onInput="{{v.setName}}" placeholder="Ex.: Corte de cabelo"></label>
+              <div class="grid2"><label class="fld">Duração (min)<input class="inp" inputmode="numeric" value="{{v.minutes}}" onInput="{{v.setMin}}"></label><label class="fld">Preço (R$)<input class="inp" inputmode="decimal" value="{{v.price}}" onInput="{{v.setPrice}}"></label></div>
+              <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}"><label class="fld">Sinal por Pix (R$) — opcional<input class="inp" inputmode="decimal" value="{{v.deposit}}" onInput="{{v.setDep}}" placeholder="0,00"></label></sc-if>
+              <button class="btn ghost mini" onClick="{{v.remove}}" style="color: #FF8A8E">Remover serviço</button>
+            </div>
+          </sc-for>
+          <button class="btn ghost full" onClick="{{addService}}" disabled="{{svcFull}}">{{addSvcLabel}}</button>
+          <div class="sec-t">Dias e horários</div>
+          <div class="card" style="padding: 16px">
+            <div class="dw"><sc-for list="{{weekdays}}" as="w" hint-placeholder-count="7"><button onClick="{{w.toggle}}" aria-pressed="{{w.on}}">{{w.n}}</button></sc-for></div>
+            <div class="grid2" style="margin-top: 12px"><label class="fld">Começa<input class="inp" type="time" value="{{ag.from}}" onChange="{{setFrom}}"></label><label class="fld">Termina<input class="inp" type="time" value="{{ag.to}}" onChange="{{setTo}}"></label></div>
+            <label class="fld">Intervalo entre horários<select class="inp" onChange="{{setStep}}"><sc-for list="{{steps}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}" selected="{{o.sel}}">{{o.n}}</option></sc-for></select></label>
+            <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}"><label class="fld" style="margin: 0">Dias bloqueados (folgas, feriados)<input class="inp" value="{{blockedText}}" onInput="{{setBlocked}}" placeholder="25/12, 01/01"></label></sc-if>
+          </div>
+          <button class="btn full" onClick="{{saveAgenda}}" style="margin-top: 14px">Salvar agenda</button>
+          <p class="note" style="text-align: center">Depois, adicione o bloco <b>Agenda</b> na sua página.</p>
+        </div>
+      </sc-if>
+
+      <!-- APOIOS -->
+      <sc-if value="{{tAp}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="card" style="padding: 16px">
+            <b style="font-size: 16px">{{sup.title}}</b>
+            <div class="gbar"><i style="{{supBar}}"></i></div>
+            <div class="note">{{supText}}</div>
+          </div>
+          <div class="sec-t">Meta</div>
+          <div class="card" style="padding: 16px">
+            <label class="fld">Título da meta<input class="inp" value="{{sup.title}}" onInput="{{setSupTitle}}" maxlength="80"></label>
+            <label class="fld">Valor da meta (R$)<input class="inp" inputmode="decimal" value="{{supGoal}}" onInput="{{setSupGoal}}"></label>
+            <sc-if value="{{notDia}}" hint-placeholder-val="{{ false }}"><p class="note" style="margin: 0 0 10px">No Diamante aparecem também o ranking dos apoiadores e as mensagens deles.</p></sc-if>
+            <button class="btn full" onClick="{{saveSupport}}">Salvar meta</button>
+            <button class="btn ghost full" onClick="{{resetSupport}}" style="margin-top: 10px">Começar meta nova (zerar)</button>
+          </div>
+          <p class="note" style="text-align: center">Os apoios aparecem em <b>Pedidos › Apoios</b>. Toque em "Confirmar Pix" quando o dinheiro cair, para entrar na meta.</p>
+        </div>
+      </sc-if>
+
+      <!-- QUIZ -->
+      <sc-if value="{{tQz}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <sc-for list="{{quizzes}}" as="q" hint-placeholder-count="1">
+            <div class="qbox">
+              <label class="fld">Título<input class="inp" value="{{q.title}}" onInput="{{q.setTitle}}" placeholder="Ex.: Descubra o perfume ideal"></label>
+              <label class="fld">Texto de abertura<input class="inp" value="{{q.intro}}" onInput="{{q.setIntro}}" placeholder="Responda 3 perguntas rápidas"></label>
+              <div class="sec-t" style="margin-top: 6px">Resultados</div>
+              <sc-for list="{{q.results}}" as="r" hint-placeholder-count="2">
+                <div class="svc">
+                  <label class="fld">Resultado {{r.n}}<input class="inp" value="{{r.title}}" onInput="{{r.setTitle}}" placeholder="Ex.: Perfume floral"></label>
+                  <label class="fld">Texto<textarea class="inp" onInput="{{r.setText}}" placeholder="Explique por que combina">{{r.text}}</textarea></label>
+                  <div class="grid2"><label class="fld" style="margin: 0">Texto do botão<input class="inp" value="{{r.btn}}" onInput="{{r.setBtn}}" placeholder="Comprar agora"></label><label class="fld" style="margin: 0">Link<input class="inp" value="{{r.url}}" onInput="{{r.setUrl}}" placeholder="https://..."></label></div>
+                </div>
+              </sc-for>
+              <button class="btn ghost mini" onClick="{{q.addResult}}">+ Resultado</button>
+              <div class="sec-t">Perguntas</div>
+              <sc-for list="{{q.questions}}" as="x" hint-placeholder-count="2">
+                <div class="svc">
+                  <label class="fld">Pergunta {{x.n}}<input class="inp" value="{{x.q}}" onInput="{{x.setQ}}"></label>
+                  <sc-for list="{{x.options}}" as="o" hint-placeholder-count="2">
+                    <div class="grid2" style="align-items: end"><label class="fld">Resposta<input class="inp" value="{{o.t}}" onInput="{{o.setT}}"></label><label class="fld">Leva para<select class="inp" onChange="{{o.setR}}"><sc-for list="{{o.choices}}" as="c" hint-placeholder-count="2"><option value="{{c.v}}" selected="{{c.sel}}">{{c.n}}</option></sc-for></select></label></div>
+                  </sc-for>
+                  <button class="btn ghost mini" onClick="{{x.addOpt}}">+ Resposta</button>
+                </div>
+              </sc-for>
+              <button class="btn ghost mini" onClick="{{q.addQ}}">+ Pergunta</button>
+              <button class="btn ghost mini" onClick="{{q.remove}}" style="color: #FF8A8E; margin-left: 6px">Apagar quiz</button>
+            </div>
+          </sc-for>
+          <button class="btn ghost full" onClick="{{addQuiz}}" disabled="{{quizFull}}">{{addQuizLabel}}</button>
+          <button class="btn full" onClick="{{saveQuiz}}" style="margin-top: 12px">Salvar quiz</button>
+          <p class="note" style="text-align: center">Quem responde vira contato em <b>Clientes</b>, com o resultado anotado.</p>
+        </div>
+      </sc-if>
+      <sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: #3A1518; color: #FFB4B4; font-size: 14px">{{err}}</div></sc-if>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- FOLHA: PRODUTO -->
+  <sc-if value="{{ps}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{close}}"><div class="sheet" onClick="{{stop}}">
+      <div class="grab"></div>
+      <h2>{{pe.head}}</h2>
+      <button class="pimg" onClick="{{pe.pick}}" style="width: 100%; height: 160px; border-radius: 18px; border: 2px dashed #3A3A46; color: #9C9CAD; font-family: inherit; cursor: pointer; margin-bottom: 12px; {{pe.img}}">{{pe.imgLabel}}</button>
+      <label class="fld">Nome<input class="inp" value="{{pe.name}}" onInput="{{pe.setName}}" maxlength="80"></label>
+      <div class="grid2"><label class="fld">Preço (R$)<input class="inp" inputmode="decimal" value="{{pe.price}}" onInput="{{pe.setPrice}}" placeholder="59,90"></label><label class="fld">Estoque<input class="inp" inputmode="numeric" value="{{pe.stock}}" onInput="{{pe.setStock}}" placeholder="vazio = sem limite"></label></div>
+      <label class="fld">Descrição<input class="inp" value="{{pe.descr}}" onInput="{{pe.setDescr}}" maxlength="300"></label>
+      <sc-if value="{{pe.err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 10px">{{pe.err}}</div></sc-if>
+      <button class="btn full" onClick="{{pe.save}}">Salvar produto</button>
+      <sc-if value="{{pe.id}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{pe.del}}" style="margin-top: 10px; color: #FF8A8E">Apagar produto</button></sc-if>
+    </div></div>
+  </sc-if>
+
+  <!-- FOLHA: VENDA -->
+  <sc-if value="{{ss}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{close}}"><div class="sheet" onClick="{{stop}}">
+      <div class="grab"></div>
+      <h2>{{se.head}}</h2>
+      <sc-for list="{{se.kv}}" as="k" hint-placeholder-count="4"><div style="display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid #1C1C24; font-size: 14px"><span style="color: #9C9CAD">{{k.k}}</span><b style="text-align: right">{{k.v}}</b></div></sc-for>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px">
+        <a class="btn full" href="{{se.wa}}" target="_blank" rel="noopener" style="background: #25D366">Chamar no WhatsApp</a>
+        <sc-for list="{{se.actions}}" as="a" hint-placeholder-count="2"><button class="btn full {{a.cls}}" onClick="{{a.go}}">{{a.t}}</button></sc-for>
+      </div>
+    </div></div>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{toast}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const h = (location.hash || '').slice(1);
+    this.state = { d: null, tab: ['pedidos', 'loja', 'agenda', 'apoios', 'quiz'].includes(h) ? h : 'pedidos', kind: '', sales: [], sums: [], sheet: null, saved: '', err: '', toast: '' };
+  }
+  async componentDidMount() { await this.load(); this.loadSales(); }
+  async load() {
+    const d = await DC.api('biz');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    if (!d.ok) return;
+    const ag = d.agenda;
+    this.setState({ d: d, pay: Object.assign({ key: '', name: '', city: '', wa: '' }, d.pay), shop: { ship: d.shop.shipping ? (d.shop.shipping / 100).toFixed(2).replace('.', ',') : '', coupons: d.shop.coupons || [] },
+      ag: Object.assign({}, ag, { services: ag.services.map((s) => Object.assign({}, s, { price: s.cents ? (s.cents / 100).toFixed(2).replace('.', ',') : '', deposit: s.deposit ? (s.deposit / 100).toFixed(2).replace('.', ',') : '' })) }),
+      sup: { title: d.support.title, goal: (d.support.cents / 100).toFixed(2).replace('.', ','), raised: d.support.raised, cents: d.support.cents, count: d.support.count },
+      quizzes: JSON.parse(JSON.stringify(d.quizzes || [])) });
+  }
+  async loadSales() { const r = await DC.api('sales' + (this.state.kind ? '?k=' + this.state.kind : '')); if (r.ok) this.setState({ sales: r.sales, sums: r.sums }); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
+  async put(body, msg) {
+    const r = await DC.api('biz', 'PUT', body);
+    this.setState({ err: r.ok ? '' : r.error });
+    if (r.ok) { this.flash(msg || 'Salvo ✓'); await this.load(); }
+  }
+  ph(k, v) { this.setState({ pay: Object.assign({}, this.state.pay, { [k]: v }) }); }
+  agSet(p) { this.setState({ ag: Object.assign({}, this.state.ag, p) }); }
+  svcSet(i, p) { const s = this.state.ag.services.slice(); s[i] = Object.assign({}, s[i], p); this.agSet({ services: s }); }
+  qz(fn) { const q = JSON.parse(JSON.stringify(this.state.quizzes)); fn(q); this.setState({ quizzes: q }); }
+  renderVals() {
+    const s = this.state, d = s.d;
+    if (!d) return { loading: true };
+    if (d.level < 1) return { loading: false, locked: true };
+    const brl = (c) => 'R$ ' + (c / 100).toFixed(2).replace('.', ',');
+    const dia = d.level >= 2;
+    const fmtD = (t) => new Date(t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const tab = s.tab;
+    const ST = { aguardando: ['Aguardando', 'rgba(242,193,78,.16)', '#F2C14E'], confirmado: ['Confirmado', 'rgba(143,227,255,.14)', '#8FE3FF'], pago: ['Pago', 'rgba(74,222,128,.14)', '#4ADE80'], concluido: ['Concluído', '#1B1B24', '#C9C9D6'], cancelado: ['Cancelado', '#1B1B24', '#6F6F80'] };
+    const sumOf = (k, st) => s.sums.filter((x) => x.kind === k && (!st || st.includes(x.status))).reduce((a, x) => a + x.c, 0);
+    const v = {
+      loading: false, ready: true, saved: s.saved, err: s.err, toast: s.toast, dia: dia, notDia: !dia,
+      tabs: [['pedidos', 'Pedidos'], ['loja', 'Loja'], ['agenda', 'Agenda'], ['apoios', 'Apoios'], ['quiz', 'Quiz']].map((t) => ({ name: t[1], sel: tab === t[0], go: () => { history.replaceState(null, '', '#' + t[0]); this.setState({ tab: t[0], err: '' }); } })),
+      tPed: tab === 'pedidos', tLoja: tab === 'loja', tAg: tab === 'agenda', tAp: tab === 'apoios', tQz: tab === 'quiz',
+      close: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation()
+    };
+    if (tab === 'pedidos') {
+      v.kpis = [{ v: brl(sumOf('pedido', ['pago', 'concluido'])), l: 'vendas pagas (30 dias)' }, { v: String(s.sums.filter((x) => x.kind === 'agendamento' && x.status !== 'cancelado').reduce((a, x) => a + x.n, 0)), l: 'agendamentos (30 dias)' }, { v: brl(sumOf('apoio', ['pago'])), l: 'apoios (30 dias)' }];
+      v.noPix = !s.pay.key; v.goPay = () => setTimeout(() => { const e = document.getElementById('recebimentos'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }, 0);
+      v.kinds = [['', 'Todos'], ['pedido', 'Pedidos'], ['agendamento', 'Agenda'], ['apoio', 'Apoios']].map((k) => ({ name: k[1], sel: s.kind === k[0], go: () => { this.setState({ kind: k[0] }); setTimeout(() => this.loadSales(), 0); } }));
+      v.sales = s.sales.map((x) => {
+        const st = ST[x.status] || ST.aguardando;
+        const title = x.kind === 'pedido' ? x.name + ' · ' + brl(x.cents) : x.kind === 'apoio' ? '💛 ' + x.name + ' · ' + brl(x.cents) : '📅 ' + x.name + ' · ' + fmtD(x.start_ts);
+        const sub = x.kind === 'pedido' ? (x.items.items || []).map((i) => i.qty + 'x ' + i.name).join(', ') : x.kind === 'apoio' ? (x.message || 'Apoio') : ((d.agenda.services.find((q) => q.id === x.service) || {}).name || 'Agendamento');
+        return { title, sub: sub + ' · ' + x.code, st: st[0], chip: 'background: ' + st[1] + '; color: ' + st[2], open: () => this.setState({ sheet: { kind: 'sale', x: x } }) };
+      });
+      v.noSales = !v.sales.length;
+      v.pay = s.pay; v.phoneHint = 'Seu celular: (' + String(d.phone).slice(0, 2) + ') ' + String(d.phone).slice(2);
+      v.setPayKey = (e) => this.ph('key', e.target.value); v.setPayName = (e) => this.ph('name', e.target.value); v.setPayCity = (e) => this.ph('city', e.target.value); v.setPayWa = (e) => this.ph('wa', e.target.value);
+      v.savePay = async () => { const r = await DC.api('settings', 'PUT', { pay: s.pay }); this.setState({ err: r.ok ? (r.warnings || []).join(' ') : r.error }); if (r.ok) { this.flash('Recebimentos salvos ✓'); this.load(); } };
+    }
+    if (tab === 'loja') {
+      const lim = dia ? 500 : 10;
+      v.prodCount = dia ? d.products.length + (d.products.length === 1 ? ' produto' : ' produtos') + ' · sem limite no seu plano' : d.products.length + ' de ' + lim + ' produtos · No Diamante é ilimitado';
+      v.products = d.products.map((p) => ({ name: p.name, sub: brl(p.cents) + (p.stock >= 0 ? ' · estoque ' + p.stock : '') + (p.active ? '' : ' · escondido'), img: p.image ? "background-image: url('/m/" + p.image + "')" : '', open: () => this.setState({ sheet: { kind: 'prod', p: { id: p.id, name: p.name, price: (p.cents / 100).toFixed(2).replace('.', ','), stock: p.stock >= 0 ? String(p.stock) : '', descr: p.descr || '', image: p.image || '' } } }) }));
+      v.newProduct = () => this.setState({ sheet: { kind: 'prod', p: { name: '', price: '', stock: '', descr: '', image: '' } } });
+      v.shop = s.shop;
+      v.setShip = (e) => this.setState({ shop: Object.assign({}, s.shop, { ship: e.target.value }) });
+      v.coupons = s.shop.coupons.map((c, i) => ({ code: c.code, pct: c.pct, setCode: (e) => { const cs = s.shop.coupons.slice(); cs[i] = Object.assign({}, cs[i], { code: e.target.value.toUpperCase() }); this.setState({ shop: Object.assign({}, s.shop, { coupons: cs }) }); }, setPct: (e) => { const cs = s.shop.coupons.slice(); cs[i] = Object.assign({}, cs[i], { pct: e.target.value }); this.setState({ shop: Object.assign({}, s.shop, { coupons: cs }) }); } }));
+      v.addCoupon = () => this.setState({ shop: Object.assign({}, s.shop, { coupons: s.shop.coupons.concat([{ code: '', pct: 10 }]) }) });
+      v.saveShop = () => this.put({ shop: { shipping: s.shop.ship || '0', coupons: s.shop.coupons } }, 'Loja salva ✓');
+    }
+    if (tab === 'agenda') {
+      const ag = s.ag;
+      v.ag = ag;
+      v.services = ag.services.map((x, i) => ({ name: x.name, minutes: x.minutes, price: x.price, deposit: x.deposit,
+        setName: (e) => this.svcSet(i, { name: e.target.value }), setMin: (e) => this.svcSet(i, { minutes: e.target.value }), setPrice: (e) => this.svcSet(i, { price: e.target.value }), setDep: (e) => this.svcSet(i, { deposit: e.target.value }),
+        remove: () => this.agSet({ services: ag.services.filter((_, k) => k !== i) }) }));
+      v.svcFull = ag.services.length >= (dia ? 30 : 1);
+      v.addSvcLabel = v.svcFull && !dia ? 'Mais serviços só no Diamante' : '+ Serviço';
+      v.addService = () => this.agSet({ services: ag.services.concat([{ name: '', minutes: 60, price: '', deposit: '' }]) });
+      v.weekdays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((n, i) => ({ n, on: !!ag.days[i], toggle: () => { const dd = ag.days.slice(); dd[i] = !dd[i]; this.agSet({ days: dd }); } }));
+      v.setFrom = (e) => this.agSet({ from: e.target.value }); v.setTo = (e) => this.agSet({ to: e.target.value });
+      v.steps = [15, 20, 30, 45, 60, 90, 120].map((m) => ({ v: m, n: 'A cada ' + m + ' min', sel: ag.step === m }));
+      v.setStep = (e) => this.agSet({ step: +e.target.value });
+      v.blockedText = ag.blockedText !== undefined ? ag.blockedText : ag.blocked.map((x) => x.slice(8, 10) + '/' + x.slice(5, 7)).join(', ');
+      v.setBlocked = (e) => this.agSet({ blockedText: e.target.value });
+      v.saveAgenda = () => {
+        const yr = new Date().getFullYear();
+        const blocked = String(v.blockedText || '').split(/[,\s]+/).filter(Boolean).map((x) => { const m = x.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?$/); if (!m) return ''; let y = +(m[3] || yr); const iso = y + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); if (!m[3] && iso < new Date().toISOString().slice(0, 10)) y++; return y + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); }).filter(Boolean);
+        this.put({ agenda: { services: ag.services, days: ag.days, from: ag.from, to: ag.to, step: ag.step, blocked } }, 'Agenda salva ✓');
+      };
+    }
+    if (tab === 'apoios') {
+      v.sup = s.sup; v.supGoal = s.sup.goal;
+      v.supBar = 'width: ' + Math.min(100, Math.round(s.sup.raised / Math.max(1, s.sup.cents) * 100)) + '%';
+      v.supText = brl(s.sup.raised) + ' de ' + brl(s.sup.cents) + ' · ' + s.sup.count + (s.sup.count === 1 ? ' apoio confirmado' : ' apoios confirmados');
+      v.setSupTitle = (e) => this.setState({ sup: Object.assign({}, s.sup, { title: e.target.value }) });
+      v.setSupGoal = (e) => this.setState({ sup: Object.assign({}, s.sup, { goal: e.target.value }) });
+      v.saveSupport = () => this.put({ support: { title: s.sup.title, goal: s.sup.goal } }, 'Meta salva ✓');
+      v.resetSupport = () => { if (confirm('Começar uma meta nova? O valor arrecadado volta para zero (os apoios continuam no histórico).')) this.put({ support: { title: s.sup.title, goal: s.sup.goal, reset: true } }, 'Meta nova começou ✓'); };
+    }
+    if (tab === 'quiz') {
+      const Q = s.quizzes;
+      v.quizzes = Q.map((q, qi) => ({
+        title: q.title, intro: q.intro,
+        setTitle: (e) => this.qz((a) => { a[qi].title = e.target.value; }), setIntro: (e) => this.qz((a) => { a[qi].intro = e.target.value; }),
+        results: q.results.map((r, ri) => ({ n: ri + 1, title: r.title, text: r.text, btn: r.btn, url: r.url,
+          setTitle: (e) => this.qz((a) => { a[qi].results[ri].title = e.target.value; }), setText: (e) => this.qz((a) => { a[qi].results[ri].text = e.target.value; }),
+          setBtn: (e) => this.qz((a) => { a[qi].results[ri].btn = e.target.value; }), setUrl: (e) => this.qz((a) => { a[qi].results[ri].url = e.target.value; }) })),
+        addResult: () => this.qz((a) => { a[qi].results.push({ title: '', text: '', btn: '', url: '' }); }),
+        questions: q.questions.map((x, xi) => ({ n: xi + 1, q: x.q, setQ: (e) => this.qz((a) => { a[qi].questions[xi].q = e.target.value; }),
+          options: x.options.map((o, oi) => ({ t: o.t, setT: (e) => this.qz((a) => { a[qi].questions[xi].options[oi].t = e.target.value; }),
+            choices: q.results.map((r, ri) => ({ v: ri, n: r.title || 'Resultado ' + (ri + 1), sel: o.r === ri })), setR: (e) => this.qz((a) => { a[qi].questions[xi].options[oi].r = +e.target.value; }) })),
+          addOpt: () => this.qz((a) => { a[qi].questions[xi].options.push({ t: '', r: 0 }); }) })),
+        addQ: () => this.qz((a) => { a[qi].questions.push({ q: '', options: [{ t: '', r: 0 }, { t: '', r: 1 % Math.max(1, a[qi].results.length) }] }); }),
+        remove: () => { if (confirm('Apagar este quiz?')) this.qz((a) => { a.splice(qi, 1); }); }
+      }));
+      v.quizFull = Q.length >= (dia ? 30 : 1);
+      v.addQuizLabel = v.quizFull && !dia ? 'Mais quizzes só no Diamante' : '+ Novo quiz';
+      v.addQuiz = () => this.qz((a) => { a.push({ title: '', intro: '', askContact: true, results: [{ title: '', text: '', btn: '', url: '' }, { title: '', text: '', btn: '', url: '' }], questions: [{ q: '', options: [{ t: '', r: 0 }, { t: '', r: 1 }] }] }); });
+      v.saveQuiz = () => this.put({ quizzes: Q }, 'Quiz salvo ✓');
+    }
+    const sh = s.sheet;
+    v.ps = !!(sh && sh.kind === 'prod'); v.ss = !!(sh && sh.kind === 'sale');
+    if (v.ps) {
+      const p = sh.p, up = (patch) => this.setState({ sheet: { kind: 'prod', p: Object.assign({}, p, patch) } });
+      v.pe = { head: p.id ? 'Editar produto' : 'Novo produto', id: p.id || '', name: p.name, price: p.price, stock: p.stock, descr: p.descr, err: p.err || '',
+        img: p.image ? "background-image: url('/m/" + p.image + "'); background-size: cover; background-position: center; border-style: solid" : '', imgLabel: p.image ? '' : '+ Foto do produto',
+        pick: async () => { const r = await DC.pickImage({ max: 900, square: true }); if (!r) return; if (!r.ok) { up({ err: r.error }); return; } up({ image: r.id, err: '' }); },
+        setName: (e) => up({ name: e.target.value }), setPrice: (e) => up({ price: e.target.value }), setStock: (e) => up({ stock: e.target.value }), setDescr: (e) => up({ descr: e.target.value }),
+        save: async () => { const r = await DC.api('products', 'POST', p); if (!r.ok) { up({ err: r.error }); return; } this.setState({ sheet: null }); this.flash('Produto salvo ✓'); this.load(); },
+        del: async () => { if (!confirm('Apagar este produto?')) return; await DC.api('products?id=' + p.id, 'DELETE'); this.setState({ sheet: null }); this.load(); } };
+    }
+    if (v.ss) {
+      const x = sh.x;
+      const svc = d.agenda.services.find((q) => q.id === x.service);
+      const kv = [['Código', x.code], ['Cliente', x.name], ['WhatsApp', x.phone ? '(' + x.phone.slice(0, 2) + ') ' + x.phone.slice(2) : '—']];
+      if (x.kind === 'pedido') { (x.items.items || []).forEach((i) => kv.push([i.qty + 'x ' + i.name, brl(i.cents * i.qty)])); if (x.items.coupon) kv.push(['Cupom', x.items.coupon]); if (x.items.ship) kv.push(['Frete', brl(x.items.ship)]); kv.push(['Total', brl(x.cents)]); }
+      if (x.kind === 'agendamento') { kv.push(['Serviço', svc ? svc.name : '—'], ['Quando', fmtD(x.start_ts)]); if (x.cents) kv.push(['Valor', brl(x.cents)]); }
+      if (x.kind === 'apoio') kv.push(['Valor', brl(x.cents)]);
+      if (x.message) kv.push(['Mensagem', x.message]);
+      if (x.aff) kv.push(['Veio pelo parceiro', x.aff]);
+      kv.push(['Feito em', fmtD(x.created_at)], ['Situação', (ST[x.status] || ST.aguardando)[0]]);
+      const act = (st, t, cls) => ({ t, cls: cls || 'ghost', go: async () => { const r = await DC.api('sales', 'POST', { id: x.id, status: st }); if (r.ok) { this.setState({ sheet: null }); this.flash('Atualizado ✓'); this.loadSales(); this.load(); } } });
+      const acts = [];
+      if (x.status === 'aguardando' || x.status === 'confirmado') acts.push(act('pago', x.kind === 'apoio' ? 'Confirmar Pix recebido' : 'Marcar como pago', ''));
+      if (x.status !== 'concluido' && x.status !== 'cancelado' && x.kind !== 'apoio') acts.push(act('concluido', x.kind === 'pedido' ? 'Marcar como entregue' : 'Marcar como atendido'));
+      if (x.status !== 'cancelado') acts.push(act('cancelado', 'Cancelar'));
+      v.se = { head: { pedido: 'Pedido', agendamento: 'Agendamento', apoio: 'Apoio' }[x.kind], kv: kv.map((k) => ({ k: k[0], v: k[1] })), wa: 'https://wa.me/55' + x.phone + '?text=' + encodeURIComponent('Olá, ' + String(x.name).split(' ')[0] + '! Aqui é sobre o seu ' + { pedido: 'pedido', agendamento: 'agendamento', apoio: 'apoio' }[x.kind] + ' ' + x.code + '.'), actions: acts };
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

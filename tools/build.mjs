@@ -9,7 +9,7 @@ const soon = (t) => '/painel/em-breve?t=' + encodeURIComponent(t);
 export const LINKS = {
   'Main.dc.html': '/', 'Entrar.dc.html': '/entrar', 'Teste.dc.html': '/entrar#cadastro',
   'Editor.dc.html': '/painel', 'Aparencia.dc.html': '/painel/aparencia', 'Temas.dc.html': '/painel/temas', 'CriadorTema.dc.html': '/painel/criador-tema',
-  'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/contatos',
+  'Agenda.dc.html': '/painel/agendamentos', 'Stats.dc.html': '/painel/estatisticas', 'Contatos.dc.html': '/painel/clientes',
   'Configuracoes.dc.html': '/painel/configuracoes', 'Indique.dc.html': '/painel/indique', 'MeuPlano.dc.html': '/painel/plano',
   'Conta.dc.html': '/painel/conta', 'EditarLink.dc.html': '/painel', 'Pagamento.dc.html': '/pagamento',
   'ConfirmarPagamento.dc.html': '/pagamento/confirmar', 'CentralAjuda.dc.html': '/ajuda', 'SuporteCliente.dc.html': '/painel/suporte',
@@ -21,17 +21,18 @@ export const LINKS = {
 const PAGES = {
   'Main.dc.html': ['index.html', false, false],
   'Editor.dc.html': ['painel.html', true, false, 'pagina', null],
-  'Aparencia.dc.html': ['painel/aparencia.html', true, false, 'aparencia', null],
+  'Aparencia.dc.html': ['painel/aparencia.html', true, false, 'pagina', null],
   'Mais.dc.html': ['painel/mais.html', true, false, 'mais', null],
-  'Temas.dc.html': ['painel/temas.html', true, false, 'aparencia', null],
-  'Contatos.dc.html': ['painel/contatos.html', true, false, 'contatos', null],
+  'Temas.dc.html': ['painel/temas.html', true, false, 'pagina', null],
+  'Contatos.dc.html': ['painel/clientes.html', true, false, 'clientes', null],
   'Configuracoes.dc.html': ['painel/configuracoes.html', true, false, 'mais', null],
   'Stats.dc.html': ['painel/estatisticas.html', true, false, 'stats', null],
   'Agenda.dc.html': ['painel/agendamentos.html', true, false, 'mais', null],
   'Indique.dc.html': ['painel/indique.html', true, false, 'mais', null],
   'Conta.dc.html': ['painel/conta.html', true, false, 'mais', null],
   'SuporteCliente.dc.html': ['painel/suporte.html', true, false, 'mais', null],
-  'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'aparencia', null],
+  'CriadorTema.dc.html': ['painel/criador-tema.html', true, false, 'pagina', null],
+  'Vendas.dc.html': ['painel/vendas.html', true, false, 'vendas', null],
   'Admin.dc.html': ['admin.html', true, false, 'admin', null],
   'MeuPlano.dc.html': ['painel/plano.html', true, false, 'mais', null],
   'Recibo.dc.html': ['painel/recibo.html', true, false, 'mais', null],
@@ -47,11 +48,13 @@ const ICONS = {
   aparencia: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1.3-1-1.7-1-2.9 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15.2" cy="8" r="1.1"/>',
   stats: '<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
   contatos: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/>',
+  vendas: '<path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/>',
+  clientes: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/>',
   mais: '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>'
 };
 export const TABS = [
-  ['pagina', 'Página', '/painel'], ['aparencia', 'Aparência', '/painel/aparencia'], ['stats', 'Estatísticas', '/painel/estatisticas'],
-  ['contatos', 'Contatos', '/painel/contatos'], ['mais', 'Mais', '/painel/mais']
+  ['pagina', 'Página', '/painel'], ['vendas', 'Vendas', '/painel/vendas'], ['clientes', 'Clientes', '/painel/clientes'],
+  ['stats', 'Números', '/painel/estatisticas'], ['mais', 'Mais', '/painel/mais']
 ];
 export function shellNav(active) {
   const svg = (k) => '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[k] + '</svg>';

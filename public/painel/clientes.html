@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contatos — WhiteLink</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/shell.css">
+</head>
+<body class="has-shell">
+
+<div id="root"></div>
+<nav class="rail" aria-label="Menu"><a class="rail-logo" href="/painel" aria-label="WhiteLink">W</a><a class="rail-i" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="rail-i" href="/painel/vendas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/></svg></span>Vendas</a><a class="rail-i on" href="/painel/clientes" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Clientes</a><a class="rail-i" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Números</a><a class="rail-i" href="/painel/mais"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<nav class="tabbar" aria-label="Menu"><a class="tab" href="/painel"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Página</a><a class="tab" href="/painel/vendas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4zM9 13h6"/></svg></span>Vendas</a><a class="tab on" href="/painel/clientes" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5"/></svg></span>Clientes</a><a class="tab" href="/painel/estatisticas"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg></span>Números</a><a class="tab" href="/painel/mais"><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg></span>Mais</a></nav>
+<script>window.DC_LINKS={"Main.dc.html":"/","Entrar.dc.html":"/entrar","Teste.dc.html":"/entrar#cadastro","Editor.dc.html":"/painel","Aparencia.dc.html":"/painel/aparencia","Temas.dc.html":"/painel/temas","CriadorTema.dc.html":"/painel/criador-tema","Agenda.dc.html":"/painel/agendamentos","Stats.dc.html":"/painel/estatisticas","Contatos.dc.html":"/painel/clientes","Configuracoes.dc.html":"/painel/configuracoes","Indique.dc.html":"/painel/indique","MeuPlano.dc.html":"/painel/plano","Conta.dc.html":"/painel/conta","EditarLink.dc.html":"/painel","Pagamento.dc.html":"/pagamento","ConfirmarPagamento.dc.html":"/pagamento/confirmar","CentralAjuda.dc.html":"/ajuda","SuporteCliente.dc.html":"/painel/suporte","Recibo.dc.html":"/painel/recibo","Termos.dc.html":"/termos","Privacidade.dc.html":"/privacidade","Planos.dc.html":"/#precos","PaginaPublica.dc.html":"/","PaginaFechada.dc.html":"/"};</script>
+<script src="/assets/dc.js"></script>
+<script src="/assets/temas-list.js"></script>
+<script src="/assets/planos.js"></script>
+<script>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { d: null }; }
+  componentDidMount() { this.load(); }
+  async load() {
+    const d = await DC.api('contacts');
+    if (d.status === 401) { location.href = '/entrar'; return; }
+    this.setState({ d: d.ok ? d : { level: 0, contacts: [] } });
+  }
+  renderVals() {
+    const d = this.state.d;
+    if (!d) return { loading: true };
+    const L = d.contacts;
+    const locked = d.level === 0 && L.length === 0;
+    return {
+      loading: false, locked: locked, empty: !locked && L.length === 0, has: L.length > 0,
+      canExport: d.level === 2 && L.length > 0, exportHint: d.level < 2 && L.length > 0,
+      countText: L.length + (L.length === 1 ? ' contato' : ' contatos'),
+      list: L.map((c) => ({
+        ini: ((c.name || '?').split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2) || '?').toUpperCase(),
+        name: c.name || 'Sem nome',
+        sub: (c.phone ? '(' + c.phone.slice(-11, -9) + ') ' + c.phone.slice(-9, -4) + '-' + c.phone.slice(-4) : c.email) + ' · ' + new Date(c.created_at).toLocaleDateString('pt-BR'),
+        wa: c.phone ? 'https://wa.me/' + (c.phone.length <= 11 ? '55' : '') + c.phone : '',
+        del: async () => { if (!confirm('Apagar o contato de ' + (c.name || 'sem nome') + '?')) return; await DC.api('contacts?id=' + c.id, 'DELETE'); this.load(); }
+      }))
+    };
+  }
+}
+
+DC.mount(document.getElementById('root'), "\n<div>\n  <div class=\"appbar\"><h1>Contatos</h1><sc-if value=\"{{canExport}}\" hint-placeholder-val=\"{{ false }}\"><a class=\"icon-btn\" href=\"/api/contacts?csv=1\" aria-label=\"Baixar planilha\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M12 4v11M7 10l5 5 5-5M5 20h14\"/></svg></a></sc-if></div>\n  <div class=\"app-main\">\n    <sc-if value=\"{{loading}}\" hint-placeholder-val=\"{{ false }}\"><div style=\"color: #9C9CAD; padding-top: 30px\">Carregando…</div></sc-if>\n    <sc-if value=\"{{locked}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"card\" style=\"padding: 22px; display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center; margin-top: 10px\">\n        <div style=\"width: 64px; height: 64px; border-radius: 22px; background: rgba(242,193,78,.14); color: #F2C14E; display: flex; align-items: center; justify-content: center\"><svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15c2 .6 3.4 2.3 3.8 5\"/></svg></div>\n        <b style=\"font-size: 18px\">Junte o WhatsApp de quem visita sua página</b>\n        <span style=\"font-size: 14px; color: #C9C9D6; line-height: 1.5\">Com o bloco de Captura, no Ouro, cada visitante pode deixar o contato para receber suas novidades.</span>\n        <a class=\"btn full\" href=\"/painel/plano\" style=\"background: #F2C14E\">Conhecer o Ouro</a>\n      </div>\n    </sc-if>\n    <sc-if value=\"{{empty}}\" hint-placeholder-val=\"{{ false }}\">\n      <div class=\"card\" style=\"padding: 22px; text-align: center; color: #C9C9D6; font-size: 15px; line-height: 1.5; margin-top: 10px\">Nenhum contato ainda.<br><a href=\"/painel\">Adicione um bloco de Captura</a> na sua página.</div>\n    </sc-if>\n    <sc-if value=\"{{has}}\" hint-placeholder-val=\"{{ true }}\">\n      <div>\n        <div style=\"font-size: 14px; color: #9C9CAD; margin: 4px 4px 12px\">{{countText}}</div>\n        <div class=\"list\">\n          <sc-for list=\"{{list}}\" as=\"c\" hint-placeholder-count=\"4\">\n            <div class=\"row\" style=\"cursor: default\">\n              <span class=\"row-ic\" style=\"font: 700 15px 'Space Grotesk'; color: #F3F3F7\">{{c.ini}}</span>\n              <span class=\"row-tx\"><b>{{c.name}}</b><span>{{c.sub}}</span></span>\n              <sc-if value=\"{{c.wa}}\" hint-placeholder-val=\"{{ true }}\"><a class=\"icon-btn\" href=\"{{c.wa}}\" target=\"_blank\" rel=\"noopener\" aria-label=\"Chamar no WhatsApp\" style=\"color: #25D366\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linejoin=\"round\"><path d=\"M4 20l1.4-4A8 8 0 1 1 8 18.6z\"/></svg></a></sc-if>\n              <button class=\"icon-btn\" onClick=\"{{c.del}}\" aria-label=\"Apagar contato\" style=\"color: #6F6F80\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12\"/></svg></button>\n            </div>\n          </sc-for>\n        </div>\n        <sc-if value=\"{{exportHint}}\" hint-placeholder-val=\"{{ false }}\"><p style=\"text-align: center; font-size: 13px; color: #9C9CAD; margin-top: 14px\">Baixar a lista em planilha é do <a href=\"/painel/plano\">Diamante</a>.</p></sc-if>\n      </div>\n    </sc-if>\n  </div>\n</div>\n", Component, {});
+(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar?next='+encodeURIComponent(location.pathname+location.search);})();
+</script>
+</body>
+</html>

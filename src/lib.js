@@ -269,6 +269,11 @@ export async function ensureSchema(env) {
     'CREATE INDEX IF NOT EXISTS idx_events_person ON events(person_id)',
     'CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, kind TEXT NOT NULL, text TEXT NOT NULL, url TEXT, created_at INTEGER NOT NULL, read_at INTEGER)',
     'CREATE INDEX IF NOT EXISTS idx_notif_user ON notifications(user_id, id)',
+    'CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, name TEXT NOT NULL, cents INTEGER NOT NULL, image TEXT, descr TEXT, active INTEGER NOT NULL DEFAULT 1, stock INTEGER NOT NULL DEFAULT -1, position INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_products_user ON products(user_id)',
+    'CREATE TABLE IF NOT EXISTS sales (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, kind TEXT NOT NULL, code TEXT NOT NULL, person_id INTEGER, name TEXT, phone TEXT, items TEXT, cents INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL, start_ts INTEGER, service TEXT, message TEXT, aff TEXT, created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_sales_user ON sales(user_id, kind, created_at)',
+    'CREATE INDEX IF NOT EXISTS idx_sales_slot ON sales(user_id, start_ts)',
     'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
@@ -279,8 +284,8 @@ export async function ensureSchema(env) {
   schemaReady = true;
 }
 
-export const BLOCK_KINDS = ['link', 'video', 'gallery', 'timer', 'shop', 'lead', 'pix', 'text'];
-export const BLOCK_NEED = { link: 0, text: 0, video: 1, gallery: 1, timer: 1, shop: 1, lead: 1, pix: 1 };
+export const BLOCK_KINDS = ['link', 'video', 'gallery', 'timer', 'shop', 'lead', 'pix', 'text', 'store', 'booking', 'support', 'quiz', 'mediakit'];
+export const BLOCK_NEED = { link: 0, text: 0, video: 1, gallery: 1, timer: 1, shop: 1, lead: 1, pix: 1, store: 1, booking: 1, support: 1, quiz: 1, mediakit: 1 };
 export const PLAN_LEVEL = { prata: 0, ouro: 1, diamante: 2 };
 
 export async function loadPage(env, userId) {
