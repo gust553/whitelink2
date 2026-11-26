@@ -87,7 +87,8 @@ class Component extends DCLogic {
     if (!d) return { loading: true, ready: false };
     const u = d.user;
     const lv = { prata: 0, ouro: 1, diamante: 2 }[u.plan] || 0;
-    const C = ['#C9CDD6', '#F2C14E', '#8FE3FF'];
+    const C = ['#C9CDD6', '#F2C14E', '#8FE3FF', '#D4FF3A'];
+    const lvx = u.agency ? 3 : lv;
     const date = (t) => new Date(t).toLocaleDateString('pt-BR');
     const days = u.until ? Math.max(0, Math.ceil((u.until - Date.now()) / 86400000)) : 0;
     const o = d.open;
@@ -99,20 +100,20 @@ class Component extends DCLogic {
     const every = d.loyalty.every || 3;
     return {
       loading: false, ready: true,
-      planName: u.trial ? 'Teste Diamante' : ['Prata', 'Ouro', 'Diamante'][lv],
-      planColor: C[lv],
+      planName: u.trial ? 'Teste Diamante' : u.agency ? 'Agência' : ['Prata', 'Ouro', 'Diamante'][lv],
+      planColor: u.agency ? '#D4FF3A' : C[lv],
       planSub: u.trial ? 'Faltam ' + days + (days === 1 ? ' dia' : ' dias') + '. Depois sua conta continua no Prata grátis.' : (lv === 0 ? 'Grátis para sempre' : 'Válido até ' + date(u.until)),
       hasOpen: !!o, openTitle, openText, openBtn, openHref, openColor,
       choiceTitle: isPaid ? 'Renovar ou mudar de plano' : 'Assinar',
-      plans: [['ouro', 'Ouro', 1], ['diamante', 'Diamante', 2]].map((p) => ({
-        name: p[1], color: C[p[2]], bg: p[2] === 1 ? 'rgba(242,193,78,.14)' : 'rgba(143,227,255,.14)',
+      plans: [['ouro', 'Ouro', 1], ['diamante', 'Diamante', 2], ['agencia', 'Agência', 3]].map((p) => ({
+        name: p[1], color: C[p[2]], bg: ['', 'rgba(242,193,78,.14)', 'rgba(143,227,255,.14)', 'rgba(212,255,58,.14)'][p[2]],
         price: d.prices[p[0] + '_m'].label + '/mês ou ' + d.prices[p[0] + '_y'].label + '/ano',
-        cta: lv === p[2] && !u.trial ? 'Renovar' : 'Assinar',
+        cta: lvx === p[2] && !u.trial ? 'Renovar' : 'Assinar',
         href: '/pagamento?p=' + p[0],
-        style: lv === p[2] && !u.trial ? 'border-color: ' + C[p[2]] : '',
+        style: lvx === p[2] && !u.trial ? 'border-color: ' + C[p[2]] : '',
         items: (window.WL_PLANOS || {})[p[0]] || []
       })),
-      myItems: (window.WL_PLANOS || {})[u.trial ? 'diamante' : ['prata', 'ouro', 'diamante'][lv]] || [],
+      myItems: (window.WL_PLANOS || {})[u.trial ? 'diamante' : u.agency ? 'agencia' : ['prata', 'ouro', 'diamante'][lv]] || [],
       showPrata: u.trial || lv > 0, prataItems: (window.WL_PLANOS || {}).prata || [],
       isPaid: isPaid,
       loyaltyText: 'A cada ' + every + ' renovações seguidas, você ganha ' + d.loyalty.days + ' dias grátis. ' + d.loyalty.count + ' de ' + every + '.',

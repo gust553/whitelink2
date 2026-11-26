@@ -38,7 +38,7 @@ class Component extends DCLogic {
   constructor(p) {
     super(p);
     const q = new URLSearchParams(location.search);
-    this.state = { loading: true, d: null, plan: q.get('p') === 'diamante' ? 'diamante' : 'ouro', period: 'm', order: null, busy: false, err: '', toast: '', code: q.get('c') };
+    this.state = { loading: true, d: null, plan: ['diamante', 'agencia'].includes(q.get('p')) ? q.get('p') : 'ouro', period: 'm', order: null, busy: false, err: '', toast: '', code: q.get('c') };
   }
   async componentDidMount() {
     const d = await DC.api('billing');
@@ -67,15 +67,16 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state, d = s.d, o = s.order;
     if (!d) return { loading: true, choose: false, pay: false, barTitle: 'Assinar' };
-    const C = { ouro: '#F2C14E', diamante: '#8FE3FF' };
-    const hints = { ouro: '10 links, todos os blocos e 13 temas', diamante: 'Tudo liberado e os 77 temas' };
+    const C = { ouro: '#F2C14E', diamante: '#8FE3FF', agencia: '#D4FF3A' };
+    const NM = { ouro: 'Ouro', diamante: 'Diamante', agencia: 'Agência' };
+    const hints = { ouro: 'Loja, agenda, CRM e IA para começar a vender', diamante: 'Tudo liberado: Pix na hora, parceiros, ao vivo e 3 páginas', agencia: 'Até 20 páginas de clientes e relatório para marcas' };
     return {
       loading: false, choose: !o, pay: !!o, barTitle: o ? 'Pagar com Pix' : 'Assinar',
       isM: s.period === 'm', isY: s.period === 'y',
       setM: () => this.setState({ period: 'm' }), setY: () => this.setState({ period: 'y' }),
-      selName: s.plan === 'ouro' ? 'Ouro' : 'Diamante', selItems: (window.WL_PLANOS || {})[s.plan || 'diamante'] || [],
-      plans: ['ouro', 'diamante'].map((p) => ({
-        name: p === 'ouro' ? 'Ouro' : 'Diamante', color: C[p], hint: hints[p], sel: s.plan === p,
+      selName: NM[s.plan], selItems: (window.WL_PLANOS || {})[s.plan || 'diamante'] || [],
+      plans: ['ouro', 'diamante', 'agencia'].map((p) => ({
+        name: NM[p], color: C[p], hint: hints[p], sel: s.plan === p,
         price: d.prices[p + '_' + s.period].label + (s.period === 'y' ? '/ano' : '/mês'),
         style: s.plan === p ? 'border-color: ' + C[p] + '; background: #191920' : '',
         pick: () => this.setState({ plan: p })

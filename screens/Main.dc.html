@@ -2,238 +2,207 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>WhiteLink — página inicial</title>
-<script src="./support.js"></script>
+<title>WhiteLink — A bio que vende, agenda e trabalha por você</title>
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap">
+<meta name="description" content="Muito mais que link na bio: loja com Pix, agenda de horários, CRM de clientes, parceiros, IA e prova social ao vivo. Teste o Diamante grátis por 3 dias.">
+<meta property="og:title" content="WhiteLink — A bio que vende por você">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
 <style>
-body{margin:0;background:#0B0B10}
-a{color:#D4FF3A}a:hover{color:#E6FF8A}
-button,input{font-family:Inter,system-ui,sans-serif}
-@media (max-width: 600px){
-[style*="font-size: 60px"]{font-size:36px !important}
-[style*="font-size: 44px"],[style*="font-size: 42px"],[style*="font-size: 40px"]{font-size:28px !important}
-[style*="font-size: 38px"],[style*="font-size: 36px"],[style*="font-size: 34px"]{font-size:26px !important}
-[style*="font-size: 32px"],[style*="font-size: 31px"],[style*="font-size: 30px"]{font-size:24px !important}
-[style*="font-size: 29px"],[style*="font-size: 28px"],[style*="font-size: 27px"],[style*="font-size: 26px"]{font-size:21px !important}
-[style*="font-size: 25px"],[style*="font-size: 24px"],[style*="font-size: 23px"],[style*="font-size: 22px"]{font-size:18px !important}
-[style*="font-size: 20px"],[style*="font-size: 19px"]{font-size:16px !important}
-[style*="font-size: 18px"],[style*="font-size: 17px"]{font-size:15px !important}
-[style*="font-size: 16px"]{font-size:15px !important}
-h1,h2{line-height:1.15 !important;letter-spacing:-0.01em !important}
-p{line-height:1.5 !important}
-[style*="padding: 72px 24px 56px"]{padding:32px 16px 28px !important}
-[style*="padding: 88px 24px 40px"],[style*="padding: 72px 24px 40px"]{padding:40px 16px 12px !important}
-[style*="padding: 56px 24px 72px"],[style*="padding: 56px 24px 24px"]{padding:28px 16px !important}
-[style*="padding: 56px 32px"]{padding:32px 20px !important}
-[style*="padding: 36px"]{padding:22px !important}
-[style*="padding: 32px 24px 56px"],[style*="padding: 28px 24px 56px"],[style*="padding: 28px 24px 48px"]{padding:20px 14px 40px !important}
-[style*="padding: 48px 24px"]{padding:24px 14px !important}
-[style*="padding: 48px;"]{padding:24px 18px !important}
-[style*="padding: 26px"],[style*="padding: 24px;"]{padding:18px !important}
-[style*="padding: 22px"]{padding:16px !important}
-[style*="gap: 48px"]{gap:28px !important}
-[style*="gap: 36px"]{gap:22px !important}
-[style*="height: 56px"]{height:50px !important}
-}
-header nav a{text-decoration:none !important}
-header nav a:hover{color:#F3F3F7 !important}
-header > a,header > button{text-decoration:none !important}
-@media (max-width: 600px){
-header{gap:10px !important;padding:12px 14px !important;align-items:center !important}
-header > div[style*="flex: 1"]{flex:1 1 0 !important}
-header nav{order:5;flex:0 0 calc(100% + 28px) !important;flex-wrap:nowrap !important;overflow-x:auto;gap:6px !important;margin:2px -14px 0 !important;padding:2px 14px 4px !important;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 24px),transparent 100%)}
-header nav::-webkit-scrollbar{display:none}
-header nav a{flex:none;white-space:nowrap;height:36px;box-sizing:border-box;display:inline-flex !important;align-items:center;padding:0 14px !important;border-radius:999px !important;background:#16161D !important;border:1px solid #24242E;color:#C9C9D6 !important;font-size:13px !important;font-weight:500 !important}
-header nav a[aria-current="page"]{background:#D4FF3A !important;border-color:#D4FF3A;color:#0E0E14 !important;font-weight:600 !important}
-header > span:not(:first-child){display:none !important}
-header > a[href="Configuracoes.dc.html"]{display:none !important}
-header > a,header > button{height:38px !important;padding:0 14px !important;font-size:13px !important;border-radius:10px !important}
-}
+:root{--bg:#09090D;--card:#121218;--line:#22222C;--tx:#F3F3F7;--mu:#A7A7B8;--li:#D4FF3A;--au:#F2C14E;--di:#8FE3FF;--pk:#FF9AD5}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.hd{position:sticky;top:0;z-index:50;background:rgba(9,9,13,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hd .wrap{display:flex;align-items:center;gap:14px;height:66px}
+.logo{display:flex;align-items:center;gap:10px;font:700 21px 'Space Grotesk';text-decoration:none}.logo i{width:34px;height:34px;border-radius:11px;background:var(--li);color:#0E0E14;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:17px}
+.nav{display:flex;gap:4px;margin-left:18px}.nav a{padding:8px 12px;border-radius:10px;color:var(--mu);text-decoration:none;font-size:14.5px}.nav a:hover{color:var(--tx);background:#16161E}
+.sp{flex:1}.b{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:none;cursor:pointer;font-family:inherit;white-space:nowrap}
+.b.p{background:var(--li);color:#0E0E14}.b.g{background:#18181F;color:var(--tx);border:1px solid var(--line)}.b.lg{height:58px;padding:0 28px;font-size:16.5px}
+@media (max-width:820px){.nav{display:none}.hd .b.g{display:none}}
+.hero{position:relative;padding:70px 0 40px;overflow:hidden}
+.hero::before{content:"";position:absolute;width:900px;height:900px;left:50%;top:-420px;transform:translateX(-50%);background:radial-gradient(circle,rgba(212,255,58,.16),transparent 60%);pointer-events:none}
+.hg{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;position:relative}
+@media (max-width:960px){.hg{grid-template-columns:1fr;gap:40px}}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:#151A08;border:1px solid #34411A;color:var(--li);font-size:13.5px;font-weight:600}
+.pill b{width:8px;height:8px;border-radius:50%;background:var(--li);box-shadow:0 0 0 0 rgba(212,255,58,.6);animation:pu 2s infinite}@keyframes pu{70%{box-shadow:0 0 0 9px rgba(212,255,58,0)}100%{box-shadow:0 0 0 0 rgba(212,255,58,0)}}
+h1{font:700 clamp(40px,6.2vw,72px)/1.02 'Space Grotesk',sans-serif;letter-spacing:-.025em;margin:20px 0 18px}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--li),#7CF5D0 55%,var(--di));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:19px;color:#C9C9D6;max-width:560px;margin:0 0 28px}
+.claim{display:flex;gap:8px;flex-wrap:wrap;max-width:560px}
+.claim label{flex:1 1 260px;display:flex;align-items:center;height:58px;border-radius:16px;background:#131319;border:1px solid #2C2C38;padding:0 6px 0 16px;color:var(--mu);font-size:16.5px}
+.claim input{flex:1;min-width:0;background:none;border:none;color:var(--tx);font:600 16.5px Inter,sans-serif;outline:none;height:100%}
+.hint{font-size:14px;margin-top:10px;min-height:20px}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;color:var(--mu);font-size:14px}.trust span::before{content:"✓ ";color:var(--li);font-weight:700}
+.phone{width:310px;height:630px;margin:0 auto;border-radius:46px;background:#000;padding:12px;box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1px #2A2A34,inset 0 0 0 2px #1A1A22;position:relative}
+.scr{width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative;background:linear-gradient(180deg,#24124A 0%,#0E0E14 55%)}
+.cov{height:150px;background:linear-gradient(135deg,#FF5FA2,#7A3CFF);position:relative}.cov::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,#170C2E)}
+.pin{position:absolute;inset:0;padding:96px 16px 16px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.av{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#FFD1E8,#FF7AB8);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font:700 26px 'Space Grotesk';color:#5A1340}
+.nm{font:700 17px 'Space Grotesk';display:flex;align-items:center;gap:6px}.nm i{width:17px;height:17px;border-radius:50%;background:var(--di);color:#06222B;font-size:10px;font-style:normal;display:flex;align-items:center;justify-content:center}
+.bi{font-size:12px;color:#D8CCF0;margin-top:-6px}
+.pb{width:100%;padding:11px;border-radius:14px;background:rgba(255,255,255,.12);text-align:center;font-size:13px;font-weight:600;animation:in .6s both}
+.pb.m{background:#fff;color:#2A0E4A}
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;animation:in .6s both}.pg2 div{border-radius:14px;background:rgba(255,255,255,.1);padding:6px;font-size:11px}.pg2 span{display:block;height:58px;border-radius:10px;margin-bottom:5px}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+.live{position:absolute;left:12px;top:14px;padding:6px 11px;border-radius:999px;background:rgba(0,0,0,.55);font-size:11px;font-weight:600;display:flex;gap:6px;align-items:center;backdrop-filter:blur(6px)}.live b{width:7px;height:7px;border-radius:50%;background:#4ADE80}
+.tst{position:absolute;left:12px;right:12px;bottom:16px;padding:10px 12px;border-radius:14px;background:rgba(10,10,14,.9);font-size:12px;animation:tsn 6s infinite;box-shadow:0 10px 24px rgba(0,0,0,.4)}
+@keyframes tsn{0%,12%{opacity:0;transform:translateY(16px)}18%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(16px)}}
+.flt{position:absolute;padding:12px 14px;border-radius:16px;background:#141419;border:1px solid #2A2A34;font-size:13px;box-shadow:0 20px 40px rgba(0,0,0,.4);animation:fl 5s ease-in-out infinite}
+.flt b{display:block;font:700 20px 'Space Grotesk'}
+@keyframes fl{50%{transform:translateY(-10px)}}
+@media (max-width:960px){.flt{display:none}}
+.sec{padding:90px 0}.sec.alt{background:linear-gradient(180deg,#0D0D12,#09090D)}
+.eyebrow{color:var(--li);font-weight:700;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase}
+h2{font:700 clamp(32px,4.4vw,50px)/1.08 'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:10px 0 14px}
+.sub{color:#C9C9D6;font-size:18px;max-width:640px;margin:0}
+.fg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+@media (max-width:1000px){.fg{grid-template-columns:repeat(2,1fr)}}@media (max-width:560px){.fg{grid-template-columns:1fr}}
+.f{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:transform .25s,border-color .25s}
+.f:hover{transform:translateY(-4px);border-color:#3A3A48}
+.f .ic{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:23px}
+.f h3{margin:4px 0 0;font:700 19px 'Space Grotesk'}.f p{margin:0;color:var(--mu);font-size:14.5px}
+.tg{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;margin-top:auto;align-self:flex-start}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.st{padding:24px;border-radius:24px;background:var(--card);border:1px solid var(--line)}.st b{width:42px;height:42px;border-radius:50%;background:var(--li);color:#0E0E14;display:flex;align-items:center;justify-content:center;font:700 18px 'Space Grotesk';margin-bottom:12px}
+.st h3{margin:0 0 6px;font:700 19px 'Space Grotesk'}.st p{margin:0;color:var(--mu);font-size:14.5px}
+.cmp{margin-top:40px;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--card)}
+.cmp .r{display:grid;grid-template-columns:1.6fr 1fr 1fr;align-items:center;border-bottom:1px solid var(--line)}.cmp .r:last-child{border:none}
+.cmp .r>div{padding:15px 18px;font-size:14.5px}.cmp .r>div:nth-child(n+2){text-align:center}
+.cmp .h{background:#16161D;font-weight:700}.cmp .h>div:nth-child(3){color:var(--li)}
+.y{color:var(--li);font-weight:700}.n{color:#5E5E6E}
+.tog{display:inline-flex;gap:4px;padding:5px;border-radius:999px;background:#15151C;border:1px solid var(--line);margin-top:26px}
+.tog button{height:42px;padding:0 18px;border-radius:999px;border:none;background:none;color:var(--mu);font:600 14.5px Inter,sans-serif;cursor:pointer}.tog button[aria-pressed="true"]{background:var(--tx);color:#0E0E14}
+.tog small{color:var(--li);font-weight:700;margin-left:4px}
+.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px;align-items:start}@media (max-width:1100px){.pg{grid-template-columns:repeat(2,1fr)}}@media (max-width:600px){.pg{grid-template-columns:1fr}}
+.pc{position:relative;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.pc.hi{border-color:var(--di);box-shadow:0 0 0 1px var(--di),0 30px 60px rgba(143,227,255,.12)}
+.pc .tag{position:absolute;top:-12px;left:22px;padding:5px 12px;border-radius:999px;background:var(--di);color:#06222B;font-size:12px;font-weight:800}
+.pc h3{margin:0;font:700 23px 'Space Grotesk'}.pc .pr{font:700 36px 'Space Grotesk';letter-spacing:-.02em}.pc .pr small{font:500 14px Inter;color:var(--mu)}
+.pc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.pc li{position:relative;padding-left:24px;font-size:14px;color:#D2D2DD;line-height:1.45}.pc li::before{content:"";position:absolute;left:2px;top:5px;width:11px;height:6px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);color:var(--li)}
+.pc li.hd2{padding-left:0;font-weight:700;color:var(--tx)}.pc li.hd2::before{display:none}
+.more{background:none;border:none;color:var(--mu);font:600 13.5px Inter;cursor:pointer;text-align:left;padding:0}
+.faq{max-width:820px;margin:40px auto 0;display:flex;flex-direction:column;gap:10px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:18px}.q button{width:100%;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 20px;background:none;border:none;color:var(--tx);font:600 16px Inter;cursor:pointer;text-align:left}
+.q p{margin:0;padding:0 20px 18px;color:#C9C9D6;font-size:15px}
+.cta{margin:20px 0 0;padding:56px 28px;border-radius:32px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(212,255,58,.25),transparent 60%),#111117;border:1px solid #2A3214}
+.ft{padding:40px 0 60px;color:var(--mu);font-size:14px;border-top:1px solid var(--line);margin-top:60px}.ft .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}.ft a{text-decoration:none}
+@keyframes rvIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@supports (animation-timeline: view()){.rv{animation:rvIn linear both;animation-timeline:view();animation-range:entry 0% entry 70%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </helmet>
-<div style="min-height: 3600px; background: #0B0B10; color: #F3F3F7; font-family: Inter, system-ui, sans-serif">
+<div>
+  <header class="hd"><div class="wrap">
+    <a class="logo" href="/"><i>W</i>WhiteLink</a>
+    <nav class="nav"><a href="#recursos">Recursos</a><a href="#comparar">Comparar</a><a href="#planos">Planos</a><a href="#duvidas">Dúvidas</a></nav>
+    <span class="sp"></span>
+    <a class="b g" href="/entrar">Entrar</a>
+    <a class="b p" href="/entrar#cadastro">Testar grátis</a>
+  </div></header>
 
-  <header style="position: sticky; top: 0; z-index: 5; background: #0B0B10; border-bottom: 1px solid #1C1C24">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 14px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px">
-      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.02em">WhiteLink</span>
-      <nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px">
-        <a href="#recursos" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Recursos</a>
-        <a href="#como" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Como funciona</a>
-        <a href="#precos" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Preços</a>
-        <a href="#duvidas" style="padding: 10px 12px; color: #C9C9D6; font-size: 14px; text-decoration: none">Dúvidas</a>
-      </nav>
-      <div style="flex: 1"></div>
-      <a href="Entrar.dc.html" style="height: 44px; padding: 0 16px; border-radius: 12px; color: #F3F3F7; font-size: 14px; display: flex; align-items: center; text-decoration: none">Entrar</a>
-      <a href="Teste.dc.html" style="height: 44px; padding: 0 18px; border-radius: 12px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 14px; display: flex; align-items: center; text-decoration: none">Testar grátis</a>
-    </div>
-  </header>
-
-  <section style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 56px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 48px; align-items: center">
-    <div style="display: flex; flex-direction: column; gap: 22px">
-      <span style="align-self: flex-start; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: #1A2008; color: #D4FF3A; border: 1px solid #3A4714">Diamante grátis por 3 dias · depois Prata grátis</span>
-      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 60px; line-height: 1.02; font-weight: 700; letter-spacing: -0.03em">O link da sua bio,<br>feito para vender.</h1>
-      <p style="margin: 0; font-size: 19px; line-height: 1.55; color: #C9C9D6; max-width: 520px">Monte sua página arrastando blocos, venda com Pix e produtos, capture contatos e veja de onde vem cada clique. Tudo em um só link.</p>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; max-width: 520px">
-        <label style="flex: 1 1 260px; display: flex; align-items: center; height: 56px; border-radius: 14px; background: #14141B; border: 1px solid #33333E; padding: 0 6px 0 16px; box-sizing: border-box; font-size: 16px; color: #A7A7B8">
-          <span>whitelink.site/</span>
-          <input aria-label="Escolha seu nome de usuário" value="{{handle}}" onInput="{{setHandle}}" placeholder="seunome" style="flex: 1; min-width: 0; height: 100%; border: none; background: transparent; color: #F3F3F7; font-size: 16px; outline: none">
-        </label>
-        <a href="{{claimHref}}" style="height: 56px; padding: 0 22px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 16px; display: flex; align-items: center; text-decoration: none">Garantir meu link</a>
+  <section class="hero"><div class="wrap hg">
+    <div>
+      <span class="pill"><b></b>Diamante grátis por 3 dias · sem cartão</span>
+      <h1>Sua bio não é só um link. <em>Ela vende por você.</em></h1>
+      <p class="lead">Loja com Pix, agenda de horários, clientes organizados, parceiros que vendem por você, IA e prova social ao vivo. Tudo num link só, do jeito que o Instagram deixa.</p>
+      <div class="claim">
+        <label>whitelink.site/<input value="{{handle}}" onInput="{{setHandle}}" placeholder="seunome" autocapitalize="none" autocomplete="off" aria-label="Seu endereço"></label>
+        <a class="b p lg" href="{{claimHref}}">Garantir meu link</a>
       </div>
-      <span style="font-size: 13px; color: {{handleColor}}; min-height: 18px">{{handleMsg}}</span>
+      <div class="hint" style="color: {{handleColor}}">{{handleMsg}}</div>
+      <div class="trust"><span>Pronto em 1 minuto</span><span>Pagamento só por Pix</span><span>Prata grátis para sempre</span></div>
     </div>
-
-    <div style="display: flex; justify-content: center">
-      <div aria-hidden="true" style="width: 300px; border-radius: 40px; padding: 12px; background: #1A1A22; border: 1px solid #2A2A34">
-        <div style="border-radius: 30px; overflow: hidden; background: linear-gradient(180deg, #1C1F10 0%, #0E0E14 60%); padding: 28px 18px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px">
-          <div style="width: 76px; height: 76px; border-radius: 50%; background: #2A2A34; border: 3px solid #D4FF3A"></div>
-          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px">@{{shownHandle}}</span>
-          <span style="font-size: 12px; color: #A7A7B8; text-align: center">[sua descrição curta aqui]</span>
-          <div style="width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 8px">
-            <div style="height: 46px; border-radius: 14px; background: #D4FF3A; color: #0E0E14; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center">Meu produto em destaque</div>
-            <div style="height: 46px; border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; font-size: 13px; display: flex; align-items: center; justify-content: center">Canal no YouTube</div>
-            <div style="border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; padding: 12px; display: flex; flex-direction: column; gap: 6px; align-items: center">
-              <span style="font-size: 11px; color: #A7A7B8">A promoção acaba em</span>
-              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: .04em">02 : 14 : 37</span>
-            </div>
-            <div style="height: 46px; border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px">Pagar com Pix</div>
-            <div style="height: 46px; border-radius: 14px; background: #1A1A22; border: 1px solid #33333E; font-size: 13px; display: flex; align-items: center; justify-content: center">Entre na minha lista VIP</div>
-          </div>
+    <div style="position: relative">
+      <div class="flt" style="left: -10px; top: 70px">🛍 Nova venda<b>R$ 86,90</b><span style="color: #A7A7B8">via Pix · agora</span></div>
+      <div class="flt" style="right: -6px; top: 300px; animation-delay: -2.5s">📅 Agendamento<b>Sáb, 10h</b><span style="color: #A7A7B8">Corte + escova</span></div>
+      <div class="flt" style="left: 0; bottom: 60px; animation-delay: -1.2s">✨ A/B decidiu<b>+38% cliques</b><span style="color: #A7A7B8">título novo no ar</span></div>
+      <div class="phone"><div class="scr">
+        <div class="cov"></div>
+        <div class="live"><b></b>{{viewers}} pessoas vendo agora</div>
+        <div class="pin">
+          <div class="av">LC</div>
+          <div class="nm">Lia Confeitaria <i>✓</i></div>
+          <div class="bi">Doces artesanais · Campinas</div>
+          <div class="pb m" style="animation-delay: .1s">📅 Agendar aula de confeitaria</div>
+          <div class="pg2" style="animation-delay: .2s"><div><span style="background: linear-gradient(135deg,#7B3F1E,#C68B59)"></span>Brigadeiro<br><b>R$ 36,00</b></div><div><span style="background: linear-gradient(135deg,#F4C2C2,#D9738F)"></span>Bolo de pote<br><b>R$ 14,90</b></div></div>
+          <div class="pb" style="animation-delay: .3s">💛 Me ajude a comprar o forno novo</div>
+          <div class="pb" style="animation-delay: .4s">✨ Qual doce combina com você?</div>
         </div>
-      </div>
+        <div class="tst">🛍 <b>Ana</b> comprou Bolo de pote · há 2 min</div>
+      </div></div>
     </div>
-  </section>
+  </div></section>
 
-  <section style="border-top: 1px solid #1C1C24; border-bottom: 1px solid #1C1C24; background: #0E0E14">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 22px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 40px; font-size: 14px; color: #C9C9D6">
-      <span>Sem login com Instagram: sua conta fica segura</span>
-      <span>Funciona em qualquer rede social</span>
-      <span>Pronto em menos de 5 minutos</span>
-      <span>Plano Prata grátis para sempre</span>
-    </div>
-  </section>
-
-  <section id="recursos" style="max-width: 1200px; margin: 0 auto; padding: 88px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 36px">
-    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 680px">
-      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Muito mais que uma lista de links</h2>
-      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #C9C9D6">Tudo o que você precisa para transformar quem clica na sua bio em cliente.</p>
-    </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px">
-      <sc-for list="{{features}}" as="f" hint-placeholder-count="6">
-        <div style="padding: 26px; border-radius: 20px; background: #14141B; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 12px">
-          <span style="width: 44px; height: 44px; border-radius: 12px; background: #1A2008; display: flex; align-items: center; justify-content: center">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4FF3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{f.icon}}"></path></svg>
-          </span>
-          <h3 style="margin: 0; font-size: 19px; font-weight: 600">{{f.t}}</h3>
-          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #C9C9D6">{{f.d}}</p>
-          <span style="font-size: 12px; color: #A7A7B8">{{f.plan}}</span>
-        </div>
+  <section class="sec" id="recursos"><div class="wrap">
+    <div class="rv"><span class="eyebrow">Muito além de link na bio</span><h2>Tudo que você precisa para vender, sem pagar dez ferramentas.</h2><p class="sub">Feito para criadores, lojas e profissionais que vendem pelo Instagram, TikTok e WhatsApp.</p></div>
+    <div class="fg">
+      <sc-for list="{{features}}" as="f" hint-placeholder-count="8">
+        <div class="f rv"><span class="ic" style="{{f.bg}}">{{f.i}}</span><h3>{{f.t}}</h3><p>{{f.d}}</p><span class="tg" style="{{f.tg}}">{{f.plan}}</span></div>
       </sc-for>
     </div>
-  </section>
+  </div></section>
 
-  <section id="como" style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Como funciona</h2>
-    <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
-      <sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
-        <li style="padding: 26px; border-radius: 20px; border: 1px solid #22222B; display: flex; flex-direction: column; gap: 10px">
-          <span style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; color: #D4FF3A; line-height: 1">{{s.n}}</span>
-          <h3 style="margin: 0; font-size: 19px; font-weight: 600">{{s.t}}</h3>
-          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #C9C9D6">{{s.d}}</p>
-        </li>
-      </sc-for>
-    </ol>
-  </section>
+  <section class="sec alt"><div class="wrap">
+    <div class="rv"><span class="eyebrow">Como funciona</span><h2>Do zero à primeira venda em minutos.</h2></div>
+    <div class="steps"><sc-for list="{{steps}}" as="s" hint-placeholder-count="3"><div class="st rv"><b>{{s.n}}</b><h3>{{s.t}}</h3><p>{{s.d}}</p></div></sc-for></div>
+  </div></section>
 
-  <section id="precos" style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
-      <div style="display: flex; flex-direction: column; gap: 10px">
-        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Preços simples</h2>
-        <p style="margin: 0; font-size: 17px; color: #C9C9D6">Teste 3 dias com tudo do Diamante. Depois, continue no Prata grátis ou assine.</p>
-      </div>
-      <div role="group" aria-label="Forma de pagamento" style="display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: #14141B; border: 1px solid #22222B">
-        <button onClick="{{setMonthly}}" aria-pressed="{{monthly}}" style="{{mStyle}}">Mensal</button>
-        <button onClick="{{setYearly}}" aria-pressed="{{yearly}}" style="{{yStyle}}">Anual</button>
-      </div>
+  <section class="sec" id="comparar"><div class="wrap">
+    <div class="rv"><span class="eyebrow">Compare</span><h2>Um link na bio comum mostra links. O WhiteLink trabalha.</h2></div>
+    <div class="cmp rv">
+      <div class="r h"><div></div><div>Link na bio comum</div><div>WhiteLink</div></div>
+      <sc-for list="{{compare}}" as="c" hint-placeholder-count="8"><div class="r"><div>{{c.t}}</div><div class="{{c.ac}}">{{c.a}}</div><div class="y">✓</div></div></sc-for>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
-      <sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
-        <div style="{{p.card}}">
-          <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: {{p.color}}">{{p.name}}</h3>
-          <div style="display: flex; align-items: baseline; gap: 6px">
-            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 700">{{p.price}}</span>
-            <span style="font-size: 14px; color: #A7A7B8">{{p.per}}</span>
-          </div>
-          <span style="font-size: 13px; color: #A7A7B8; min-height: 18px">{{p.note}}</span>
-          <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #E4E4EC">
-            <sc-for list="{{p.items}}" as="it" hint-placeholder-count="4">
-              <li style="display: flex; gap: 10px">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{p.color}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 1px"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
-                <span>{{it}}</span>
-              </li>
-            </sc-for>
-          </ul>
-          <a href="{{p.href}}" style="{{p.btn}}">{{p.cta}}</a>
+  </div></section>
+
+  <section class="sec alt" id="planos"><div class="wrap" style="text-align: center">
+    <div class="rv"><span class="eyebrow">Planos</span><h2>Comece grátis. Cresça quando quiser.</h2><p class="sub" style="margin: 0 auto">Teste tudo do Diamante por 3 dias. Depois, continue no Prata grátis ou escolha seu plano. Pague só por Pix.</p></div>
+    <div class="tog" role="group" aria-label="Período"><button onClick="{{monthly}}" aria-pressed="{{isM}}">Mensal</button><button onClick="{{yearly}}" aria-pressed="{{isY}}">Anual<small>2 meses grátis</small></button></div>
+    <div class="pg" style="text-align: left">
+      <sc-for list="{{plans}}" as="p" hint-placeholder-count="4">
+        <div class="pc {{p.cls}}" style="{{p.st}}">
+          <sc-if value="{{p.tag}}" hint-placeholder-val="{{ false }}"><span class="tag">{{p.tag}}</span></sc-if>
+          <h3 style="color: {{p.color}}">{{p.name}}</h3>
+          <div class="pr">{{p.price}} <small>{{p.per}}</small></div>
+          <span style="font-size: 13.5px; color: #A7A7B8; margin-top: -8px">{{p.note}}</span>
+          <a class="b {{p.btn}}" href="{{p.href}}" style="width: 100%">{{p.cta}}</a>
+          <ul><sc-for list="{{p.items}}" as="it" hint-placeholder-count="6"><li class="{{it.c}}">{{it.t}}</li></sc-for></ul>
+          <sc-if value="{{p.more}}" hint-placeholder-val="{{ false }}"><button class="more" onClick="{{p.toggle}}">{{p.more}}</button></sc-if>
         </div>
       </sc-for>
     </div>
-    <a href="Planos.dc.html" style="align-self: flex-start; font-size: 15px">Ver a comparação completa dos planos</a>
-  </section>
+  </div></section>
 
-  <section style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 24px; box-sizing: border-box">
-    <div style="padding: 36px; border-radius: 24px; background: #14141B; border: 1px solid #22222B; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between">
-      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 640px">
-        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">Indique e ganhe dias de plano</h2>
-        <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #C9C9D6">Cada amigo que assinar pelo seu convite rende dias grátis para você, e ele também ganha um bônus para começar.</p>
-      </div>
-      <a href="Indique.dc.html" style="height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid #D4FF3A; color: #D4FF3A; font-weight: 600; font-size: 15px; display: flex; align-items: center; text-decoration: none">Como funciona a indicação</a>
+  <section class="sec" id="duvidas"><div class="wrap">
+    <div class="rv" style="text-align: center"><span class="eyebrow">Dúvidas</span><h2>Perguntas frequentes</h2></div>
+    <div class="faq">
+      <sc-for list="{{faq}}" as="q" hint-placeholder-count="6"><div class="q"><button onClick="{{q.toggle}}" aria-expanded="{{q.open}}">{{q.q}}<span style="font-size: 22px; color: #D4FF3A">{{q.sign}}</span></button><sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}"><p>{{q.a}}</p></sc-if></div></sc-for>
     </div>
-  </section>
+    <div class="cta rv">
+      <h2 style="margin-top: 0">Sua próxima venda pode vir da bio.</h2>
+      <p class="sub" style="margin: 0 auto 24px">3 dias com tudo do Diamante, grátis. Sem cartão.</p>
+      <a class="b p lg" href="/entrar#cadastro">Criar minha página grátis</a>
+    </div>
+  </div></section>
 
-  <section id="duvidas" style="max-width: 860px; margin: 0 auto; padding: 72px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
-    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em">Dúvidas frequentes</h2>
-    <div style="display: flex; flex-direction: column; gap: 8px">
-      <sc-for list="{{faq}}" as="q" hint-placeholder-count="6">
-        <div style="border-radius: 16px; background: #14141B; border: 1px solid #22222B">
-          <button onClick="{{q.toggle}}" aria-expanded="{{q.open}}" style="width: 100%; min-height: 60px; padding: 16px 20px; border: none; background: transparent; color: #F3F3F7; font-size: 16px; font-weight: 500; text-align: left; display: flex; align-items: center; gap: 12px; cursor: pointer">
-            <span style="flex: 1">{{q.q}}</span>
-            <span aria-hidden="true" style="font-size: 22px; color: #D4FF3A">{{q.sign}}</span>
-          </button>
-          <sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}">
-            <p style="margin: 0; padding: 0 20px 18px; font-size: 15px; line-height: 1.6; color: #C9C9D6">{{q.a}}</p>
-          </sc-if>
-        </div>
-      </sc-for>
-    </div>
-  </section>
-
-  <section style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 72px; box-sizing: border-box">
-    <div style="padding: 56px 32px; border-radius: 28px; background: #D4FF3A; color: #0E0E14; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
-      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.02em">Seu novo link está a 5 minutos</h2>
-      <p style="margin: 0; font-size: 17px; max-width: 520px; line-height: 1.5">3 dias com tudo do Diamante e depois o Prata grátis para sempre. Sem cartão de crédito.</p>
-      <a href="Teste.dc.html" style="height: 56px; padding: 0 28px; border-radius: 14px; background: #0E0E14; color: #F3F3F7; font-weight: 600; font-size: 16px; display: flex; align-items: center; text-decoration: none">Começar meu teste grátis</a>
-    </div>
-  </section>
-
-  <footer style="border-top: 1px solid #1C1C24">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 28px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; font-size: 14px; color: #A7A7B8">
-      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: #F3F3F7">WhiteLink</span>
-      <a href="Termos.dc.html" style="color: #A7A7B8">Termos de uso</a>
-      <a href="Privacidade.dc.html" style="color: #A7A7B8">Privacidade</a>
-      <a href="CentralAjuda.dc.html" style="color: #A7A7B8">Ajuda e suporte</a>
-      <div style="flex: 1"></div>
-      <a href="https://wa.me/5511993931841" target="_blank" rel="noopener" style="color: #A7A7B8">WhatsApp (11) 99393-1841</a>
-    </div>
-  </footer>
+  <footer class="ft"><div class="wrap">
+    <a class="logo" href="/" style="font-size: 17px"><i style="width: 28px; height: 28px; font-size: 14px">W</i>WhiteLink</a>
+    <span class="sp"></span>
+    <a href="/termos">Termos de uso</a><a href="/privacidade">Privacidade</a><a href="/ajuda">Ajuda e suporte</a><a href="https://wa.me/5511993931841" target="_blank" rel="noopener">WhatsApp</a>
+  </div></footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3600}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
 class Component extends DCLogic {
-  constructor(p) { super(p); this.state = { handle: '', yearly: false, open: 0 }; }
+  constructor(p) { super(p); this.state = { handle: '', yearly: false, open: 0, prices: null, expand: {}, viewers: 12 }; }
+  componentDidMount() {
+    fetch('/api/prices').then((r) => r.json()).then((d) => { if (d.ok) this.setState({ prices: d.prices }); }).catch(() => {});
+    this.vt = setInterval(() => this.setState({ viewers: 9 + Math.floor(Math.random() * 9) }), 4000);
+  }
   renderVals() {
     const s = this.state;
     const h = s.handle.toLowerCase().replace(/[^a-z0-9._]/g, '');
@@ -242,57 +211,64 @@ class Component extends DCLogic {
     if (h.length > 0 && h.length < 3) { msg = 'Use pelo menos 3 caracteres.'; col = '#FF8A6B'; }
     else if (h.length >= 3 && chk.h !== h) { msg = 'Conferindo whitelink.site/' + h + '…'; }
     else if (h.length >= 3 && chk.free === false) { msg = chk.reason || ('whitelink.site/' + h + ' já está em uso. Tente outro.'); col = '#FF8A6B'; }
-    else if (h.length >= 3 && chk.free) { msg = 'whitelink.site/' + h + ' está livre!'; col = '#D4FF3A'; }
-    const yr = s.yearly;
-    const tog = (sel) => 'height: 44px; padding: 0 18px; border-radius: 10px; border: none; cursor: pointer; font-size: 14px; ' + (sel ? 'background: #F3F3F7; color: #0E0E14; font-weight: 600' : 'background: transparent; color: #C9C9D6');
-    const P = [
-      { name: 'Prata', color: '#C9CDD6', free: true, items: (window.WL_PLANOS || {}).prata || [] },
-      { name: 'Ouro', color: '#F2C14E', m: 'R$ 19,90', y: 'R$ 199,90', items: (window.WL_PLANOS || {}).ouro || [], hi: true },
-      { name: 'Diamante', color: '#8FE3FF', m: 'R$ 39,90', y: 'R$ 399,90', items: (window.WL_PLANOS || {}).diamante || [] }
-    ];
+    else if (h.length >= 3 && chk.free) { msg = '✓ whitelink.site/' + h + ' está livre!'; col = '#D4FF3A'; }
+    const yr = s.yearly, P = s.prices || { ouro_m: 'R$ 19,90', ouro_y: 'R$ 199,90', diamante_m: 'R$ 39,90', diamante_y: 'R$ 399,90', agencia_m: 'R$ 99,90', agencia_y: 'R$ 999,90' };
+    const W = window.WL_PLANOS || {};
+    const tg = (c) => 'background: ' + c + '22; color: ' + c;
     const F = [
-      { t: 'Editor arrastável', d: 'Arraste os blocos para a ordem que quiser e veja a página mudando na hora, no celular ou no computador.', plan: 'Todos os planos', icon: 'M5 9h14M5 15h14M9 5l-4 4 4 4' },
-      { t: 'Venda direto pela bio', d: 'Blocos de produto, botão de Pix, contagem regressiva para promoções e formulário para captar contatos.', plan: 'Ouro e Diamante', icon: 'M6 6h15l-2 9H8L6 3H3M9 20h.01M18 20h.01' },
-      { t: 'Estatísticas de verdade', d: 'Saiba quantas pessoas clicaram, em qual link, de qual rede social, aparelho e cidade.', plan: 'Detalhadas no Ouro e Diamante', icon: 'M4 20V10M10 20V4M16 20v-7M22 20H2' },
-      { t: 'Links agendados e destaque', d: 'Programe um link para aparecer e sumir sozinho e chame atenção para o mais importante com animação.', plan: 'Ouro e Diamante', icon: 'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0' },
-      { t: 'Teste A/B', d: 'Coloque dois títulos no mesmo link e descubra qual deles faz mais gente clicar.', plan: 'Diamante', icon: 'M7 4v16M17 4v16M3 8h8M13 16h8' },
-      { t: 'Temas e tema próprio', d: 'Escolha um tema pronto ou crie o seu, com suas cores, fontes e até fotos e vídeo de fundo.', plan: 'Tema próprio no Diamante', icon: 'M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-1.2-1-1.5-1-2.5S13.5 15 15 15h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8' }
+      ['🛍', 'Loja com Pix na hora', 'Produtos com foto, carrinho e Pix copia e cola com o valor certo. O dinheiro cai direto na sua conta, sem taxa nossa.', 'Ouro e Diamante', '#D4FF3A'],
+      ['📅', 'Agenda de horários', 'O cliente escolhe o dia e o horário livres e confirma no WhatsApp. No Diamante, cobra o sinal por Pix.', 'Ouro e Diamante', '#7CF5D0'],
+      ['👥', 'Clientes organizados', 'Cada contato, compra e agendamento vira uma ficha com histórico, etapa e etiquetas. Campanhas por WhatsApp em poucos toques.', 'CRM completo no Diamante', '#8FE3FF'],
+      ['🤝', 'Parceiros que vendem por você', 'Dê um link para afiliados e revendedores e veja quanto cada um vendeu e a comissão de cada um.', 'Diamante', '#B9A6FF'],
+      ['✨', 'Assistente de IA', 'Escreve sua bio, os títulos dos botões e as descrições dos produtos, e analisa seus números com dicas para vender mais.', 'Ouro e Diamante', '#FF9AD5'],
+      ['🔥', 'Prova social ao vivo', '"12 pessoas vendo agora" e "Ana comprou há 2 min" na sua página. Quem vê, compra mais.', 'Diamante', '#FF8A6B'],
+      ['🧠', 'Página que se otimiza sozinha', 'O teste A/B escolhe o título vencedor e os links mais clicados sobem sozinhos.', 'Diamante', '#F2C14E'],
+      ['📊', 'Mídia kit que fecha publi', 'Página profissional com seus números reais atualizados, público e preços. A marca manda a proposta por ela.', 'Ouro e Diamante', '#4ADE80'],
+      ['📲', 'App com avisos', 'Instale no celular e receba um aviso a cada venda, agendamento e contato.', 'Ouro e Diamante', '#D4FF3A'],
+      ['🔗', 'Links inteligentes', 'Abrem direto no app do YouTube ou do Instagram, mudam por aparelho e horário, com links de campanha e relatório.', 'Ouro e Diamante', '#7CF5D0'],
+      ['🎨', '77 temas e criador de tema', 'Temas com movimento, capa em foto ou vídeo, animações de entrada e um tema com a sua cara.', 'Todos os planos', '#8FE3FF'],
+      ['🏢', 'Feito para agências', 'Até 20 páginas de clientes num painel só, com relatório para mostrar às marcas.', 'Agência', '#D4FF3A']
     ];
-    const Q = [
-      ['Preciso conectar meu Instagram?', 'Não. Você só copia o seu link do WhiteLink e cola na bio do Instagram, TikTok, YouTube ou onde quiser. Não pedimos sua senha nem acesso à sua conta.'],
-      ['Como funciona o teste grátis?', 'Você usa todos os recursos do Diamante, o plano mais completo, por 3 dias sem colocar cartão. Para ser justo com todos, cada pessoa pode fazer o teste uma vez, confirmado pelo celular e pelo e-mail.'],
-      ['O que acontece quando o teste acaba?', 'Sua conta passa para o Prata, que é grátis para sempre, e a página continua no ar. O que passa do limite do Prata fica guardado e volta na hora em que você assinar o Ouro ou o Diamante.'],
-      ['O plano Prata é grátis mesmo?', 'Sim, para sempre e sem cartão. Ele tem o básico para ter sua página: até 3 links, 2 temas e o total de visitas da semana.'],
-      ['Posso trocar de plano depois?', 'Sim. Você pode subir ou descer de plano quando quiser, em Meu plano.'],
-      ['Quais formas de pagamento vocês aceitam?', 'Só Pix. No Pix automático o plano é liberado na hora, assim que o banco confirma. No Pix direto você paga o valor exato do pedido, envia o comprovante e liberamos assim que conferirmos. Se o plano vencer sem pagamento, sua conta volta para o Prata grátis e tudo volta quando o pagamento for conferido.'],
-      ['Como cancelo?', 'Em Meu plano, a qualquer momento. Você usa o plano até o fim do período já pago e depois continua no Prata grátis.']
-    ];
+    const C = [['Loja com carrinho e Pix', '✗'], ['Agenda de horários com sinal', '✗'], ['CRM de clientes e campanhas', '✗'], ['Afiliados com comissão', '✗'], ['IA que escreve e analisa', '✗'], ['Prova social ao vivo', '✗'], ['A/B que decide sozinho', '✗'], ['Mídia kit com números reais', 'Às vezes'], ['Abrir links direto no app', 'Às vezes'], ['Pagamento por Pix', 'Raro']];
+    const mk = (key, name, color, price, per, note, cta, href, opts) => {
+      const all = W[key] || [], open = !!s.expand[key], lim = 8;
+      return Object.assign({ name, color, price, per, note, cta, href, cls: '', st: '', tag: '', btn: 'g',
+        items: (open ? all : all.slice(0, lim)).map((t) => ({ t, c: /e mais:$/.test(t) ? 'hd2' : '' })),
+        more: all.length > lim ? (open ? 'Mostrar menos' : 'Ver tudo (' + all.length + ')') : '',
+        toggle: () => this.setState({ expand: Object.assign({}, s.expand, { [key]: !open }) }) }, opts || {});
+    };
     return {
-      handle: s.handle,
+      handle: s.handle, viewers: s.viewers,
       setHandle: (e) => {
         const v = e.target.value; this.setState({ handle: v });
         const hh = v.toLowerCase().replace(/[^a-z0-9._]/g, '');
         clearTimeout(this.ht);
         if (hh.length >= 3) this.ht = setTimeout(async () => { const d = await DC.api('handle-check?h=' + encodeURIComponent(hh)); this.setState({ chk: { h: hh, free: d.free, reason: d.reason } }); }, 350);
       },
-      claimHref: '/entrar?h=' + encodeURIComponent(h) + '#cadastro',
-      handleMsg: msg, handleColor: col,
-      shownHandle: h || 'seunome',
-      features: F,
+      claimHref: '/entrar?h=' + encodeURIComponent(h) + '#cadastro', handleMsg: msg, handleColor: col,
+      features: F.map((f) => ({ i: f[0], t: f[1], d: f[2], plan: f[3], bg: 'background: ' + f[4] + '1F', tg: tg(f[4]) })),
       steps: [
-        { n: '1', t: 'Escolha seu endereço', d: 'Crie sua conta com e-mail e garanta o seu whitelink.site/seunome.' },
-        { n: '2', t: 'Monte sua página', d: 'Adicione links, produtos e vídeos, escolha um tema e arraste tudo para o lugar.' },
-        { n: '3', t: 'Cole na bio e acompanhe', d: 'Coloque o link na bio das suas redes e veja os cliques chegando no painel.' }
+        { n: '1', t: 'Garanta seu endereço', d: 'Crie a conta com e-mail e celular e escolha o seu whitelink.site/seunome.' },
+        { n: '2', t: 'Monte em minutos', d: 'Adicione links, produtos, agenda e quiz. A IA ajuda a escrever. Escolha entre 77 temas.' },
+        { n: '3', t: 'Cole na bio e venda', d: 'Coloque o link no Instagram, TikTok ou YouTube e receba pedidos, agendamentos e contatos no celular.' }
       ],
-      monthly: !yr, yearly: yr, mStyle: tog(!yr), yStyle: tog(yr),
-      setMonthly: () => this.setState({ yearly: false }),
-      setYearly: () => this.setState({ yearly: true }),
-      plans: P.map((p) => ({ name: p.name, color: p.color, items: p.items,
-        price: p.free ? 'Grátis' : (yr ? p.y : p.m), per: p.free ? '' : (yr ? '/ano' : '/mês'), note: p.free ? 'para sempre, sem cartão' : (yr ? 'pagamento único por 12 meses' : 'ou ' + p.y + ' por ano'),
-        href: p.free ? 'Teste.dc.html' : 'Pagamento.dc.html', cta: p.free ? 'Começar grátis' : 'Assinar ' + p.name,
-        btn: 'margin-top: auto; height: 48px; border-radius: 12px; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; text-decoration: none; ' + (p.hi ? 'background: ' + p.color + '; color: #0E0E14' : 'border: 1px solid #33333E; color: #F3F3F7'),
-        card: 'padding: 26px; border-radius: 20px; display: flex; flex-direction: column; gap: 12px; background: ' + (p.hi ? '#17171F' : '#121218') + '; border: ' + (p.hi ? '2px solid ' + p.color : '1px solid #22222B') })),
-      faq: Q.map((q, i) => ({ q: q[0], a: q[1], open: s.open === i, sign: s.open === i ? '−' : '+', toggle: () => this.setState({ open: s.open === i ? -1 : i }) }))
+      compare: C.map((c) => ({ t: c[0], a: c[1], ac: c[1] === '✗' ? 'n' : '' })),
+      isM: !yr, isY: yr, monthly: () => this.setState({ yearly: false }), yearly: () => this.setState({ yearly: true }),
+      plans: [
+        mk('prata', 'Prata', '#C9CDD6', 'R$ 0', 'para sempre', 'Para começar', 'Começar grátis', '/entrar#cadastro'),
+        mk('ouro', 'Ouro', '#F2C14E', yr ? P.ouro_y : P.ouro_m, yr ? '/ano' : '/mês', 'Para quem quer vender', 'Assinar Ouro', '/pagamento?p=ouro'),
+        mk('diamante', 'Diamante', '#8FE3FF', yr ? P.diamante_y : P.diamante_m, yr ? '/ano' : '/mês', 'Tudo liberado · teste 3 dias grátis', 'Testar 3 dias grátis', '/entrar#cadastro', { cls: 'hi', tag: 'MAIS ESCOLHIDO', btn: 'p' }),
+        mk('agencia', 'Agência', '#D4FF3A', yr ? P.agencia_y : P.agencia_m, yr ? '/ano' : '/mês', 'Para agências e assessorias', 'Assinar Agência', '/pagamento?p=agencia')
+      ],
+      faq: [
+        ['Preciso conectar meu Instagram?', 'Não. Você só copia o seu link do WhiteLink e cola na bio do Instagram, TikTok, YouTube ou onde quiser. Não pedimos sua senha nem acesso à sua conta.'],
+        ['Como recebo o dinheiro das minhas vendas?', 'Direto na sua conta, pelo Pix da sua chave. O WhiteLink gera o Pix copia e cola com o valor certo e você confirma o recebimento no painel. Não cobramos taxa sobre as suas vendas.'],
+        ['Como funciona o teste grátis?', 'Você usa tudo do Diamante por 3 dias, sem cartão. Para ser justo com todos, cada pessoa pode testar uma vez, confirmado pelo celular e pelo e-mail.'],
+        ['O que acontece quando o teste acaba?', 'Sua conta passa para o Prata, grátis para sempre, e a página continua no ar. O que passa do limite fica guardado e volta na hora em que você assinar.'],
+        ['Funciona para quem vende serviço?', 'Sim. A agenda de horários é feita para manicures, cabeleireiros, personal trainers, consultores, professores e qualquer profissional com hora marcada.'],
+        ['Quais formas de pagamento vocês aceitam?', 'Só Pix. O plano é liberado assim que o pagamento é confirmado.'],
+        ['Posso cancelar quando quiser?', 'Sim, sem multa. Você usa até o fim do período pago e depois continua no Prata grátis.']
+      ].map((q, i) => ({ q: q[0], a: q[1], open: s.open === i, sign: s.open === i ? '−' : '+', toggle: () => this.setState({ open: s.open === i ? -1 : i }) }))
     };
   }
 }
