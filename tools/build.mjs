@@ -58,7 +58,7 @@ const ICONS = {
 };
 export const TABS = [
   ['pagina', 'Página', '/painel'], ['vendas', 'Vendas', '/painel/vendas'], ['clientes', 'Clientes', '/painel/clientes'],
-  ['stats', 'Números', '/painel/estatisticas'], ['mais', 'Mais', '/painel/mais']
+  ['stats', 'Números', '/painel/estatisticas'], ['mais', 'Ferramentas', '/painel/mais']
 ];
 export function shellNav(active) {
   const svg = (k) => '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[k] + '</svg>';
@@ -98,6 +98,8 @@ ${tab && tab !== 'admin' ? shellNav(tab) : ''}
 <script src="/assets/dc.js"></script>
 ${tab ? '<script src="/assets/temas-list.js"></script>' : ''}
 <script src="/assets/planos.js"></script>
+${tab ? '<script src="/assets/ajuda.js"></script>' : ''}
+${out === 'painel.html' ? '<script src="/assets/anuncio.js" defer></script>' : ''}
 <script>
 ${code.replace(/<\/script/gi, '<\\/script')}
 ${tab ? "if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});" : ''}

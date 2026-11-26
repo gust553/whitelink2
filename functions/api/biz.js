@@ -29,7 +29,7 @@ export async function onRequestPut({ request, env }) {
   const u = await currentUser(env, request);
   if (!u) return fail('Entre na sua conta.', 401);
   const lvl = PLAN_LEVEL[effectivePlan(u).plan];
-  if (lvl < 1) return fail('Vendas pela bio são do plano Ouro ou Diamante.', 403);
+  if (lvl < 1) return fail('Vendas pelo seu link são do plano Ouro ou Diamante.', 403);
   const b = (await readJson(request, 200000)) || {};
   const patch = {};
   if (b.shop) {

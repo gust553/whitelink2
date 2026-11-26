@@ -25,7 +25,7 @@
   <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div class="app-main" style="color: #9C9CAD; padding-top: 40px">Carregando…</div></sc-if>
   <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
   <div class="app-main">
-    <div class="sec-t" style="margin-top: 8px">Tema</div>
+    <div class="sec-t" style="margin-top: 8px">Tema<button class="hq" data-help="temas" aria-label="Ajuda">?</button></div>
     <a class="card" href="/painel/temas" style="display: flex; align-items: center; gap: 16px; padding: 14px; text-decoration: none; color: inherit">
       <div class="mini-ap"><div class="ph {{tcls}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in"><div class="ph-head"><div class="ph-av"></div><div class="ph-name">Aa</div><div class="ph-orn"></div></div><div class="ph-btn main">Link</div><div class="ph-btn">Link</div></div></div></div>
       <div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><b style="font-size: 17px">{{themeName}}</b><span style="font-size: 14px; color: #9C9CAD">{{moreThemes}}</span></div>

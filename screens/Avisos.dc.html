@@ -22,7 +22,7 @@
     <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
     <div>
       <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
-        <b style="font-size: 16px">📲 WhiteLink no seu celular</b>
+        <b style="font-size: 16px">📲 WhiteLink no seu celular<button class="hq" data-help="avisos" aria-label="Ajuda">?</button></b>
         <span class="note">{{pushText}}</span>
         <sc-if value="{{canInstall}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{install}}">Instalar o app</button></sc-if>
         <sc-if value="{{iosHelp}}" hint-placeholder-val="{{ false }}"><ol class="steps"><li>Abra o whitelink.site/painel no <b>Safari</b></li><li>Toque em <b>Compartilhar</b> (quadrado com seta)</li><li>Escolha <b>Adicionar à Tela de Início</b></li><li>Abra o app pela tela inicial e volte aqui para ligar os avisos</li></ol></sc-if>
@@ -31,7 +31,7 @@
         <sc-if value="{{msg}}" hint-placeholder-val="{{ false }}"><div role="status" class="note" style="color: #D4FF3A">{{msg}}</div></sc-if>
         <span class="note">{{planNote}}</span>
       </div>
-      <div class="sec-t">Últimos avisos</div>
+      <div class="sec-t">Últimos avisos<button class="hq" data-help="avisos" aria-label="Ajuda">?</button></div>
       <div class="list">
         <sc-for list="{{items}}" as="n" hint-placeholder-count="4"><a class="row" href="{{n.url}}"><span class="nic">{{n.ic}}</span><span class="row-tx"><b style="font-weight: 500">{{n.text}}</b><span>{{n.at}}</span></span><sc-if value="{{n.unread}}" hint-placeholder-val="{{ false }}"><span class="new"></span></sc-if></a></sc-for>
         <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nenhum aviso ainda. Quando alguém comprar, agendar, apoiar ou deixar o contato, aparece aqui.</div></sc-if>

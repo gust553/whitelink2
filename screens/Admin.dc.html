@@ -176,6 +176,18 @@ textarea.inp{height:auto;min-height:90px;padding:12px 14px;resize:vertical;font-
         </div>
       </sc-if>
 
+      <sc-if value="{{cfgAnn}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="card" style="padding: 14px 16px; font-size: 14px; color: #C9C9D6; line-height: 1.5; margin-top: 4px">Aparece uma vez por dia quando o cliente abre o painel. Mostra os benefícios do próximo plano conforme o plano dele. Se você escrever uma novidade abaixo, ela aparece em destaque no topo.</div>
+          <div class="card" style="margin-top: 12px"><div class="row" style="cursor: default; border: none"><span class="row-tx"><b>Mostrar o anúncio</b></span><button class="sw" onClick="{{toggleAnn}}" aria-pressed="{{annOn}}" style="{{annSw}}"><span style="{{annKn}}"></span></button></div></div>
+          <div class="sec-t">Novidade (opcional)</div>
+          <div class="card" style="padding: 16px">
+            <label class="fld">Título<input class="inp" value="{{s.ann_title}}" onInput="{{set_ann_title}}" maxlength="80" placeholder="Ex.: Novo: agenda com sinal por Pix"></label>
+            <label class="fld" style="margin: 0">Texto<textarea class="inp" onInput="{{set_ann_text}}" maxlength="400" placeholder="Ex.: Agora seus clientes pagam o sinal na hora de agendar.">{{s.ann_text}}</textarea></label>
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{cfgAny}}" hint-placeholder-val="{{ false }}">
         <div>
           <sc-if value="{{cfgErr}}" hint-placeholder-val="{{ false }}"><div role="alert" style="margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: #3A1518; color: #FFB4B4; font-size: 14px">{{cfgErr}}</div></sc-if>
@@ -299,7 +311,7 @@ class Component extends DCLogic {
     window.scrollTo(0, 0);
     const s = this.state;
     let d = {};
-    if (sub === 'pagto' || sub === 'precos' || sub === 'dominios') { const r = await DC.api('admin/settings'); this.setState({ cfg: r.ok ? r.settings : null, doms: r.domains || [] }); }
+    if (sub === 'pagto' || sub === 'precos' || sub === 'dominios' || sub === 'anuncio') { const r = await DC.api('admin/settings'); this.setState({ cfg: r.ok ? r.settings : null, doms: r.domains || [] }); }
     else if (sub === 'indicacoes') d = await DC.api('admin/referrals');
     else if (sub === 'antifraude') d = await DC.api('admin/fraud');
     else if (sec === 'inicio') { d = await DC.api('admin/overview'); if (d.ok) this.setState({ badges: d.alerts, ov: d }); }
@@ -351,7 +363,7 @@ class Component extends DCLogic {
   }
   async saveCfg() {
     const c = this.state.cfg;
-    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp'] : this.state.sub === 'dominios' ? ['cf_token', 'cf_zone'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y', 'loyalty_every', 'loyalty_days'];
+    const keys = this.state.sub === 'pagto' ? ['pay_mode', 'pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp'] : this.state.sub === 'dominios' ? ['cf_token', 'cf_zone'] : this.state.sub === 'anuncio' ? ['ann_on', 'ann_title', 'ann_text'] : ['price_ouro_m', 'price_ouro_y', 'price_diamante_m', 'price_diamante_y', 'price_agencia_m', 'price_agencia_y', 'loyalty_every', 'loyalty_days'];
     const body = {};
     for (const k of keys) body[k] = k.startsWith('price_') ? (c['_' + k] !== undefined ? c['_' + k] : (c[k] / 100).toFixed(2).replace('.', ',')) : c[k];
     const r = await DC.api('admin/settings', 'PUT', body);
@@ -396,7 +408,7 @@ class Component extends DCLogic {
     const fmtDay = (t) => t ? new Date(t).toLocaleDateString('pt-BR') : '—';
     const PN = { prata: 'Prata', ouro: 'Ouro', diamante: 'Diamante', agencia: 'Agência' };
     const PC = { prata: 'background: #26262F; color: #C9C9D6', ouro: 'background: rgba(242,193,78,.16); color: #F2C14E', diamante: 'background: rgba(143,227,255,.14); color: #8FE3FF', agencia: 'background: rgba(212,255,58,.14); color: #D4FF3A' };
-    const SUBT = { dominios: 'Domínio próprio', pagto: 'Formas de pagamento', precos: 'Planos e preços', indicacoes: 'Indicações', antifraude: 'Antifraude' };
+    const SUBT = { anuncio: 'Anúncio ao entrar', dominios: 'Domínio próprio', pagto: 'Formas de pagamento', precos: 'Planos e preços', indicacoes: 'Indicações', antifraude: 'Antifraude' };
     const sec = s.sec, sub = s.sub, ready = !s.loading;
     const v = {
       gate: false, app: true, toast: s.toast, busy: s.loading, sub: !!sub, back: () => this.go(sec),
@@ -406,7 +418,7 @@ class Component extends DCLogic {
         icon: DC.html('<svg viewBox="0 0 24 24" aria-hidden="true">' + IC[t[0]] + '</svg>')
       })),
       home: ready && sec === 'inicio' && !sub && !!d.kpis, pay: ready && sec === 'pagamentos', cli: ready && sec === 'clientes', sup: ready && sec === 'suporte', more: ready && sec === 'mais' && !sub,
-      cfgPay: ready && sub === 'pagto' && !!s.cfg, cfgPrice: ready && sub === 'precos' && !!s.cfg, cfgDom: ready && sub === 'dominios' && !!s.cfg, cfgAny: ready && (sub === 'pagto' || sub === 'precos' || sub === 'dominios') && !!s.cfg,
+      cfgPay: ready && sub === 'pagto' && !!s.cfg, cfgPrice: ready && sub === 'precos' && !!s.cfg, cfgDom: ready && sub === 'dominios' && !!s.cfg, cfgAnn: ready && sub === 'anuncio' && !!s.cfg, cfgAny: ready && (sub === 'pagto' || sub === 'precos' || sub === 'dominios' || sub === 'anuncio') && !!s.cfg,
       refs: ready && sub === 'indicacoes' && !!d.ok, fraud: ready && sub === 'antifraude' && !!d.ok,
       closeSheet: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation(),
       os: false, us: false, cs: false
@@ -440,18 +452,19 @@ class Component extends DCLogic {
       v.noThreads = !v.threads.length;
     }
     if (v.more) {
-      v.moreRows = [['pagto', 'Formas de pagamento', 'Pix direto ou gateway, chave Pix, WhatsApp'], ['precos', 'Planos e preços', 'Valores, fidelidade'], ['dominios', 'Domínio próprio', 'Ligação automática dos domínios dos clientes'], ['indicacoes', 'Indicações', 'Quem indica e prêmios'], ['antifraude', 'Antifraude', 'Testes negados e bloqueios']]
+      v.moreRows = [['pagto', 'Formas de pagamento', 'Pix direto ou gateway, chave Pix, WhatsApp'], ['precos', 'Planos e preços', 'Valores, fidelidade'], ['dominios', 'Domínio próprio', 'Ligação automática dos domínios dos clientes'], ['anuncio', 'Anúncio ao entrar', 'Aviso que aparece quando o cliente abre o painel'], ['indicacoes', 'Indicações', 'Quem indica e prêmios'], ['antifraude', 'Antifraude', 'Testes negados e bloqueios']]
         .map((r) => ({ t: r[1], d: r[2], go: () => this.go('mais', r[0]) }));
     }
     if (v.cfgAny) {
       const c = s.cfg;
       v.s = c; v.cfgErr = s.cfgErr; v.saveLabel = s.saved ? 'Salvo ✓' : 'Salvar'; v.saveCfg = () => this.saveCfg();
+      v.annOn = c.ann_on !== '0'; v.annSw = 'background: ' + (v.annOn ? '#D4FF3A' : '#33333E') + '; justify-content: ' + (v.annOn ? 'flex-end' : 'flex-start'); v.annKn = 'background: ' + (v.annOn ? '#0E0E14' : '#A7A7B8'); v.toggleAnn = () => this.setCfg('ann_on', v.annOn ? '0' : '1');
       v.domOn = !!(c.cf_token && c.cf_zone);
       v.domText = v.domOn ? 'Ligado: o cliente Diamante conecta o domínio sozinho em Configurações, e o site ativa automaticamente.' : 'Desligado: cole as duas chaves abaixo e toque em Salvar para os clientes conectarem o domínio sozinhos.';
       v.domColor = v.domOn ? '#4ADE80' : '#F2C14E';
       v.doms = (s.doms || []).map((d) => ({ t: d.hostname, d: d.name + ' (@' + d.handle + ') · ' + (d.status === 'ativo' ? 'funcionando' : 'aguardando o cliente configurar') }));
       v.noDoms = !v.doms.length;
-      for (const k of ['pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp', 'loyalty_every', 'loyalty_days', 'cf_token', 'cf_zone']) v['set_' + k] = (e) => this.setCfg(k, e.target.value);
+      for (const k of ['pix_key', 'pix_name', 'pix_city', 'order_hours', 'gw_token', 'whatsapp', 'loyalty_every', 'loyalty_days', 'cf_token', 'cf_zone', 'ann_title', 'ann_text']) v['set_' + k] = (e) => this.setCfg(k, e.target.value);
       v.isPix = c.pay_mode !== 'gateway'; v.isGw = c.pay_mode === 'gateway';
       v.modePix = () => this.setCfg('pay_mode', 'pix'); v.modeGw = () => this.setCfg('pay_mode', 'gateway');
       v.modeText = c.pay_mode === 'gateway' ? 'Gateway ligado: o cliente paga o Pix gerado pelo Mercado Pago e o plano libera sozinho, sem comprovante.' : 'Pix direto: o cliente paga na sua chave Pix, envia o comprovante e você libera em Pagamentos.';

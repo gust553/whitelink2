@@ -26,7 +26,7 @@
 </style>
 </helmet>
 <div>
-  <div class="appbar"><a class="icon-btn" href="/painel/aparencia" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Criador de tema</h1><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
+  <div class="appbar"><a class="icon-btn" href="/painel/aparencia" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Criador de tema</h1><button class="hq" data-help="criador" aria-label="Ajuda">?</button><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
   <div class="app-main">
     <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
     <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
@@ -43,7 +43,7 @@
         <div class="stage"><div class="ph t-custom"><div class="ph-bg"></div><div class="ph-in"><div class="ph-head"><div class="ph-av">{{ini}}</div><div class="ph-name">{{name}}</div><div class="ph-bio">Sua página, do seu jeito</div></div><div class="ph-btn main">Meu link principal</div><div class="ph-btn">Instagram</div><div class="ph-btn">WhatsApp</div><div class="ph-card" style="padding: 12px; font-size: 13px">Bloco de texto</div></div></div></div>
       </div>
       <div>
-        <div class="sec-t" style="margin-top: 8px">Começar de um modelo</div>
+        <div class="sec-t" style="margin-top: 8px">Começar de um modelo<button class="hq" data-help="criador" aria-label="Ajuda">?</button></div>
         <div class="presets"><sc-for list="{{presets}}" as="p" hint-placeholder-count="6"><button onClick="{{p.pick}}" style="{{p.st}}" aria-label="{{p.name}}"></button></sc-for></div>
         <div class="sec-t">Fundo</div>
         <div class="cols" style="grid-template-columns: repeat(2, minmax(0, 1fr))"><label class="cbox">Cor 1<input type="color" value="{{c.bg1}}" onInput="{{set_bg1}}"></label><label class="cbox">Cor 2<input type="color" value="{{c.bg2}}" onInput="{{set_bg2}}"></label></div>

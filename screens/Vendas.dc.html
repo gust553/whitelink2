@@ -30,7 +30,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
 </style>
 </helmet>
 <div>
-  <div class="appbar"><h1>Vendas</h1><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
+  <div class="appbar"><h1>Vendas</h1><button class="hq" data-help="{{tabHelp}}" aria-label="O que é esta aba?">?</button><span role="status" style="font-size: 12.5px; color: #D4FF3A; padding-right: 10px">{{saved}}</span></div>
   <div class="app-main">
     <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
     <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
@@ -54,7 +54,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
             <sc-for list="{{sales}}" as="x" hint-placeholder-count="3"><button class="row" onClick="{{x.open}}"><span class="row-tx"><b>{{x.title}}</b><span>{{x.sub}}</span></span><span class="chip" style="{{x.chip}}">{{x.st}}</span></button></sc-for>
             <sc-if value="{{noSales}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nada por aqui ainda. Adicione os blocos de Loja, Agenda ou Apoio na sua página.</div></sc-if>
           </div>
-          <div class="sec-t" id="recebimentos">Recebimentos por Pix</div>
+          <div class="sec-t" id="recebimentos">Recebimentos por Pix<button class="hq" data-help="recebimentos" aria-label="Ajuda">?</button></div>
           <div class="card" style="padding: 16px">
             <label class="fld">Sua chave Pix<input class="inp" value="{{pay.key}}" onInput="{{setPayKey}}" placeholder="CPF, celular, e-mail ou chave aleatória"></label>
             <div class="grid2"><label class="fld">Nome do recebedor<input class="inp" value="{{pay.name}}" onInput="{{setPayName}}" maxlength="25" placeholder="Como está no banco"></label><label class="fld">Cidade<input class="inp" value="{{pay.city}}" onInput="{{setPayCity}}" maxlength="15" placeholder="São Paulo"></label></div>
@@ -73,7 +73,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
             <sc-for list="{{products}}" as="p" hint-placeholder-count="3"><button class="row" onClick="{{p.open}}"><span class="pimg" style="{{p.img}}"></span><span class="row-tx"><b>{{p.name}}</b><span>{{p.sub}}</span></span><span class="chev">›</span></button></sc-for>
           </div>
           <button class="btn full" onClick="{{newProduct}}" style="margin-top: 12px">+ Novo produto</button>
-          <div class="sec-t">Frete e cupons <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span></div>
+          <div class="sec-t">Frete e cupons <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span><button class="hq" data-help="cupons" aria-label="Ajuda">?</button></div>
           <div class="card" style="padding: 16px">
             <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
               <div>
@@ -92,17 +92,17 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
       <!-- AGENDA -->
       <sc-if value="{{tAg}}" hint-placeholder-val="{{ false }}">
         <div>
-          <div class="sec-t" style="margin-top: 0">Serviços</div>
+          <div class="sec-t" style="margin-top: 0">Serviços<button class="hq" data-help="agenda" aria-label="Ajuda">?</button></div>
           <sc-for list="{{services}}" as="v" hint-placeholder-count="1">
             <div class="svc">
               <label class="fld">Nome<input class="inp" value="{{v.name}}" onInput="{{v.setName}}" placeholder="Ex.: Corte de cabelo"></label>
               <div class="grid2"><label class="fld">Duração (min)<input class="inp" inputmode="numeric" value="{{v.minutes}}" onInput="{{v.setMin}}"></label><label class="fld">Preço (R$)<input class="inp" inputmode="decimal" value="{{v.price}}" onInput="{{v.setPrice}}"></label></div>
-              <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}"><label class="fld">Sinal por Pix (R$) — opcional<input class="inp" inputmode="decimal" value="{{v.deposit}}" onInput="{{v.setDep}}" placeholder="0,00"></label></sc-if>
+              <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}"><label class="fld"><span>Sinal por Pix (R$) — opcional <button class="hq" data-help="sinal" aria-label="Ajuda">?</button></span><input class="inp" inputmode="decimal" value="{{v.deposit}}" onInput="{{v.setDep}}" placeholder="0,00"></label></sc-if>
               <button class="btn ghost mini" onClick="{{v.remove}}" style="color: #FF8A8E">Remover serviço</button>
             </div>
           </sc-for>
           <button class="btn ghost full" onClick="{{addService}}" disabled="{{svcFull}}">{{addSvcLabel}}</button>
-          <div class="sec-t">Dias e horários</div>
+          <div class="sec-t">Dias e horários<button class="hq" data-help="horarios" aria-label="Ajuda">?</button></div>
           <div class="card" style="padding: 16px">
             <div class="dw"><sc-for list="{{weekdays}}" as="w" hint-placeholder-count="7"><button onClick="{{w.toggle}}" aria-pressed="{{w.on}}">{{w.n}}</button></sc-for></div>
             <div class="grid2" style="margin-top: 12px"><label class="fld">Começa<input class="inp" type="time" value="{{ag.from}}" onChange="{{setFrom}}"></label><label class="fld">Termina<input class="inp" type="time" value="{{ag.to}}" onChange="{{setTo}}"></label></div>
@@ -122,7 +122,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
             <div class="gbar"><i style="{{supBar}}"></i></div>
             <div class="note">{{supText}}</div>
           </div>
-          <div class="sec-t">Meta</div>
+          <div class="sec-t">Meta<button class="hq" data-help="apoio" aria-label="Ajuda">?</button></div>
           <div class="card" style="padding: 16px">
             <label class="fld">Título da meta<input class="inp" value="{{sup.title}}" onInput="{{setSupTitle}}" maxlength="80"></label>
             <label class="fld">Valor da meta (R$)<input class="inp" inputmode="decimal" value="{{supGoal}}" onInput="{{setSupGoal}}"></label>
@@ -150,7 +150,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
                 </div>
               </sc-for>
               <button class="btn ghost mini" onClick="{{q.addResult}}">+ Resultado</button>
-              <div class="sec-t">Perguntas</div>
+              <div class="sec-t">Perguntas<button class="hq" data-help="quiz" aria-label="Ajuda">?</button></div>
               <sc-for list="{{q.questions}}" as="x" hint-placeholder-count="2">
                 <div class="svc">
                   <label class="fld">Pergunta {{x.n}}<input class="inp" value="{{x.q}}" onInput="{{x.setQ}}"></label>
@@ -181,7 +181,7 @@ textarea.inp{height:auto;min-height:72px;padding:12px 14px;font-family:inherit}
       <h2>{{pe.head}}</h2>
       <button class="pimg" onClick="{{pe.pick}}" style="width: 100%; height: 160px; border-radius: 18px; border: 2px dashed #3A3A46; color: #9C9CAD; font-family: inherit; cursor: pointer; margin-bottom: 12px; {{pe.img}}">{{pe.imgLabel}}</button>
       <label class="fld">Nome<input class="inp" value="{{pe.name}}" onInput="{{pe.setName}}" maxlength="80"></label>
-      <div class="grid2"><label class="fld">Preço (R$)<input class="inp" inputmode="decimal" value="{{pe.price}}" onInput="{{pe.setPrice}}" placeholder="59,90"></label><label class="fld">Estoque<input class="inp" inputmode="numeric" value="{{pe.stock}}" onInput="{{pe.setStock}}" placeholder="vazio = sem limite"></label></div>
+      <div class="grid2"><label class="fld">Preço (R$)<input class="inp" inputmode="decimal" value="{{pe.price}}" onInput="{{pe.setPrice}}" placeholder="59,90"></label><label class="fld"><span>Estoque <button class="hq" data-help="estoque" aria-label="Ajuda">?</button></span><input class="inp" inputmode="numeric" value="{{pe.stock}}" onInput="{{pe.setStock}}" placeholder="vazio = sem limite"></label></div>
       <label class="fld">Descrição<input class="inp" value="{{pe.descr}}" onInput="{{pe.setDescr}}" maxlength="300"></label>
       <button class="btn ghost" onClick="{{pe.ai}}" style="height: 36px; font-size: 13.5px; margin: -4px 0 10px; color: #D9CCFF; border-color: #3B2F5E">✨ {{pe.aiLabel}}</button>
       <sc-for list="{{pe.aiItems}}" as="x" hint-placeholder-count="2"><button onClick="{{x.use}}" style="display: block; width: 100%; text-align: left; padding: 11px 13px; border-radius: 14px; border: 1px solid #2E2A44; background: #14121F; color: #F3F3F7; font: 14px/1.4 Inter, sans-serif; margin-bottom: 8px; cursor: pointer">{{x.t}}</button></sc-for>
@@ -248,6 +248,7 @@ class Component extends DCLogic {
     const v = {
       loading: false, ready: true, saved: s.saved, err: s.err, toast: s.toast, dia: dia, notDia: !dia,
       tabs: [['pedidos', 'Pedidos'], ['loja', 'Loja'], ['agenda', 'Agenda'], ['apoios', 'Apoios'], ['quiz', 'Quiz']].map((t) => ({ name: t[1], sel: tab === t[0], go: () => { history.replaceState(null, '', '#' + t[0]); this.setState({ tab: t[0], err: '' }); } })),
+      tabHelp: { pedidos: 'pedidos', loja: 'loja', agenda: 'agenda', apoios: 'apoio', quiz: 'quiz' }[tab],
       tPed: tab === 'pedidos', tLoja: tab === 'loja', tAg: tab === 'agenda', tAp: tab === 'apoios', tQz: tab === 'quiz',
       close: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation()
     };

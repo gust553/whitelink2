@@ -25,6 +25,8 @@ export async function onRequestPut({ request, env }) {
   if (b.pix_name !== undefined) patch.pix_name = patch.pix_name.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
   if (b.pix_city !== undefined) patch.pix_city = patch.pix_city.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
   if (b.whatsapp !== undefined) { let w = String(b.whatsapp).replace(/\D/g, ''); if (w.length <= 11) w = '55' + w; patch.whatsapp = w; }
+  if (b.ann_on !== undefined) patch.ann_on = b.ann_on === '0' || b.ann_on === false ? '0' : '1';
+  txt('ann_title', 80); txt('ann_text', 400);
   if (b.pay_mode !== undefined) patch.pay_mode = b.pay_mode === 'gateway' ? 'gateway' : 'pix';
   if (b.gw_provider !== undefined) patch.gw_provider = 'mercadopago';
   if (b.gw_token !== undefined && !String(b.gw_token).startsWith('••••')) patch.gw_token = String(b.gw_token).trim().slice(0, 300);

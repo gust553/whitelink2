@@ -67,7 +67,7 @@
   <div class="ed-wrap">
     <div>
       <sc-if value="{{multi}}" hint-placeholder-val="{{ false }}">
-        <div class="pgs" role="tablist" aria-label="Suas páginas"><sc-for list="{{pageTabs}}" as="t" hint-placeholder-count="2"><button role="tab" onClick="{{t.go}}" aria-selected="{{t.sel}}">{{t.name}}</button></sc-for><sc-if value="{{canNewPage}}" hint-placeholder-val="{{ false }}"><button onClick="{{openNewPage}}" style="border-style: dashed">+ Nova página</button></sc-if></div>
+        <div class="pgs" role="tablist" aria-label="Suas páginas"><sc-for list="{{pageTabs}}" as="t" hint-placeholder-count="2"><button role="tab" onClick="{{t.go}}" aria-selected="{{t.sel}}">{{t.name}}</button></sc-for><sc-if value="{{canNewPage}}" hint-placeholder-val="{{ false }}"><button onClick="{{openNewPage}}" style="border-style: dashed">+ Nova página</button></sc-if><button class="hq" data-help="paginas" aria-label="Ajuda">?</button></div>
       </sc-if>
       <div class="card">
         <button class="prof" onClick="{{openProfile}}" style="width: 100%; background: transparent; border: none; color: inherit; text-align: left; cursor: pointer">
@@ -81,7 +81,7 @@
       </div>
       <sc-if value="{{saveError}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: #2A1512; color: #FFB4A3; font-size: 14px">{{saveText}}</div></sc-if>
 
-      <div class="sec-t">Seus links</div>
+      <div class="sec-t">Seus links<button class="hq" data-help="blocos" aria-label="Ajuda">?</button></div>
       <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
         <div class="card" style="padding: 28px 20px; text-align: center; color: #9C9CAD; font-size: 15px">Toque em <b style="color: #D4FF3A">Adicionar</b> para criar seu primeiro link.</div>
       </sc-if>
@@ -141,7 +141,7 @@
         <div class="grab"></div>
         <h2>{{ed.kindLabel}}</h2>
         <label class="fld">{{ed.titleLabel}}<input class="inp" value="{{ed.title}}" onInput="{{ed.setTitle}}" maxlength="300"></label>
-        <sc-if value="{{ed.aiOk}}" hint-placeholder-val="{{ false }}"><button class="ai-btn" onClick="{{ed.aiTitles}}">✨ {{ed.aiLabel}}</button></sc-if>
+        <sc-if value="{{ed.aiOk}}" hint-placeholder-val="{{ false }}"><button class="ai-btn" onClick="{{ed.aiTitles}}">✨ {{ed.aiLabel}}</button><button class="hq" data-help="ia" aria-label="Ajuda">?</button></sc-if>
         <sc-if value="{{ed.aiItems}}" hint-placeholder-val="{{ false }}"><div class="ai-list"><sc-for list="{{ed.aiItems}}" as="x" hint-placeholder-count="3"><button onClick="{{x.use}}">{{x.t}}</button></sc-for></div></sc-if>
         <sc-if value="{{ed.aiErr}}" hint-placeholder-val="{{ false }}"><div class="ai-err">{{ed.aiErr}}</div></sc-if>
         <sc-if value="{{ed.cfg}}" hint-placeholder-val="{{ false }}"><a class="row card" href="{{ed.cfgHref}}" style="margin: 0 0 12px; padding: 12px 14px; text-decoration: none; color: inherit; font-size: 14px"><span class="row-tx"><span>{{ed.cfg}}</span></span><span class="chev">›</span></a></sc-if>
@@ -151,7 +151,7 @@
         </sc-if>
         <sc-if value="{{ed.smart}}" hint-placeholder-val="{{ false }}">
           <div class="smart" style="margin: 0 0 14px; border: 1px solid #24242E; border-radius: 16px; padding: 12px 14px; background: #0E0E14">
-            <button onClick="{{ed.toggleSmart}}" style="width: 100%; text-align: left; background: none; border: none; color: #F3F3F7; cursor: pointer; font: 600 14.5px Inter, sans-serif; padding: 0">🧠 Link inteligente <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span> <span style="float: right; color: #9C9CAD">{{ed.smartArrow}}</span></button>
+            <button onClick="{{ed.toggleSmart}}" style="width: 100%; text-align: left; background: none; border: none; color: #F3F3F7; cursor: pointer; font: 600 14.5px Inter, sans-serif; padding: 0">🧠 Link inteligente <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span> <span style="float: right; color: #9C9CAD">{{ed.smartArrow}}</span></button><div style="margin-top: 6px"><button class="hq" data-help="smart" aria-label="Ajuda" style="margin: 0">?</button> <span style="font-size: 12.5px; color: #9C9CAD">O que é isso?</span></div>
             <sc-if value="{{ed.smartOn}}" hint-placeholder-val="{{ true }}">
               <div style="margin-top: 12px">
                 <p style="font-size: 13px; color: #9C9CAD; margin: 0 0 10px; line-height: 1.5">Mande cada pessoa para o lugar certo. Deixe em branco o que não quiser usar.</p>
@@ -167,7 +167,7 @@
         </sc-if>
         <sc-if value="{{ed.canFeature}}" hint-placeholder-val="{{ false }}">
           <div class="row" style="padding: 8px 2px; border: none; min-height: 56px; cursor: default">
-            <span class="row-tx"><b>Destacar</b></span>
+            <span class="row-tx"><b>Destacar <button class="hq" data-help="destacar" aria-label="Ajuda">?</button></b></span>
             <button class="sw" onClick="{{ed.toggleFeatured}}" aria-pressed="{{ed.featured}}" style="{{ed.featSw}}"><span style="{{ed.featKnob}}"></span></button>
           </div>
         </sc-if>
@@ -185,7 +185,7 @@
     <div class="scrim" onClick="{{closeSheet}}">
       <div class="sheet" onClick="{{stop}}">
         <div class="grab"></div>
-        <h2>Seu perfil</h2>
+        <h2>Seu perfil <button class="hq" data-help="perfil" aria-label="Ajuda">?</button></h2>
         <div class="pf-media">
           <button class="pf-av" onClick="{{pickAvatar}}" aria-label="Trocar foto de perfil" style="{{avStyle}}">{{avLabel}}</button>
           <div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
@@ -197,12 +197,12 @@
         <button class="pf-cover" onClick="{{pickCover}}" style="{{coverStyle}}">{{coverLabel}}</button>
         <sc-if value="{{hasCover}}" hint-placeholder-val="{{ false }}"><button class="link-btn" onClick="{{removeCover}}" style="margin-top: 6px">Tirar capa</button></sc-if>
         <label class="fld" style="margin-top: 12px">Vídeo de capa (YouTube ou .mp4) <span class="chip" style="background: rgba(143,227,255,.14); color: #8FE3FF; margin-left: 6px">Diamante</span><input class="inp" value="{{coverVideo}}" onInput="{{setCoverVideo}}" placeholder="https://youtube.com/watch?v=..." disabled="{{noVideo}}"></label>
-        <div class="sec-t" style="display: flex; gap: 8px; align-items: center">Animação de entrada <span class="chip" style="background: rgba(242,193,78,.16); color: #F2C14E">Ouro</span></div>
+        <div class="sec-t" style="display: flex; gap: 8px; align-items: center">Animação de entrada <span class="chip" style="background: rgba(242,193,78,.16); color: #F2C14E">Ouro</span><button class="hq" data-help="animacao" aria-label="Ajuda">?</button></div>
         <div class="anims"><sc-for list="{{anims}}" as="a" hint-placeholder-count="5"><button onClick="{{a.pick}}" aria-pressed="{{a.sel}}" style="{{a.st}}">{{a.name}}</button></sc-for></div>
         <sc-if value="{{pfErr}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin: 10px 0">{{pfErr}}</div></sc-if>
         <label class="fld" style="margin-top: 14px">Nome<input class="inp" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60"></label>
-        <label class="fld">Bio<input class="inp" value="{{bio}}" onInput="{{setBio}}" maxlength="160" placeholder="Ex.: Moda feminina com entrega para todo o Brasil"></label>
-        <button class="ai-btn" onClick="{{aiBio}}">✨ {{aiBioLabel}}</button>
+        <label class="fld">Descrição<input class="inp" value="{{bio}}" onInput="{{setBio}}" maxlength="160" placeholder="Ex.: Moda feminina com entrega para todo o Brasil"></label>
+        <button class="ai-btn" onClick="{{aiBio}}">✨ {{aiBioLabel}}</button><button class="hq" data-help="ia" aria-label="Ajuda">?</button>
         <sc-if value="{{aiBioItems}}" hint-placeholder-val="{{ false }}"><div class="ai-list"><sc-for list="{{aiBioItems}}" as="x" hint-placeholder-count="3"><button onClick="{{x.use}}">{{x.t}}</button></sc-for></div></sc-if>
         <sc-if value="{{aiBioErr}}" hint-placeholder-val="{{ false }}"><div class="ai-err">{{aiBioErr}}</div></sc-if>
         <button class="btn full" onClick="{{closeSheet}}">Salvar</button>
@@ -466,7 +466,7 @@ class Component extends DCLogic {
       blocks: blocks, ed: ed,
       visible: visible, showBrand: plan === 0, isPrata: plan === 0,
       initials: (title.split(/\s+/).map((w) => w[0] || '').join('').slice(0, 2) || 'WL').toUpperCase(),
-      pageTitle: title, bio: s.bio, bioLine: s.bio || 'Toque para escrever sua bio',
+      pageTitle: title, bio: s.bio, bioLine: s.bio || 'Toque para escrever sua descrição',
       setPageTitle: (e) => this.change({ title: e.target.value.slice(0, 60) }),
       setBio: (e) => this.change({ bio: e.target.value.slice(0, 160) }),
       bg: th.bg, fg: th.fg, card: th.card, muted: th.muted, accent: th.accent,

@@ -186,4 +186,25 @@
     a.setAttribute('style', 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:30;padding:8px 14px;border-radius:999px;background:#F3F3F7;color:#0E0E14;font:600 13px Inter,sans-serif;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap');
     document.body.appendChild(a);
   });
+  // "?" de ajuda: <button class="hq" data-help="chave">?</button>
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-help]');
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var h = (window.WL_HELP || {})[b.getAttribute('data-help')];
+    if (!h) return;
+    var w = document.createElement('div');
+    w.className = 'hpop'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true');
+    var box = document.createElement('div'); box.className = 'hb';
+    var t = document.createElement('h4'); t.innerHTML = '<i>?</i>'; t.appendChild(document.createTextNode(h[0]));
+    var p = document.createElement('p'); p.textContent = h[1];
+    var ok = document.createElement('button'); ok.className = 'ok'; ok.textContent = 'Entendi';
+    box.appendChild(t); box.appendChild(p); box.appendChild(ok); w.appendChild(box);
+    var close = function () { w.remove(); document.removeEventListener('keydown', esc); b.focus && b.focus(); };
+    var esc = function (k) { if (k.key === 'Escape') close(); };
+    w.addEventListener('click', function (x) { if (x.target === w) close(); });
+    ok.addEventListener('click', close);
+    document.addEventListener('keydown', esc);
+    document.body.appendChild(w); ok.focus();
+  }, true);
 })();

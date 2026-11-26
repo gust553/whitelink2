@@ -38,7 +38,7 @@
       </div>
     </sc-if>
 
-    <div class="sec-t">{{choiceTitle}}</div>
+    <div class="sec-t">{{choiceTitle}}<button class="hq" data-help="plano" aria-label="Ajuda">?</button></div>
     <div style="display: flex; flex-direction: column; gap: 10px">
       <sc-for list="{{plans}}" as="p" hint-placeholder-count="2">
         <a class="plan-opt" href="{{p.href}}" style="{{p.style}}">

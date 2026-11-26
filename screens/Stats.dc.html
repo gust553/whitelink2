@@ -24,7 +24,7 @@
 </style>
 </helmet>
 <div>
-  <div class="appbar"><h1>Estatísticas</h1><sc-if value="{{canExport}}" hint-placeholder-val="{{ false }}"><a class="icon-btn" href="/api/stats/csv" aria-label="Baixar planilha"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></a></sc-if></div>
+  <div class="appbar"><h1>Números</h1><button class="hq" data-help="visitas" aria-label="Ajuda">?</button><sc-if value="{{canExport}}" hint-placeholder-val="{{ false }}"><a class="icon-btn" href="/api/stats/csv" aria-label="Baixar planilha"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></a></sc-if></div>
   <div class="app-main">
     <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
     <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
@@ -50,7 +50,7 @@
 
       <sc-if value="{{full}}" hint-placeholder-val="{{ true }}">
       <div>
-        <div class="sec-t">Links mais clicados</div>
+        <div class="sec-t">Links mais clicados<button class="hq" data-help="visitas" aria-label="Ajuda">?</button></div>
         <div class="list">
           <sc-for list="{{links}}" as="l" hint-placeholder-count="3">
             <div class="row" style="cursor: default"><span class="row-tx"><b>{{l.title}}</b><sc-if value="{{l.ab}}" hint-placeholder-val="{{ false }}"><span>{{l.ab}}</span></sc-if></span><b style="font: 700 18px 'Space Grotesk'">{{l.clicks}}</b></div>
@@ -59,14 +59,14 @@
         </div>
         <sc-if value="{{dia}}" hint-placeholder-val="{{ false }}">
           <div>
-            <div class="sec-t">Horários de pico</div>
+            <div class="sec-t">Horários de pico<button class="hq" data-help="pico" aria-label="Ajuda">?</button></div>
             <div class="card" style="padding: 14px">
               <div class="chart" style="height: 110px; padding: 0"><sc-for list="{{hours}}" as="h" hint-placeholder-count="24"><div style="{{h.st}}" title="{{h.t}}"></div></sc-for></div>
               <div style="display: flex; justify-content: space-between; font-size: 11px; color: #9C9CAD; margin-top: 6px"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span></div>
               <p style="font-size: 14px; margin: 12px 0 0; color: #C9C9D6">{{peakText}}</p>
             </div>
-            <sc-if value="{{hasCamps}}" hint-placeholder-val="{{ false }}"><div><div class="sec-t">Links de campanha</div><div class="list"><sc-for list="{{camps}}" as="c" hint-placeholder-count="2"><div class="row" style="cursor: default"><span class="row-tx"><b>{{c.name}}</b><span>/{{c.slug}}</span></span><b style="font: 700 18px 'Space Grotesk'">{{c.n}}</b></div></sc-for></div></div></sc-if>
-            <div class="sec-t">Análise da IA</div>
+            <sc-if value="{{hasCamps}}" hint-placeholder-val="{{ false }}"><div><div class="sec-t">Links de campanha<button class="hq" data-help="campanha" aria-label="Ajuda">?</button></div><div class="list"><sc-for list="{{camps}}" as="c" hint-placeholder-count="2"><div class="row" style="cursor: default"><span class="row-tx"><b>{{c.name}}</b><span>/{{c.slug}}</span></span><b style="font: 700 18px 'Space Grotesk'">{{c.n}}</b></div></sc-for></div></div></sc-if>
+            <div class="sec-t">Análise da IA<button class="hq" data-help="analise" aria-label="Ajuda">?</button></div>
             <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
               <sc-for list="{{tips}}" as="t" hint-placeholder-count="2"><div style="font-size: 14px; line-height: 1.5; padding: 10px 12px; border-radius: 12px; background: #14121F; border: 1px solid #2E2A44">💡 {{t}}</div></sc-for>
               <sc-if value="{{tipErr}}" hint-placeholder-val="{{ false }}"><div style="color: #FFB4A3; font-size: 13.5px">{{tipErr}}</div></sc-if>
@@ -77,7 +77,7 @@
         <sc-if value="{{ouroOnly}}" hint-placeholder-val="{{ false }}"><a class="row card" href="/painel/plano" style="margin-top: 14px; padding: 14px; border-color: #1E3A44"><span class="row-tx"><b>Horários de pico e análise da IA</b><span>No Diamante você descobre a melhor hora de postar e recebe dicas da IA para vender mais.</span></span><span class="chev">›</span></a></sc-if>
         <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
           <div>
-            <div class="sec-t">{{g.title}}</div>
+            <div class="sec-t">{{g.title}}<button class="hq" data-help="{{g.h}}" aria-label="Ajuda">?</button></div>
             <div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
               <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="3">
                 <div><div style="display: flex; justify-content: space-between; font-size: 14px"><span>{{r.k}}</span><b>{{r.pct}}</b></div><div class="bar"><i style="{{r.st}}"></i></div></div>
@@ -126,7 +126,7 @@ class Component extends DCLogic {
       tips: this.state.tips || [], tipErr: this.state.tipErr || '',
       analyzeLabel: this.state.tipBusy ? 'Analisando…' : (this.state.tips ? '✨ Analisar de novo' : '✨ Pedir análise da IA'),
       analyze: async () => { this.setState({ tipBusy: true, tipErr: '' }); const r = await DC.ai('analyze'); this.setState({ tipBusy: false, tips: r.ok ? r.items : this.state.tips, tipErr: r.ok ? '' : r.error }); },
-      groups: [['De onde vieram', b.src, '#D4FF3A'], ['Aparelho', b.dev, '#7CF5D0'], ['Cidade', b.city, '#B9A6FF']].map((g) => ({ title: g[0], rows: pct(g[1].map((r) => ({ k: r.k, n: r.n, c: g[2] }))), empty: !g[1].length }))
+      groups: [['De onde vieram', b.src, '#D4FF3A'], ['Aparelho', b.dev, '#7CF5D0'], ['Cidade', b.city, '#B9A6FF']].map((g) => ({ h: 'origem', title: g[0], rows: pct(g[1].map((r) => ({ k: r.k, n: r.n, c: g[2] }))), empty: !g[1].length }))
     };
   }
 }

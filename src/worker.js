@@ -43,6 +43,7 @@ import * as aiApi from '../functions/api/ai.js';
 import * as pushApi from '../functions/api/push.js';
 import * as notifApi from '../functions/api/notifications.js';
 import * as pricesApi from '../functions/api/prices.js';
+import * as annApi from '../functions/api/announce.js';
 import * as subPage from '../functions/[handle]/[sub].js';
 import { isMainHost, domainOwner, domainCleanup, domainSeen } from './domains.js';
 import { effectivePlan } from './lib.js';
@@ -100,6 +101,7 @@ const ROUTES = [
   [/^\/api\/push$/, pushApi],
   [/^\/api\/notifications$/, notifApi],
   [/^\/api\/prices$/, pricesApi],
+  [/^\/api\/announce$/, annApi],
   [/^\/api\/pub\/(?<action>order|slots|book|support|quiz|goal|publi|live)$/, pubApi],
   [/^\/m\/(?<id>[a-f0-9]{8,40})$/, mediaGet],
   [/^\/api\/webhooks\/gateway$/, gwHook],

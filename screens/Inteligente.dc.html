@@ -19,27 +19,27 @@
 </style>
 </helmet>
 <div>
-  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Turbo</h1></div>
+  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Turbo</h1><button class="hq" data-help="aovivo" aria-label="Ajuda">?</button></div>
   <div class="app-main">
     <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
     <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
     <div>
-      <div class="card feat"><span class="ic">📲</span><span style="flex: 1"><b>Abrir direto no app</b> <span class="lk o">Ouro</span><div class="note" style="margin-top: 4px">Quem clica no seu link de YouTube, Instagram, WhatsApp, TikTok ou Spotify dentro do Instagram abre direto no aplicativo, sem ficar preso no navegador. {{appStatus}}</div></span></div>
+      <div class="card feat"><span class="ic">📲</span><span style="flex: 1"><b>Abrir direto no app</b><button class="hq" data-help="abrirapp" aria-label="Ajuda">?</button> <span class="lk o">Ouro</span><div class="note" style="margin-top: 4px">Quem clica no seu link de YouTube, Instagram, WhatsApp, TikTok ou Spotify dentro do Instagram abre direto no aplicativo, sem ficar preso no navegador. {{appStatus}}</div></span></div>
 
-      <div class="sec-t">Prova social ao vivo <span class="lk">Diamante</span></div>
+      <div class="sec-t">Prova social ao vivo <span class="lk">Diamante</span><button class="hq" data-help="aovivo" aria-label="Ajuda">?</button></div>
       <div class="card">
         <div class="row" style="cursor: default"><span class="row-tx"><b>Pessoas vendo agora</b><span>Mostra "12 pessoas vendo agora" no topo da página</span></span><button class="sw" onClick="{{tViewers}}" aria-pressed="{{live.viewers}}" style="{{swViewers}}" disabled="{{notDia}}"><span style="{{knViewers}}"></span></button></div>
         <div class="row" style="cursor: default; border: none"><span class="row-tx"><b>Compras recentes</b><span>Mostra "Ana comprou Bolo de pote há 5 min"</span></span><button class="sw" onClick="{{tSales}}" aria-pressed="{{live.sales}}" style="{{swSales}}" disabled="{{notDia}}"><span style="{{knSales}}"></span></button></div>
       </div>
 
-      <div class="sec-t">Otimização automática <span class="lk">Diamante</span></div>
+      <div class="sec-t">Otimização automática <span class="lk">Diamante</span><button class="hq" data-help="autoab" aria-label="Ajuda">?</button></div>
       <div class="card">
         <div class="row" style="cursor: default"><span class="row-tx"><b>Teste A/B decide sozinho</b><span>Com 100 cliques, o título que vende mais vira o oficial e você recebe um aviso</span></span><button class="sw" onClick="{{tAb}}" aria-pressed="{{auto.ab}}" style="{{swAb}}" disabled="{{notDia}}"><span style="{{knAb}}"></span></button></div>
         <div class="row" style="cursor: default; border: none"><span class="row-tx"><b>Ordem pelos cliques</b><span>Os links mais clicados sobem sozinhos (os fixados continuam no topo)</span></span><button class="sw" onClick="{{tOrder}}" aria-pressed="{{auto.order}}" style="{{swOrder}}" disabled="{{notDia}}"><span style="{{knOrder}}"></span></button></div>
       </div>
       <p class="note" style="margin: 8px 4px 0">Regras por aparelho e por horário: no editor, toque num link e role até "Link inteligente".</p>
 
-      <div class="sec-t">Links de campanha <span class="lk">Diamante</span></div>
+      <div class="sec-t">Links de campanha <span class="lk">Diamante</span><button class="hq" data-help="campanha" aria-label="Ajuda">?</button></div>
       <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
         <div>
           <p class="note" style="margin: 0 4px 10px">Crie um link curto para cada campanha (ex.: whitelink.site/{{handle}}/blackfriday) e veja quantos cliques cada uma trouxe.</p>

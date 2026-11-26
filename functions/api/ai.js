@@ -6,9 +6,9 @@ const LIMIT = [0, 20, 500];
 const MODEL = '@cf/meta/llama-3.1-8b-instruct';
 
 const TASKS = {
-  bio: (i) => `Escreva 4 opções de bio curta (até 150 caracteres cada) para a página de links de um criador brasileiro. Sobre a pessoa: "${i}". Tom próximo, com no máximo 1 emoji por opção.`,
-  titles: (i) => `Escreva 5 opções de texto curto (até 40 caracteres) para um botão de link na bio, que façam as pessoas clicarem. O link é sobre: "${i}". Use verbos de ação.`,
-  product: (i) => `Escreva 3 opções de descrição de produto (até 200 caracteres cada) para vender pela bio no Instagram. Produto: "${i}". Destaque o benefício.`,
+  bio: (i) => `Escreva 4 opções de descrição curta (até 150 caracteres cada) para a página de links de um criador brasileiro. Sobre a pessoa: "${i}". Tom próximo, com no máximo 1 emoji por opção.`,
+  titles: (i) => `Escreva 5 opções de texto curto (até 40 caracteres) para um botão de uma página de links (usada na bio, nos stories, em anúncios e no WhatsApp), que façam as pessoas clicarem. O link é sobre: "${i}". Use verbos de ação.`,
+  product: (i) => `Escreva 3 opções de descrição de produto (até 200 caracteres cada) para vender por link no Instagram, WhatsApp e anúncios. Produto: "${i}". Destaque o benefício.`,
   quiz: (i) => `Sugira 4 perguntas de quiz divertido para indicar produtos. Tema: "${i}". Cada item deve ser só a pergunta.`,
   message: (i) => `Escreva 3 mensagens curtas de WhatsApp para um criador mandar a um cliente. Situação: "${i}". Tom educado e próximo, sem parecer robô.`
 };
