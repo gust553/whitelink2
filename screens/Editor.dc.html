@@ -9,6 +9,7 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,700&amp;family=Space+Mono:wght@400;700&amp;family=Pacifico&amp;family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&amp;family=Cinzel:wght@500;700&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&amp;family=DM+Serif+Display:ital@0;1&amp;family=Syne:wght@600;800&amp;family=Fraunces:ital,wght@0,500;0,600;1,600&amp;family=Unbounded:wght@600;800&amp;family=Bebas+Neue&amp;family=Righteous&amp;family=Press+Start+2P&amp;family=Abril+Fatface&amp;family=Great+Vibes&amp;family=Bungee&amp;family=Caveat:wght@500;700&amp;family=Italiana&amp;family=Limelight&amp;family=Marcellus&amp;family=Amatic+SC:wght@400;700&amp;family=Comfortaa:wght@500;700&amp;family=Lobster&amp;family=Yeseva+One&amp;family=IM+Fell+English&amp;family=Orbitron:wght@500;800&amp;family=Monoton&amp;family=UnifrakturMaguntia&amp;family=Cinzel+Decorative:wght@700&amp;family=Josefin+Sans:wght@400;700&amp;family=Shrikhand&amp;family=Bangers&amp;family=Special+Elite&amp;display=swap">
 <link rel="stylesheet" href="/assets/temas.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=DM+Serif+Display&amp;family=Syne:wght@500;700&amp;family=Caveat:wght@500;700&amp;family=Bebas+Neue&amp;family=Outfit:wght@400;600&amp;display=swap">
 <style>
 .ed-wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;max-width:1180px;margin:0 auto}
 .ed-side{display:none}
@@ -28,6 +29,9 @@
 .drag{color:#5E5E6E;cursor:grab;display:flex;padding:6px 0 6px 2px;flex:none}
 .drag svg{width:18px;height:18px;fill:currentColor;stroke:none}
 .row.over{background:#1F2410}
+.pgs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;scrollbar-width:none}
+.pgs button{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font-size:14px;cursor:pointer;font-family:inherit}
+.pgs button[aria-selected="true"]{background:#F3F3F7;color:#0E0E14;border-color:#F3F3F7;font-weight:600}
 </style>
 </helmet>
 <div>
@@ -46,6 +50,9 @@
   <div class="app-main" style="max-width: none">
   <div class="ed-wrap">
     <div>
+      <sc-if value="{{multi}}" hint-placeholder-val="{{ false }}">
+        <div class="pgs" role="tablist" aria-label="Suas páginas"><sc-for list="{{pageTabs}}" as="t" hint-placeholder-count="2"><button role="tab" onClick="{{t.go}}" aria-selected="{{t.sel}}">{{t.name}}</button></sc-for><sc-if value="{{canNewPage}}" hint-placeholder-val="{{ false }}"><button onClick="{{openNewPage}}" style="border-style: dashed">+ Nova página</button></sc-if></div>
+      </sc-if>
       <div class="card">
         <button class="prof" onClick="{{openProfile}}" style="width: 100%; background: transparent; border: none; color: inherit; text-align: left; cursor: pointer">
           <div class="av" style="background: #1B1B24; border: 2px solid {{accent}}; color: #F3F3F7">{{initials}}</div>
@@ -80,6 +87,7 @@
 
     <aside class="ed-side">
       <div class="phone">
+        <style>{{customCss}}</style>
         <div class="ph {{tcls}}" style="{{phStyle}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in">
           <div class="ph-head"><div class="ph-av">{{initials}}</div><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
           <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div class="{{v.cls}}" style="{{v.pStyle}}">{{v.title}}</div></sc-for>
@@ -100,7 +108,7 @@
         <h2>O que você quer adicionar?</h2>
         <div class="grid2">
           <sc-for list="{{library}}" as="b" hint-placeholder-count="8">
-            <button class="tile" onClick="{{b.add}}" disabled="{{b.locked}}">
+            <button class="tile" onClick="{{b.add}}" aria-disabled="{{b.locked}}" style="{{b.lockStyle}}">
               <span class="row-ic"><svg viewBox="0 0 24 24"><path d="{{b.svg}}"/></svg></span>
               <b style="font-weight: 600">{{b.label}}</b>
               <sc-if value="{{b.locked}}" hint-placeholder-val="{{ false }}"><span class="lock">{{b.need}}</span></sc-if>
@@ -144,6 +152,21 @@
         <label class="fld">Nome<input class="inp" value="{{pageTitle}}" onInput="{{setPageTitle}}" maxlength="60"></label>
         <label class="fld">Bio<input class="inp" value="{{bio}}" onInput="{{setBio}}" maxlength="160" placeholder="Ex.: Moda feminina com entrega para todo o Brasil"></label>
         <button class="btn full" onClick="{{closeSheet}}">Salvar</button>
+        <sc-if value="{{isExtra}}" hint-placeholder-val="{{ false }}"><button class="btn ghost full" onClick="{{deletePage}}" style="margin-top: 10px; color: #FF8A8E">Apagar esta página</button></sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{sheetNewPage}}" hint-placeholder-val="{{ false }}">
+    <div class="scrim" onClick="{{closeSheet}}">
+      <div class="sheet" onClick="{{stop}}">
+        <div class="grab"></div>
+        <h2>Nova página</h2>
+        <p style="font-size: 14px; color: #C9C9D6; margin: 0 0 14px; line-height: 1.5">No Diamante você tem até 3 páginas, cada uma com seu endereço, links e tema. Ex.: uma para a loja e outra para o seu trabalho.</p>
+        <label class="fld">Endereço<div style="display: flex; align-items: center; border-radius: 14px; border: 1px solid #24242E; background: #14141B"><span style="padding-left: 14px; color: #9C9CAD; white-space: nowrap">whitelink.site/</span><input class="inp" style="border: none; background: transparent; padding-left: 2px" value="{{np.handle}}" onInput="{{np.setHandle}}" maxlength="30" autocapitalize="none" placeholder="minhaloja"></div></label>
+        <label class="fld">Nome da página<input class="inp" value="{{np.title}}" onInput="{{np.setTitle}}" maxlength="60" placeholder="Ex.: Loja da Mari"></label>
+        <sc-if value="{{np.err}}" hint-placeholder-val="{{ false }}"><div role="alert" style="padding: 10px 12px; border-radius: 12px; background: #3A1518; color: #FFB4B4; font-size: 14px; margin-bottom: 12px">{{np.err}}</div></sc-if>
+        <button class="btn full" onClick="{{np.create}}" disabled="{{np.busy}}">Criar página</button>
       </div>
     </div>
   </sc-if>
@@ -153,6 +176,7 @@
       <div class="sheet" onClick="{{stop}}" style="background: #0E0E14">
         <div class="grab"></div>
         <div class="phone">
+        <style>{{customCss}}</style>
         <div class="ph {{tcls}}" style="{{phStyle}}"><div class="ph-bg"></div><div class="ph-tag">NOVO!</div><div class="ph-in">
           <div class="ph-head"><div class="ph-av">{{initials}}</div><div class="ph-name">{{pageTitle}}</div><div class="ph-handle">@{{instagram}}</div><sc-if value="{{bio}}" hint-placeholder-val="{{ false }}"><div class="ph-bio">{{bio}}</div></sc-if><div class="ph-orn"></div></div>
           <sc-for list="{{visible}}" as="v" hint-placeholder-count="4"><div class="{{v.cls}}" style="{{v.pStyle}}">{{v.title}}</div></sc-for>
@@ -182,7 +206,8 @@ class Component extends DCLogic {
     const a = d.appearance || {};
     this.uid = d.blocks.reduce((m, b) => Math.max(m, b.id || 0), 0) + 1;
     this.setState({ loading: false, user: d.user, blocks: d.blocks, title: d.profile.title || '', bio: d.profile.bio || '',
-      theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '' });
+      theme: a.theme || 0, tk: a.tk || '', font: a.font || 0, shape: a.shape == null ? 1 : a.shape, acc: a.acc || '',
+      custom: a.custom || null, useCustom: !!a.useCustom, page: d.page || { id: 0, handle: d.user.handle }, pages: d.pages || [], np: {} });
   }
   flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
   change(patch) {
@@ -211,6 +236,19 @@ class Component extends DCLogic {
       gallery: { svg: 'M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M15 9h.01', label: 'Galeria', ic: 'Gl', hint: 'Link para álbum', t: 'Título', u: 'Link do álbum', uh: '' }
     };
   }
+  async createPage() {
+    const np = this.state.np || {};
+    this.setState({ np: Object.assign({}, np, { busy: true, err: '' }) });
+    const r = await DC.api('pages', 'POST', { handle: np.handle, title: np.title });
+    if (!r.ok) { this.setState({ np: Object.assign({}, np, { busy: false, err: r.error }) }); return; }
+    DC.setPage(r.id, r.handle); location.reload();
+  }
+  async deletePage() {
+    const pg = this.state.page;
+    if (!confirm('Apagar a página whitelink.site/' + pg.handle + '? Os links dela somem e o endereço fica livre.')) return;
+    await DC.api('pages?id=' + pg.id, 'DELETE');
+    DC.setPage(0); location.reload();
+  }
   move(from, to) {
     const b = this.state.blocks.slice();
     if (to < 0 || to >= b.length || from === to) return;
@@ -225,6 +263,7 @@ class Component extends DCLogic {
     const K = this.kinds();
     const s = this.state;
     const u = s.user || { plan: 'prata', trial: false, handle: '', instagram: '', limit: 3 };
+    const pgH = (s.page && s.page.handle) || u.handle;
     const plan = { prata: 0, ouro: 1, diamante: 2 }[u.plan] || 0;
     const themes = [
       { bg: '#0E0E14', fg: '#F3F3F7', card: '#1A1A22', muted: '#A7A7B8', accent: '#D4FF3A', ink: '#0E0E14' },
@@ -275,12 +314,17 @@ class Component extends DCLogic {
       up: () => this.move(idx, idx - 1), down: () => this.move(idx, idx + 1),
       remove: () => { if (confirm('Remover o bloco "' + eb.title + '"?')) { this.change({ blocks: list.filter((x) => x.id !== eb.id), sheet: null, editing: null });  } }
     } : {};
-    let shown = list.filter((b) => b.on && NEED[b.kind] <= plan);
-    shown = shown.filter((b) => b.featured).concat(shown.filter((b) => !b.featured));
+    const nowT = Date.now();
+    const inTime = (b) => { const a = b.start ? Date.parse(b.start) : 0, z = b.end ? Date.parse(b.end) : 0; return !(a && nowT < a) && !(z && nowT > z); };
+    let shown = list.filter((b) => b.on && NEED[b.kind] <= plan && (plan === 0 || inTime(b)));
+    if (limit) { let n = 0; shown = shown.filter((b) => b.kind !== 'link' || ++n <= limit); }
+    const top = (b) => b.featured || (plan >= 1 && b.pin);
+    shown = shown.filter(top).concat(shown.filter((b) => !top(b)));
     const TT = window.WL_TEMAS || [];
     const tkRaw = s.tk || ['noite', 'papel', 'oceano', 'brasa'][s.theme] || 'noite';
     const trow = TT.find((t) => t[1] === tkRaw) || ['Noite', 'noite', 0];
-    const tk = trow[2] <= plan ? trow[1] : 'noite';
+    const useC = plan === 2 && s.useCustom && !!s.custom;
+    const tk = useC ? 'custom' : (trow[2] <= plan ? trow[1] : 'noite');
     const basic = ['noite', 'papel', 'oceano', 'brasa'].indexOf(tk) >= 0;
     const visible = shown.map((b) => ({
       title: b.title,
@@ -293,16 +337,28 @@ class Component extends DCLogic {
     const close = () => this.setState({ sheet: null, editing: null });
     return {
       loading: s.loading, ready: !s.loading,
-      handle: u.handle, instagram: u.instagram, pageUrl: '/' + u.handle,
+      handle: pgH, instagram: u.instagram, pageUrl: '/' + pgH,
+      customCss: useC && window.WL_customCss ? window.WL_customCss(s.custom) : '',
+      multi: plan === 2 || (s.pages || []).length > 0, isExtra: !!(s.page && s.page.id),
+      pageTabs: [{ id: 0, handle: u.handle }].concat(s.pages || []).map((p) => ({ name: '/' + p.handle, sel: (s.page && s.page.id || 0) === p.id, go: () => { if ((s.page && s.page.id || 0) === p.id) return; DC.setPage(p.id, p.handle); location.reload(); } })),
+      canNewPage: plan === 2 && (s.pages || []).length < 2,
+      openNewPage: () => this.setState({ sheet: 'newpage', np: {} }),
+      sheetNewPage: s.sheet === 'newpage',
+      np: Object.assign({}, s.np, {
+        setHandle: (e) => this.setState({ np: Object.assign({}, this.state.np, { handle: e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, ''), err: '' }) }),
+        setTitle: (e) => this.setState({ np: Object.assign({}, this.state.np, { title: e.target.value }) }),
+        create: () => this.createPage()
+      }),
+      deletePage: () => this.deletePage(),
       planLabel: u.trial ? 'Teste Diamante · ' + days + (days === 1 ? ' dia' : ' dias') : ['Prata grátis', 'Plano Ouro', 'Plano Diamante'][plan],
       planColor: tierC[plan], planBg: ['rgba(201,205,214,.12)', 'rgba(242,193,78,.14)', 'rgba(143,227,255,.14)'][plan],
       limitText: limit ? links + ' de ' + limit + ' links' : links + (links === 1 ? ' link' : ' links') + ' · ilimitados',
       limitColor: full ? '#F2C14E' : '#C9C9D6',
       saveText: saveMap[s.saved][0], saveColor: saveMap[s.saved][1], saveError: s.saved === 'error',
       copyLabel: 'Copiar',
-      copyLink: async () => { try { await navigator.clipboard.writeText('https://whitelink.site/' + u.handle); } catch (e) {} this.flash('Link copiado!'); },
+      copyLink: async () => { try { await navigator.clipboard.writeText('https://whitelink.site/' + pgH); } catch (e) {} this.flash('Link copiado!'); },
       share: async () => {
-        const url = 'https://whitelink.site/' + u.handle;
+        const url = 'https://whitelink.site/' + pgH;
         if (navigator.share) { try { await navigator.share({ title: title, url: url }); return; } catch (e) { return; } }
         try { await navigator.clipboard.writeText(url); } catch (e) {} this.flash('Link copiado!');
       },
@@ -327,9 +383,9 @@ class Component extends DCLogic {
         const lim = key === 'link' && full;
         const locked = NEED[key] > plan || lim;
         return Object.assign({}, K[key], {
-          locked: locked, need: lim ? 'Limite' : 'Ouro',
+          locked: locked, need: lim ? 'Limite' : 'Ouro', lockStyle: locked ? 'opacity: .55' : '',
           add: () => {
-            if (locked) return;
+            if (locked) { this.flash(lim ? 'Você chegou ao limite de ' + limit + ' links do seu plano. Veja os planos em Mais › Meu plano.' : K[key].label + ' é do plano Ouro. Veja em Mais › Meu plano.'); return; }
             const id = this.uid++;
             const nb = { id: id, kind: key, title: key === 'text' ? 'Escreva seu texto aqui' : K[key].label, url: '', on: true };
             this.change({ blocks: list.concat([nb]), sheet: 'edit', editing: id });

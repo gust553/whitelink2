@@ -6,7 +6,9 @@ export async function onRequestPost({ request, env }) {
   const b = await readJson(request);
   if (!b) return fail('Dados inválidos.');
   if (!(await rateLimit(env, 'lead:' + clientIp(request), 10, 3600000))) return fail('Muitas tentativas. Tente mais tarde.', 429);
-  const u = await env.DB.prepare('SELECT id, plan, plan_until, trial_until FROM users WHERE handle = ? AND status = ?').bind(String(b.h || '').toLowerCase(), 'ativo').first();
+  const hh = String(b.h || '').toLowerCase();
+  let u = await env.DB.prepare('SELECT id, plan, plan_until, trial_until FROM users WHERE handle = ? AND status = ?').bind(hh, 'ativo').first();
+  if (!u) u = await env.DB.prepare("SELECT u.id, u.plan, u.plan_until, u.trial_until FROM pages p JOIN users u ON u.id = p.user_id WHERE p.handle = ? AND u.status = 'ativo'").bind(hh).first();
   if (!u || PLAN_LEVEL[effectivePlan(u).plan] < 1) return fail('Página não encontrada.', 404);
   const phone = String(b.phone || '').replace(/\D/g, '').slice(0, 13);
   const email = cleanEmail(b.email);

@@ -256,6 +256,8 @@ export async function ensureSchema(env) {
     'CREATE TABLE IF NOT EXISTS ref_rewards (id INTEGER PRIMARY KEY AUTOINCREMENT, referrer_id INTEGER NOT NULL, friend_id INTEGER NOT NULL, order_id INTEGER NOT NULL, days INTEGER NOT NULL, status TEXT NOT NULL, release_at INTEGER NOT NULL, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS order_gw (order_id INTEGER PRIMARY KEY, gw_id TEXT NOT NULL, pix TEXT NOT NULL, created_at INTEGER NOT NULL)',
     'CREATE INDEX IF NOT EXISTS idx_order_gw ON order_gw(gw_id)',
+    'CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, handle TEXT NOT NULL UNIQUE, title TEXT, bio TEXT, blocks TEXT NOT NULL DEFAULT \'[]\', appearance TEXT NOT NULL DEFAULT \'{}\', created_at INTEGER NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS idx_pages_user ON pages(user_id)',
     'CREATE TABLE IF NOT EXISTS admin_2fa (token_hash TEXT PRIMARY KEY, until INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS fraud_log (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, user_id INTEGER, detail TEXT, ip TEXT, created_at INTEGER NOT NULL)',
     'CREATE TABLE IF NOT EXISTS admin_log (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER NOT NULL, action TEXT NOT NULL, target TEXT, created_at INTEGER NOT NULL)'
@@ -280,6 +282,33 @@ export async function loadPage(env, userId) {
   const r = await env.DB.prepare('SELECT title, url, active FROM links WHERE user_id = ? ORDER BY position, id').bind(userId).all();
   const blocks = (r.results || []).map((l, i) => ({ id: i + 1, kind: 'link', title: l.title, url: l.url, on: !!l.active }));
   return { blocks, appearance: {} };
+}
+
+// Páginas extras do Diamante (até 3 no total: a principal + 2)
+export const EXTRA_PAGES = 2;
+export async function handleTaken(env, h) {
+  if (RESERVED.has(h)) return true;
+  const a = await env.DB.prepare('SELECT 1 AS x FROM users WHERE handle = ?').bind(h).first();
+  if (a) return true;
+  const b = await env.DB.prepare('SELECT 1 AS x FROM pages WHERE handle = ?').bind(h).first();
+  return !!b;
+}
+export function parsePageRow(r) {
+  let blocks = [], appearance = {};
+  try { blocks = JSON.parse(r.blocks) || []; } catch (e) {}
+  try { appearance = JSON.parse(r.appearance || '{}') || {}; } catch (e) {}
+  return { blocks, appearance };
+}
+// ?p=ID na URL escolhe uma página extra; sem ele, é a página principal
+export async function pageTarget(env, u, request) {
+  const id = parseInt(new URL(request.url).searchParams.get('p'), 10) || 0;
+  if (!id) return { main: true };
+  const r = await env.DB.prepare('SELECT * FROM pages WHERE id = ? AND user_id = ?').bind(id, u.id).first();
+  return r ? { main: false, row: r } : { missing: true };
+}
+export async function listPages(env, u) {
+  const r = await env.DB.prepare('SELECT id, handle, title FROM pages WHERE user_id = ? ORDER BY id').bind(u.id).all();
+  return r.results || [];
 }
 
 export function cleanBlocks(list) {

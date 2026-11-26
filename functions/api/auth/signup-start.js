@@ -29,6 +29,7 @@ export async function onRequestPost({ request, env }) {
     if (dup.phone === phone) return fail('Este celular já tem conta. Entre ou recupere a senha.');
     return fail('Esse endereço já está em uso. Escolha outro.');
   }
+  if (await env.DB.prepare('SELECT 1 AS x FROM pages WHERE handle = ?').bind(handle).first()) return fail('Esse endereço já está em uso. Escolha outro.');
 
   const pw = await hashPassword(String(b.password));
   const issued = await issueCode(env, phone, 'signup', {

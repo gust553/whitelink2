@@ -71,7 +71,7 @@ function build(file, [out, login, preview, tab, barTitle]) {
   const title = (src.match(/<title>([\s\S]*?)<\/title>/) || [, 'WhiteLink'])[1];
   const code = src.slice(src.indexOf('class Component'), src.lastIndexOf('</script>'));
   const props = (() => { try { const m = src.match(/data-props='([^']*)'/); const p = JSON.parse(m[1]); const o = {}; for (const k in p) if (k[0] !== '$' && p[k] && p[k].default !== undefined) o[k] = p[k].default; return o; } catch (e) { return {}; } })();
-  const guard = login ? `(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar';})();` : '';
+  const guard = login ? `(async()=>{const d=await DC.api('me');if(d.status===401)location.href='/entrar?next='+encodeURIComponent(location.pathname+location.search);})();` : '';
   const html = `<!doctype html>
 <html lang="pt-BR">
 <head>

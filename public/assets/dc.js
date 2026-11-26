@@ -35,7 +35,17 @@
     root.kids.push(s.slice(last)); return root;
   }
 
+  // nas páginas abertas (site, ajuda, termos), quem já entrou vê "Meu painel" em vez de "Entrar"
+  function loggedLinks(root) {
+    root.querySelectorAll('a[href="/entrar"], a[href="/entrar#cadastro"]').forEach((a) => {
+      a.setAttribute('href', '/painel');
+      if (/^\s*(Entrar|Testar grátis|Começar grátis)\s*$/.test(a.textContent)) a.textContent = 'Meu painel';
+    });
+  }
   function mount(rootEl, tplText, Component, props) {
+    if (/^\/(ajuda|termos|privacidade)?$/.test(location.pathname)) {
+      fetch('/api/me', { credentials: 'same-origin' }).then((r) => { if (r.ok) { window.__wlMe = true; loggedLinks(rootEl); } }).catch(() => {});
+    }
     const tree = parse(tplText);
     const inst = new Component(props || {});
     let handlers = [], queued = false;
@@ -110,6 +120,7 @@
       const html = render(tree, vals);
       if (first) { rootEl.innerHTML = html; first = false; }
       else { const t = document.createElement('div'); t.innerHTML = html; morphKids(rootEl, t); }
+      if (window.__wlMe) loggedLinks(rootEl);
     }
     draw();
     if (typeof inst.componentDidMount === 'function') inst.componentDidMount();
@@ -121,12 +132,28 @@
     mount,
     html: (s) => ({ __html: String(s) }), // HTML fixo do próprio código (ícones), nunca dados do usuário
     // chamadas para o servidor do WhiteLink
+    // página que está sendo editada (Diamante pode ter até 3). 0 = principal.
+    page() { try { return parseInt(localStorage.getItem('wl_page'), 10) || 0; } catch (e) { return 0; } },
+    setPage(id, handle) { try { if (id) { localStorage.setItem('wl_page', String(id)); localStorage.setItem('wl_page_h', handle || ''); } else { localStorage.removeItem('wl_page'); localStorage.removeItem('wl_page_h'); } } catch (e) {} },
     async api(path, method, body) {
+      const pid = this.page();
+      if (pid && /^(editor|appearance)(\?|$)/.test(path)) path += (path.indexOf('?') < 0 ? '?' : '&') + 'p=' + pid;
       try {
         const r = await fetch('/api/' + path, { method: method || 'GET', headers: body ? { 'content-type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined, credentials: 'same-origin' });
         const d = await r.json().catch(() => ({ ok: false, error: 'Resposta inválida do servidor.' }));
-        d.status = r.status; if (!r.ok && d.ok !== false) d.ok = false; return d;
+        d.status = r.status; if (!r.ok && d.ok !== false) d.ok = false;
+        if (pid && r.status === 404 && /^(editor|appearance)/.test(path)) { this.setPage(0); location.reload(); }
+        return d;
       } catch (e) { return { ok: false, error: 'Sem conexão. Confira sua internet.' }; }
     }
   };
+  // aviso de qual página está sendo editada (Diamante com mais de uma página)
+  document.addEventListener('DOMContentLoaded', function () {
+    var h = ''; try { h = window.DC.page() ? localStorage.getItem('wl_page_h') || '' : ''; } catch (e) {}
+    if (!h || !/^\/painel\/(aparencia|temas|criador-tema|agendamentos)/.test(location.pathname)) return;
+    var a = document.createElement('a');
+    a.href = '/painel'; a.textContent = 'Editando whitelink.site/' + h + ' · trocar';
+    a.setAttribute('style', 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:30;padding:8px 14px;border-radius:999px;background:#F3F3F7;color:#0E0E14;font:600 13px Inter,sans-serif;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap');
+    document.body.appendChild(a);
+  });
 })();

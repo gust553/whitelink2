@@ -1,4 +1,4 @@
-import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, BLOCK_NEED, PLAN_LEVEL, themeFor, customCss, cleanCustom, CUSTOM_FONTS } from '../src/lib.js';
+import { RESERVED, escapeHtml, effectivePlan, ensureSchema, loadPage, parsePageRow, BLOCK_NEED, PLAN_LEVEL, themeFor, customCss, cleanCustom, CUSTOM_FONTS } from '../src/lib.js';
 import { TEMA_FONTS } from '../src/temas.js';
 
 const BASIC = ['noite', 'papel', 'oceano', 'brasa'];
@@ -27,16 +27,25 @@ export async function onRequestGet(context) {
   if (!/^[a-z0-9._]{3,30}$/.test(h)) return notFound(context, raw);
   await ensureSchema(env);
 
-  const u = await env.DB.prepare('SELECT id, name, instagram, handle, plan, plan_until, trial_until, status FROM users WHERE handle = ?').bind(h).first();
+  let u = await env.DB.prepare('SELECT id, name, instagram, handle, plan, plan_until, trial_until, status FROM users WHERE handle = ?').bind(h).first();
+  let extra = null;
+  if (!u) {
+    // página extra do Diamante
+    extra = await env.DB.prepare('SELECT * FROM pages WHERE handle = ?').bind(h).first();
+    if (extra) u = await env.DB.prepare('SELECT id, name, instagram, handle, plan, plan_until, trial_until, status FROM users WHERE id = ?').bind(extra.user_id).first();
+  }
   if (!u) return notFound(context, h);
+  if (extra && effectivePlan(u).plan !== 'diamante') {
+    return html('Página indisponível', `<div class="ph t-noite pub"><div class="ph-bg"></div><div class="ph-in"><div class="ph-head" style="margin-top:120px"><div class="ph-name">Esta página não está disponível</div><div class="ph-bio">Volte mais tarde.</div></div><a class="ph-btn main" href="/">Conheça o WhiteLink</a></div></div>`, 'noite', '', 404);
+  }
   if (u.status !== 'ativo') {
     return html('Página indisponível', `<div class="ph t-noite pub"><div class="ph-bg"></div><div class="ph-in"><div class="ph-head" style="margin-top:120px"><div class="ph-name">Esta página não está disponível</div><div class="ph-bio">Volte mais tarde.</div></div><a class="ph-btn main" href="/">Conheça o WhiteLink</a></div></div>`, 'noite', '', 503);
   }
 
-  const prof = (await env.DB.prepare('SELECT title, bio FROM profiles WHERE user_id = ?').bind(u.id).first()) || {};
+  const prof = extra ? { title: extra.title, bio: extra.bio } : ((await env.DB.prepare('SELECT title, bio FROM profiles WHERE user_id = ?').bind(u.id).first()) || {});
   const ep = effectivePlan(u);
   const lvl = PLAN_LEVEL[ep.plan];
-  const { blocks, appearance: a } = await loadPage(env, u.id);
+  const { blocks, appearance: a } = extra ? parsePageRow(extra) : await loadPage(env, u.id);
   const useC = lvl === 2 && a.useCustom && a.custom;
   const tk = useC ? 'custom' : themeFor(a, lvl);
   const now = Date.now();
@@ -52,7 +61,7 @@ export async function onRequestGet(context) {
   ).bind(u.id, new Date().toISOString().slice(0, 10)).run());
   context.waitUntil(trackMeta(env, context.request, u.id));
 
-  const go = (b, v) => `/go/${u.id}/${b.id}${v ? '?v=b' : ''}`;
+  const go = (b, v) => `/go/${extra ? 'x' + extra.id : u.id}/${b.id}${v ? '?v=b' : ''}`;
   const parts = shown.map((b) => {
     const useB = lvl === 2 && b.titleB ? Math.random() * 100 >= (b.split || 50) : false;
     const title = useB ? b.titleB : b.title;
@@ -112,11 +121,12 @@ export async function onRequestGet(context) {
   document.querySelectorAll('.timer').forEach(function(el){var end=+el.dataset.end,b=el.querySelectorAll('.tm b');function t(){var s=Math.max(0,Math.floor((end-Date.now())/1000));var v=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];b.forEach(function(x,i){x.textContent=String(v[i]).padStart(2,'0')});}t();setInterval(t,1000);});
   document.querySelectorAll('.pixb').forEach(function(btn){btn.onclick=function(){btn.nextElementSibling.classList.toggle('hide');};});
   document.querySelectorAll('[data-k]').forEach(function(btn){btn.onclick=function(){try{navigator.clipboard.writeText(btn.dataset.k);}catch(e){}btn.textContent='Chave copiada!';};});
-  document.querySelectorAll('form.lead').forEach(function(f){f.onsubmit=function(e){e.preventDefault();var m=f.querySelector('.msg');fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({h:${JSON.stringify(u.handle)},name:f.name.value,phone:f.phone.value,source:f.dataset.src})}).then(function(r){return r.json()}).then(function(d){if(d.ok){f.innerHTML='<b>Pronto! Você vai receber as novidades.</b>';}else{m.textContent=d.error||'Tente de novo.';}}).catch(function(){m.textContent='Sem conexão.';});};});
+  document.querySelectorAll('form.lead').forEach(function(f){f.onsubmit=function(e){e.preventDefault();var m=f.querySelector('.msg');fetch('/api/lead',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({h:${JSON.stringify(h)},name:f.name.value,phone:f.phone.value,source:f.dataset.src})}).then(function(r){return r.json()}).then(function(d){if(d.ok){f.innerHTML='<b>Pronto! Você vai receber as novidades.</b>';}else{m.textContent=d.error||'Tente de novo.';}}).catch(function(){m.textContent='Sem conexão.';});};});
 })();
 </script>`;
   const cfgRow = await env.DB.prepare('SELECT data FROM user_settings WHERE user_id = ?').bind(u.id).first();
   let cfg = {}; try { cfg = JSON.parse((cfgRow && cfgRow.data) || '{}'); } catch (e) {}
+  if (extra) cfg = Object.assign({}, cfg, { seo: {} }); // título do Google é só da página principal
   return html(title + ' | WhiteLink', body, tk, custom, 200, cfg, lvl, cfont);
 }
 

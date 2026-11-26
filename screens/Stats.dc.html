@@ -95,7 +95,7 @@ class Component extends DCLogic {
     return {
       loading: false, ready: true, canExport: d.level === 2,
       periods: [7, 30, 90].map((n, i) => ({ name: n + ' dias', sel: d.days === n, locked: i > d.level, pick: () => this.load(n) })),
-      kpis: full ? [{ v: fmt(d.visits), l: 'visitas' }, { v: fmt(d.clicks), l: 'cliques' }, { v: fmt(d.contacts), l: 'contatos' }] : [{ v: fmt(d.visits), l: 'visitas em 7 dias' }],
+      kpis: full ? [{ v: fmt(d.visits), l: d.visits === 1 ? 'visita' : 'visitas' }, { v: fmt(d.clicks), l: d.clicks === 1 ? 'clique' : 'cliques' }, { v: fmt(d.contacts), l: d.contacts === 1 ? 'contato' : 'contatos' }] : [{ v: fmt(d.visits), l: (d.visits === 1 ? 'visita' : 'visitas') + ' em 7 dias' }],
       bars: d.series.map((x) => 'height: ' + Math.max(3, x.views / max * 100) + '%' + (x.views ? '' : '; background: #26262F')),
       firstDay: new Date(d.series[0].day + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       locked: !full, full: full,

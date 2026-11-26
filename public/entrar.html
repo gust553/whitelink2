@@ -122,6 +122,10 @@ body{min-height:100vh;min-height:100dvh}
   const qs = new URLSearchParams(location.search);
   if (qs.get('h')) $('sHandle').value = qs.get('h');
   if (qs.get('ref')) $('sRef').value = qs.get('ref');
+  // para onde voltar depois de entrar (só páginas do próprio site)
+  const nx = qs.get('next') || '';
+  const NEXT = /^\/(?!\/)[\w\-\/?=&.%]*$/.test(nx) ? nx : '/painel';
+  WL.api('me').then((d) => { if (d && d.ok) location.replace(NEXT); });
   show(location.hash === '#cadastro' || qs.get('h') || qs.get('ref') ? 'fSign' : 'fLogin');
 
   let t;
@@ -152,7 +156,7 @@ body{min-height:100vh;min-height:100dvh}
     const d = await WL.api('auth/login', 'POST', { email: $('lEmail').value, password: $('lPw').value });
     WL.busy($('lBtn'), false);
     if (!d.ok) { $('lErr').textContent = d.error; return; }
-    location.href = '/painel';
+    location.href = NEXT;
   });
 
   $('fSign').addEventListener('submit', async (e) => {

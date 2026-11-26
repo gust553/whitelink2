@@ -26,6 +26,7 @@ import * as account from '../functions/api/account/index.js';
 import * as accountPhone from '../functions/api/account/phone.js';
 import * as referrals from '../functions/api/referrals.js';
 import * as support from '../functions/api/support.js';
+import * as pagesApi from '../functions/api/pages.js';
 import * as gwHook from '../functions/api/webhooks/gateway.js';
 import * as admVerify from '../functions/api/admin/verify.js';
 import * as admOverview from '../functions/api/admin/overview.js';
@@ -65,6 +66,7 @@ const ROUTES = [
   [/^\/api\/account\/phone$/, accountPhone],
   [/^\/api\/referrals$/, referrals],
   [/^\/api\/support$/, support],
+  [/^\/api\/pages$/, pagesApi],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],
   [/^\/api\/admin\/overview$/, admOverview],
@@ -77,7 +79,7 @@ const ROUTES = [
   [/^\/api\/admin\/fraud$/, admFraud],
   [/^\/api\/admin\/orders$/, adminOrders],
   [/^\/api\/admin\/orders\/(?<code>[A-Za-z0-9]+)$/, adminOrderOne],
-  [/^\/go\/(?<uid>\d+)\/(?<bid>\d+)$/, goBlock],
+  [/^\/go\/(?<uid>x?\d+)\/(?<bid>\d+)$/, goBlock],
   [/^\/go\/(?<id>\d+)$/, go],
   [/^\/(?<handle>[^/]+)$/, profile]
 ];
@@ -118,7 +120,7 @@ async function route(request, env, ctx) {
 export default {
   async fetch(request, env, ctx) {
     try {
-      return await mw.onRequest({ request, next: () => route(request, env, ctx) });
+      return await mw.onRequest({ request, env, next: () => route(request, env, ctx) });
     } catch (e) {
       console.error(e);
       return new Response('{"ok":false,"error":"Erro no servidor. Tente de novo."}', { status: 500, headers: { 'content-type': 'application/json' } });
