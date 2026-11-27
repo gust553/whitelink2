@@ -1,5 +1,5 @@
 // Meta (Facebook/Instagram Ads): API de Conversões, enviada pelo servidor.
-// Liga sozinho quando as variáveis META_PIXEL_ID e META_CAPI_TOKEN existem na Cloudflare.
+// Liga sozinho quando as variáveis META_PIXEL_ID (4293861087575730) e META_CAPI_TOKEN existem na Cloudflare.
 // Os eventos do servidor usam o mesmo event_id do pixel do navegador, então a Meta não conta em dobro.
 import { sha256, clientIp, getCookie } from './lib.js';
 

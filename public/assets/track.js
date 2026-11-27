@@ -1,7 +1,7 @@
 // Pixel da Meta do site WhiteLink (anúncios do próprio WhiteLink, não das páginas dos clientes).
 // Para trocar o pixel, mude só o número abaixo. Vazio = desligado.
 (function () {
-  var ID = '';
+  var ID = '4293861087575730';
   window.WL_track = function () {};
   if (!ID || window.fbq) return;
   !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
