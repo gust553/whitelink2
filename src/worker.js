@@ -57,6 +57,7 @@ import * as admSupport from '../functions/api/admin/support/index.js';
 import * as admSupportOne from '../functions/api/admin/support/[id].js';
 import * as admRefs from '../functions/api/admin/referrals.js';
 import * as admFraud from '../functions/api/admin/fraud.js';
+import * as admExport from '../functions/api/admin/export.js';
 import * as adminOrders from '../functions/api/admin/orders/index.js';
 import * as adminOrderOne from '../functions/api/admin/orders/[code].js';
 import * as profile from '../functions/[handle].js';
@@ -106,6 +107,7 @@ const ROUTES = [
   [/^\/m\/(?<id>[a-f0-9]{8,40})$/, mediaGet],
   [/^\/api\/webhooks\/gateway$/, gwHook],
   [/^\/api\/admin\/verify$/, admVerify],
+  [/^\/api\/admin\/export$/, admExport],
   [/^\/api\/admin\/overview$/, admOverview],
   [/^\/api\/admin\/users$/, admUsers],
   [/^\/api\/admin\/users\/(?<id>\d+)$/, admUser],

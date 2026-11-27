@@ -98,6 +98,7 @@ textarea.inp{height:auto;min-height:90px;padding:12px 14px;resize:vertical;font-
         <div>
           <input class="inp" type="search" placeholder="Buscar por nome, e-mail, @ ou celular" value="{{q}}" onInput="{{setQ}}" aria-label="Buscar cliente" style="margin-bottom: 12px">
           <div class="chips"><sc-for list="{{cliTabs}}" as="t" hint-placeholder-count="6"><button onClick="{{t.go}}" aria-pressed="{{t.sel}}">{{t.name}}</button></sc-for></div>
+          <a class="btn ghost full" href="{{exportHref}}" download style="height: 46px; margin-bottom: 12px; font-size: 14.5px">⬇ Exportar planilha ({{exportLabel}})</a>
           <div class="list">
             <sc-for list="{{users}}" as="u" hint-placeholder-count="4"><button class="row" onClick="{{u.open}}"><span class="row-tx"><b>{{u.name}}</b><span>{{u.sub}}</span></span><span class="chip" style="{{u.chip}}">{{u.plan}}</span></button></sc-for>
             <sc-if value="{{noUsers}}" hint-placeholder-val="{{ false }}"><div class="row" style="cursor: default; color: #9C9CAD">Nenhum cliente encontrado.</div></sc-if>
@@ -441,7 +442,7 @@ class Component extends DCLogic {
         name: t[1], n: t[2] || '', on: sec === t[0] ? 'on' : '', go: () => this.go(t[0]),
         icon: DC.html('<svg viewBox="0 0 24 24" aria-hidden="true">' + IC[t[0]] + '</svg>')
       })),
-      home: ready && sec === 'inicio' && !sub && !!d.kpis, pay: ready && sec === 'pagamentos', cli: ready && sec === 'clientes', sup: ready && sec === 'suporte', more: ready && sec === 'mais' && !sub,
+      home: ready && sec === 'inicio' && !sub && !!d.kpis, pay: ready && sec === 'pagamentos', cli: ready && sec === 'clientes', exportHref: '/api/admin/export?f=' + encodeURIComponent(s.f || 'todos') + '&q=' + encodeURIComponent(s.q || ''), exportLabel: (s.q ? 'busca atual' : ({ todos: 'todos os cadastros', teste: 'em teste', prata: 'Prata', ouro: 'Ouro', diamante: 'Diamante', agencia: 'Agência', bloqueado: 'bloqueados' }[s.f || 'todos'] || 'filtro atual')), sup: ready && sec === 'suporte', more: ready && sec === 'mais' && !sub,
       cfgPay: ready && sub === 'pagto' && !!s.cfg, cfgPrice: ready && sub === 'precos' && !!s.cfg, cfgDom: ready && sub === 'dominios' && !!s.cfg, cfgAnn: ready && sub === 'anuncio' && !!s.cfg, cfgAny: ready && (sub === 'pagto' || sub === 'precos' || sub === 'dominios' || sub === 'anuncio') && !!s.cfg,
       refs: ready && sub === 'indicacoes' && !!d.ok, fraud: ready && sub === 'antifraude' && !!d.ok,
       closeSheet: () => this.setState({ sheet: null }), stop: (e) => e.stopPropagation(),
