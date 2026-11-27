@@ -1,5 +1,6 @@
 // Pagamentos do WhiteLink: preços, configurações do admin, Pix copia e cola
 import { ensureSchema, randomHex } from './lib.js';
+import { trackPurchase } from './meta.js';
 
 export const DEFAULTS = {
   pix_key: 'fcaf9712-5ed5-47c7-bf1a-dbcaa9614ab6',
@@ -128,6 +129,8 @@ export async function releaseOrder(env, o) {
         .bind(ref.id, u.id, o.id, d, now + 7 * DAY, now).run();
     }
   }
+  // anúncios: avisa a Meta que houve uma venda (Purchase), para otimizar por quem paga
+  await trackPurchase(env, o);
 }
 
 // entrega os prêmios de indicação que já passaram dos 7 dias

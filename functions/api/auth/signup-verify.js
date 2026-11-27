@@ -1,8 +1,9 @@
 import { json, fail, readJson, checkCode, createSession, sha256, randomHex, getCookie, cookie,
   rateLimit, clientIp, DAY, TRIAL_DAYS } from '../../../src/lib.js';
+import { saveAttrib, trackSignup } from '../../../src/meta.js';
 
 // Passo 2 do cadastro: confere o código, cria a conta e decide se ganha o teste Diamante
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, waitUntil }) {
   const b = await readJson(request);
   if (!b) return fail('Dados inválidos.');
   if (!(await rateLimit(env, 'verify-ip:' + clientIp(request), 30, 3600000))) return fail('Muitas tentativas. Tente mais tarde.', 429);
@@ -55,8 +56,13 @@ export async function onRequestPost({ request, env }) {
     }
   }
 
+  // anúncios: guarda de onde veio e avisa a Meta (API de Conversões) sem atrasar a resposta
+  await saveAttrib(env, userId, request);
+  const tr = trackSignup(env, request, userId, !used).catch(() => {});
+  if (waitUntil) waitUntil(tr); else await tr;
+
   const headers = new Headers({ 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
   headers.append('set-cookie', await createSession(env, request, userId));
   if (newDevice) headers.append('set-cookie', cookie('wl_d', device, 5 * 365 * 86400));
-  return new Response(JSON.stringify({ ok: true, trial: !used }), { headers });
+  return new Response(JSON.stringify({ ok: true, trial: !used, ev: 'reg-' + userId }), { headers });
 }

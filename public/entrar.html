@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
 <link rel="stylesheet" href="/assets/app.css">
+<script src="/assets/track.js"></script>
 <style>
 body{min-height:100vh;min-height:100dvh}
 .top{background:transparent;border:none;backdrop-filter:none;position:static}
@@ -189,6 +190,8 @@ body{min-height:100vh;min-height:100dvh}
     WL.busy($('cBtn'), false);
     if (!d.ok) { $('cErr').textContent = d.error; return; }
     if (flow === 'signup') {
+      WL_track('CompleteRegistration', { content_name: d.trial ? 'teste_diamante' : 'prata', status: 'ok' }, d.ev);
+      if (d.trial) WL_track('StartTrial', { value: 0, currency: 'BRL', predicted_ltv: 39.9 }, d.ev + '-t');
       $('dTitle').textContent = d.trial ? 'Teste Diamante liberado!' : 'Conta criada!';
       $('dTxt').textContent = d.trial ? 'Você tem 3 dias com tudo do Diamante. Depois continua no Prata grátis.' : 'Este celular, e-mail, Instagram ou aparelho já usou o teste grátis, então sua conta começa no Prata grátis.';
       $('dBtn').textContent = 'Montar minha página'; $('dBtn').href = '/painel';

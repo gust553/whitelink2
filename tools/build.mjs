@@ -95,7 +95,7 @@ function build(file, [out, login, preview, tab, barTitle]) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${title}</title>
-${login ? '<meta name="robots" content="noindex">' : ''}
+${login ? '<meta name="robots" content="noindex">' : '<script src="/assets/track.js"></script>'}
 ${asyncFonts(helmet.trim())}
 ${tab ? '<link rel="stylesheet" href="/assets/shell.css">' : ''}
 <link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0B0B10"><link rel="apple-touch-icon" href="/assets/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" href="/assets/icons/icon-192.png">
