@@ -151,7 +151,7 @@ export async function onRequestPost({ request, env, params }) {
     const brand = cleanText(b.brand, 60);
     const t = await track(env, u.id, { phone, name, kind: 'publi', title: (brand || 'Marca') + (b.budget ? ' · ' + cleanText(b.budget, 40) : '') + (b.message ? ' · ' + cleanText(b.message, 120) : ''), aff });
     await env.DB.prepare("UPDATE people SET tags = CASE WHEN tags = '' THEN 'marca' WHEN (',' || tags || ',') LIKE '%,marca,%' THEN tags ELSE tags || ',marca' END WHERE id = ?").bind(t.personId).run();
-    await notify(env, u.id, 'publi', 'Proposta de publi: ' + (brand || name), '/painel/clientes');
+    await notify(env, u.id, 'publi', 'Proposta de publi: ' + (brand || name), '/painel/midiakit');
     return json({ ok: true });
   }
 

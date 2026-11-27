@@ -13,11 +13,15 @@
 select.inp{appearance:none}textarea.inp{height:auto;min-height:90px;padding:12px 14px;font-family:inherit}
 .note{font-size:13px;color:#9C9CAD;line-height:1.5}
 .pf{width:96px;height:96px;border-radius:50%;border:2px dashed #3A3A46;background:#14141B center/cover no-repeat;color:#9C9CAD;font-size:12px;cursor:pointer;font-family:inherit}
+.opt{display:flex;gap:8px;flex-wrap:wrap}.opt button{min-height:42px;padding:0 14px;border-radius:12px;border:1px solid #2A2A34;background:#14141B;color:#C9C9D6;font:inherit;font-size:14px;cursor:pointer}.opt button[aria-pressed="true"]{border-color:#D4FF3A;background:rgba(212,255,58,.12);color:#F3F3F7;font-weight:600}
+.sw2{width:40px;height:40px;border-radius:50%;border:3px solid transparent;cursor:pointer}.sw2[aria-pressed="true"]{border-color:#F3F3F7}
+.wimg{width:72px;height:72px;border-radius:14px;border:2px dashed #3A3A46;background:#14141B center/cover no-repeat;color:#9C9CAD;font-size:11px;cursor:pointer;flex:none;font-family:inherit}
+.onpage{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin-bottom:12px}.onpage.off{border-color:#4A3A14;background:#1D1A10}
 .lk{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid #8FE3FF;color:#8FE3FF;margin-left:6px}
 </style>
 </helmet>
 <div>
-  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Mídia kit</h1><button class="hq" data-help="midiakit" aria-label="Ajuda">?</button><sc-if value="{{url}}" hint-placeholder-val="{{ false }}"><a class="icon-btn" href="{{url}}" target="_blank" rel="noopener" aria-label="Ver mídia kit"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></sc-if></div>
+  <div class="appbar"><a class="icon-btn" href="/painel/mais" aria-label="Voltar"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1>Mídia kit</h1><span role="status" style="font-size: 12.5px; color: #D4FF3A; margin-left: auto; padding-right: 8px">{{toast}}</span><button class="hq" data-help="midiakit" aria-label="Ajuda">?</button><sc-if value="{{url}}" hint-placeholder-val="{{ false }}"><a class="icon-btn" href="{{url}}" target="_blank" rel="noopener" aria-label="Ver mídia kit"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></sc-if></div>
   <div class="app-main">
     <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}"><div style="color: #9C9CAD; padding-top: 30px">Carregando…</div></sc-if>
     <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
@@ -29,10 +33,26 @@ select.inp{appearance:none}textarea.inp{height:auto;min-height:90px;padding:12px
     </sc-if>
     <sc-if value="{{ready}}" hint-placeholder-val="{{ true }}">
     <div>
-      <div class="card" style="padding: 16px; display: flex; gap: 14px; align-items: center">
-        <button class="pf" onClick="{{pick}}" style="{{photo}}">{{photoLabel}}</button>
-        <div class="note">Mande o link <b style="color: #F3F3F7">whitelink.site/{{handle}}/midiakit</b> para as marcas, ou adicione o bloco <b style="color: #F3F3F7">Mídia kit</b> na sua página.</div>
+      <div class="{{op.cls}}" role="status">
+        <span style="font-size: 22px; line-height: 1">{{op.icon}}</span>
+        <div style="flex: 1; min-width: 0"><b style="font-size: 15px">{{op.title}}</b><p class="note" style="margin: 4px 0 0">{{op.text}}</p>
+          <sc-if value="{{op.off}}" hint-placeholder-val="{{ false }}"><button class="btn mini" onClick="{{op.show}}" style="height: 40px; padding: 0 16px; margin-top: 10px">Mostrar na minha página</button></sc-if></div>
       </div>
+      <div class="card" style="padding: 16px">
+        <div style="display: flex; gap: 14px; align-items: center">
+          <button class="pf" onClick="{{pick}}" style="{{photo}}" aria-label="Trocar foto do mídia kit">{{photoLabel}}</button>
+          <div class="note" style="flex: 1; min-width: 0">Seu link para mandar às marcas:<br><b style="color: #F3F3F7; word-break: break-all">whitelink.site/{{handle}}/midiakit</b></div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap">
+          <a class="btn ghost mini" href="{{url}}" target="_blank" rel="noopener" style="flex: 1; height: 42px">Ver</a>
+          <button class="btn ghost mini" onClick="{{copyLink}}" style="flex: 1; height: 42px">{{copyLabel}}</button>
+          <a class="btn ghost mini" href="{{waShare}}" target="_blank" rel="noopener" style="flex: 1; height: 42px">Enviar no WhatsApp</a>
+        </div>
+      </div>
+      <sc-if value="{{hasProps}}" hint-placeholder-val="{{ false }}"><div id="propostas">
+        <div class="sec-t">Propostas recebidas</div>
+        <div class="card" style="padding: 0 16px"><sc-for list="{{props}}" as="pp" hint-placeholder-count="2"><div class="row" style="cursor: default"><span class="row-tx"><b>{{pp.title}}</b><span>{{pp.sub}}</span></span><a class="btn mini" href="{{pp.wa}}" target="_blank" rel="noopener" style="height: 38px; padding: 0 14px">Responder</a></div></sc-for></div>
+      </div></sc-if>
       <div class="sec-t">Sobre você<button class="hq" data-help="midiakit" aria-label="Ajuda">?</button></div>
       <div class="card" style="padding: 16px">
         <label class="fld">Título<input class="inp" value="{{k.headline}}" onInput="{{set_headline}}" placeholder="Ex.: Mari Souza · Moda e beleza"></label>
@@ -50,8 +70,39 @@ select.inp{appearance:none}textarea.inp{height:auto;min-height:90px;padding:12px
       </sc-for>
       <button class="btn ghost full" onClick="{{addNet}}">+ Rede</button>
       <div class="sec-t">Formatos e valores</div>
-      <sc-for list="{{prices}}" as="p" hint-placeholder-count="1"><div class="grid2"><label class="fld">Formato<input class="inp" value="{{p.name}}" onInput="{{p.setName}}" placeholder="Ex.: 3 stories"></label><label class="fld">Valor<input class="inp" value="{{p.price}}" onInput="{{p.setPrice}}" placeholder="R$ 800 ou 'sob consulta'"></label></div></sc-for>
+      <sc-for list="{{prices}}" as="p" hint-placeholder-count="1"><div class="net">
+        <div class="grid2"><label class="fld">Formato<input class="inp" value="{{p.name}}" onInput="{{p.setName}}" placeholder="Ex.: 1 Reels + 3 stories"></label><label class="fld">Valor<input class="inp" value="{{p.price}}" onInput="{{p.setPrice}}" placeholder="Ex.: R$ 800"></label></div>
+        <label class="fld">Detalhes (opcional)<input class="inp" value="{{p.detail}}" onInput="{{p.setDetail}}" maxlength="140" placeholder="Ex.: entrega em 7 dias, 1 ajuste incluso"></label>
+        <button class="btn ghost" onClick="{{p.remove}}" style="height: 36px; font-size: 13px; color: #FF8A8E">Remover</button>
+      </div></sc-for>
       <button class="btn ghost full" onClick="{{addPrice}}">+ Formato</button>
+      <div class="row" style="padding: 10px 2px; border: none; cursor: default; min-height: 48px"><span class="row-tx"><b>Mostrar os valores</b><span>Desligado, aparece "Valores sob consulta"</span></span><button class="sw" onClick="{{togglePrices}}" aria-pressed="{{showPrices}}" aria-label="Mostrar os valores" style="{{pricesSw}}"><span style="{{pricesKn}}"></span></button></div>
+
+      <div class="sec-t">Trabalhos anteriores <span class="note" style="text-transform: none; letter-spacing: 0">({{worksLim}})</span><button class="hq" data-help="mktrabalhos" aria-label="Ajuda">?</button></div>
+      <sc-for list="{{works}}" as="w" hint-placeholder-count="1"><div class="net" style="display: flex; gap: 12px">
+        <button class="wimg" onClick="{{w.pick}}" style="{{w.img}}" aria-label="Foto do trabalho">{{w.imgLabel}}</button>
+        <div style="flex: 1; min-width: 0">
+          <label class="fld">Marca<input class="inp" value="{{w.brand}}" onInput="{{w.setBrand}}" placeholder="Ex.: Natura"></label>
+          <label class="fld">Resultado<input class="inp" value="{{w.result}}" onInput="{{w.setResult}}" placeholder="Ex.: 120 mil views e 3 mil cliques"></label>
+          <label class="fld">Link do post (opcional)<input class="inp" value="{{w.url}}" onInput="{{w.setUrl}}" placeholder="https://instagram.com/p/…" inputmode="url"></label>
+          <button class="btn ghost" onClick="{{w.remove}}" style="height: 36px; font-size: 13px; color: #FF8A8E">Remover</button>
+        </div>
+      </div></sc-for>
+      <sc-if value="{{canWork}}" hint-placeholder-val="{{ true }}"><button class="btn ghost full" onClick="{{addWork}}">+ Trabalho</button></sc-if>
+
+      <div class="sec-t">Contato para as marcas</div>
+      <div class="card" style="padding: 16px">
+        <label class="fld">E-mail comercial (opcional)<input class="inp" type="email" value="{{k.email}}" onInput="{{set_email}}" placeholder="contato@seuemail.com" inputmode="email"></label>
+        <div class="row" style="padding: 4px 0; border: none; cursor: default; min-height: 0"><span class="row-tx"><b>Botão "Chamar no WhatsApp"</b><span>Usa o celular da sua conta</span></span><button class="sw" onClick="{{toggleWa}}" aria-pressed="{{waOn}}" aria-label="Botão de WhatsApp" style="{{waSw}}"><span style="{{waKn}}"></span></button></div>
+      </div>
+
+      <div class="sec-t">Aparência do mídia kit</div>
+      <div class="card" style="padding: 16px">
+        <div class="note" style="margin-bottom: 8px">Fundo</div>
+        <div class="opt"><sc-for list="{{themes}}" as="o" hint-placeholder-count="2"><button onClick="{{o.pick}}" aria-pressed="{{o.sel}}">{{o.name}}</button></sc-for></div>
+        <div class="note" style="margin: 14px 0 8px">Cor de destaque</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap"><sc-for list="{{accents}}" as="o" hint-placeholder-count="6"><button class="sw2" onClick="{{o.pick}}" aria-pressed="{{o.sel}}" aria-label="{{o.name}}" style="{{o.st}}"></button></sc-for></div>
+      </div>
       <div class="sec-t">Público, marcas e números <span class="lk">Diamante</span><button class="hq" data-help="midiakit" aria-label="Ajuda">?</button></div>
       <div class="card" style="padding: 16px">
         <sc-if value="{{dia}}" hint-placeholder-val="{{ true }}">
@@ -90,11 +141,13 @@ class Component extends DCLogic {
   async load() {
     const d = await DC.api('mediakit');
     if (d.status === 401) { location.href = '/entrar'; return; }
-    const k = Object.assign({ headline: '', niche: '', about: '', photo: '', networks: [], prices: [], audience: {}, brands: [], showStats: true }, d.kit || {});
+    const k = Object.assign({ headline: '', niche: '', about: '', photo: '', networks: [], prices: [], audience: {}, brands: [], showStats: true, showPrices: true, works: [], email: '', wa: true, theme: 'escuro', accent: '#d4ff3a' }, d.kit || {});
+    const e = await DC.api('editor'); if (e.ok) this.setState({ pblocks: e.blocks || [], phandle: (e.page && e.page.handle) || d.handle });
     if (!k.networks.length) k.networks = [{ net: 'instagram', handle: '', followers: '', eng: '', views: '' }];
     if (!k.prices.length) k.prices = [{ name: '', price: '' }];
     this.setState({ d: d, k: k });
   }
+  async showOnPage(quiet) { clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 2500); const r = await DC.api('editor', 'POST', { show: 'mediakit' }); if (!r.ok) return; const e = await DC.api('editor'); if (e.ok) this.setState({ pblocks: e.blocks || [] }); if (r.added || !quiet) this.setState({ toast: 'Já aparece na sua página ✓' }); }
   set(p) { this.setState({ k: Object.assign({}, this.state.k, p), saved: false }); }
   arr(key, i, p) { const a = this.state.k[key].slice(); a[i] = Object.assign({}, a[i], p); this.set({ [key]: a }); }
   renderVals() {
@@ -104,9 +157,10 @@ class Component extends DCLogic {
     const NETS = [['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['youtube', 'YouTube'], ['twitch', 'Twitch'], ['kwai', 'Kwai'], ['facebook', 'Facebook'], ['x', 'X'], ['outro', 'Outra']];
     const aud = k.audience || {};
     const sw = (on) => 'background: ' + (on ? '#D4FF3A' : '#33333E') + '; justify-content: ' + (on ? 'flex-end' : 'flex-start');
+    const kn = (on) => 'background: ' + (on ? '#0E0E14' : '#A7A7B8');
     const reportUrl = d.report ? 'https://whitelink.site/' + d.handle + '/relatorio?k=' + d.report : '';
     const v = {
-      loading: false, ready: true, handle: d.handle, dia: d.level >= 2, notDia: d.level < 2, agency: d.agency, k: k, err: s.err,
+      loading: false, ready: true, handle: d.handle, toast: s.toast || '', dia: d.level >= 2, notDia: d.level < 2, agency: d.agency, k: k, err: s.err,
       url: '/' + d.handle + '/midiakit',
       photo: k.photo ? "background-image: url('/m/" + k.photo + "'); border-style: solid" : '', photoLabel: k.photo ? '' : 'Sua foto',
       pick: async () => { const r = await DC.pickImage({ max: 600, square: true }); if (!r) return; if (!r.ok) { this.setState({ err: r.error }); return; } this.set({ photo: r.id }); },
@@ -116,8 +170,26 @@ class Component extends DCLogic {
         setEng: (e) => this.arr('networks', i, { eng: e.target.value }), setViews: (e) => this.arr('networks', i, { views: e.target.value }),
         remove: () => this.set({ networks: k.networks.filter((_, x) => x !== i) }) })),
       addNet: () => this.set({ networks: k.networks.concat([{ net: 'tiktok', handle: '', followers: '', eng: '', views: '' }]) }),
-      prices: k.prices.map((p, i) => ({ name: p.name, price: p.price, setName: (e) => this.arr('prices', i, { name: e.target.value }), setPrice: (e) => this.arr('prices', i, { price: e.target.value }) })),
-      addPrice: () => this.set({ prices: k.prices.concat([{ name: '', price: '' }]) }),
+      prices: k.prices.map((p, i) => ({ name: p.name, price: p.price, detail: p.detail || '', setName: (e) => this.arr('prices', i, { name: e.target.value }), setPrice: (e) => this.arr('prices', i, { price: e.target.value }), setDetail: (e) => this.arr('prices', i, { detail: e.target.value }), remove: () => this.set({ prices: k.prices.filter((_, x) => x !== i) }) })),
+      addPrice: () => this.set({ prices: k.prices.concat([{ name: '', price: '', detail: '' }]) }),
+      showPrices: k.showPrices !== false, pricesSw: sw(k.showPrices !== false), pricesKn: kn(k.showPrices !== false), togglePrices: () => this.set({ showPrices: k.showPrices === false }),
+      worksLim: d.level >= 2 ? 'até 8' : 'até 3 no Ouro, 8 no Diamante',
+      works: (k.works || []).map((w, i) => ({ brand: w.brand, result: w.result, url: w.url, img: w.img ? "background-image: url('/m/" + w.img + "'); border-style: solid" : '', imgLabel: w.img ? '' : '+ Foto',
+        pick: async () => { const r = await DC.pickImage({ max: 900 }); if (!r) return; if (!r.ok) { this.setState({ err: r.error }); return; } this.arr('works', i, { img: r.id }); },
+        setBrand: (e) => this.arr('works', i, { brand: e.target.value }), setResult: (e) => this.arr('works', i, { result: e.target.value }), setUrl: (e) => this.arr('works', i, { url: e.target.value }),
+        remove: () => this.set({ works: k.works.filter((_, x) => x !== i) }) })),
+      canWork: (k.works || []).length < (d.level >= 2 ? 8 : 3), addWork: () => this.set({ works: (k.works || []).concat([{ brand: '', result: '', url: '', img: '' }]) }),
+      waOn: k.wa !== false, waSw: sw(k.wa !== false), waKn: kn(k.wa !== false), toggleWa: () => this.set({ wa: k.wa === false }),
+      themes: [['escuro', 'Escuro'], ['claro', 'Claro (bom para PDF)']].map((t) => ({ name: t[1], sel: (k.theme || 'escuro') === t[0], pick: () => this.set({ theme: t[0] }) })),
+      accents: [['#d4ff3a', 'Lima'], ['#8fe3ff', 'Azul'], ['#ff9ad5', 'Rosa'], ['#f2c14e', 'Dourado'], ['#7cf5d0', 'Menta'], ['#b9a6ff', 'Lilás']].map((a) => ({ name: a[1], sel: (k.accent || '#d4ff3a') === a[0], st: 'background: ' + a[0], pick: () => this.set({ accent: a[0] }) })),
+      copyLabel: s.copied ? 'Copiado ✓' : 'Copiar link',
+      copyLink: async () => { try { await navigator.clipboard.writeText('https://whitelink.site/' + d.handle + '/midiakit'); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      waShare: 'https://wa.me/?text=' + encodeURIComponent('Olá! Segue meu mídia kit com números, formatos e valores: https://whitelink.site/' + d.handle + '/midiakit'),
+      hasProps: (d.proposals || []).length > 0,
+      props: (d.proposals || []).map((x) => { const parts = String(x.title || '').split(' · '); const dt = new Date(x.created_at); return { title: parts[0] + (x.name ? ' · ' + x.name : ''), sub: (parts.slice(1).join(' · ') || 'Sem mensagem') + ' · ' + dt.toLocaleDateString('pt-BR'), wa: x.phone ? 'https://wa.me/' + ((ph) => (ph.length <= 11 ? '55' + ph : ph))(String(x.phone).replace(/\D/g, '')) + '?text=' + encodeURIComponent('Olá' + (x.name ? ', ' + x.name.split(' ')[0] : '') + '! Recebi sua proposta pelo meu mídia kit. Vamos conversar?') : '/painel/clientes' }; }),
+      op: (() => { const b = (s.pblocks || []).find((x) => x.kind === 'mediakit'); const on = !!(b && b.on !== false);
+        return on ? { cls: 'card onpage', icon: '✅', title: 'Aparece na sua página', text: 'O botão "' + (b.title || 'Mídia kit') + '" está na sua página. Você também pode mandar o link direto para as marcas.', off: false }
+          : { cls: 'card onpage off', icon: '👀', title: 'Ainda não aparece na sua página', text: 'Mande o link direto para as marcas ou coloque o botão na sua página. Ao salvar, já colocamos.', off: true, show: () => this.showOnPage(false) }; })(),
       aud: aud, brands: Array.isArray(k.brands) ? k.brands.join(', ') : k.brands,
       setWomen: (e) => this.set({ audience: Object.assign({}, aud, { women: e.target.value }) }), setAges: (e) => this.set({ audience: Object.assign({}, aud, { ages: e.target.value }) }),
       setCities: (e) => this.set({ audience: Object.assign({}, aud, { cities: e.target.value }) }), setBrands: (e) => this.set({ brands: e.target.value }),
@@ -126,9 +198,9 @@ class Component extends DCLogic {
       copyReport: () => { try { navigator.clipboard.writeText(reportUrl); } catch (e) {} },
       toggleReport: async () => { const r = await DC.api('mediakit', 'PUT', { report: !reportUrl }); if (r.ok) this.load(); else this.setState({ err: r.error }); },
       saveLabel: s.saved ? 'Salvo ✓' : 'Salvar mídia kit',
-      save: async () => { const r = await DC.api('mediakit', 'PUT', { kit: k }); this.setState({ saved: r.ok, err: r.ok ? '' : r.error }); }
+      save: async () => { const r = await DC.api('mediakit', 'PUT', { kit: k }); this.setState({ saved: r.ok, err: r.ok ? '' : r.error }); if (r.ok) this.showOnPage(true); }
     };
-    ['headline', 'niche', 'about'].forEach((f) => { v['set_' + f] = (e) => this.set({ [f]: e.target.value }); });
+    ['headline', 'niche', 'about', 'email'].forEach((f) => { v['set_' + f] = (e) => this.set({ [f]: e.target.value }); });
     return v;
   }
 }

@@ -49,7 +49,7 @@ export async function onRequestPut({ request, env }) {
 }
 
 // Vendas › "Mostrar na minha página": põe (ou religa) o bloco da Loja, Agenda, Apoio ou Quiz, sem mexer no resto
-const SHOW = { store: 'Minha loja', booking: 'Agendar horário', support: 'Quero apoiar', quiz: 'Faça o quiz' };
+const SHOW = { store: 'Minha loja', booking: 'Agendar horário', support: 'Quero apoiar', quiz: 'Faça o quiz', mediakit: 'Mídia kit para marcas' };
 export async function onRequestPost({ request, env }) {
   await ensureSchema(env);
   const u = await currentUser(env, request);

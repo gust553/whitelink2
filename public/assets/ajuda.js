@@ -1,5 +1,6 @@
 // WhiteLink — explicações de cada função (abrem no "?")
 window.WL_HELP = {
+  mktrabalhos: ['Trabalhos anteriores', 'Mostre publis que você já fez: a foto do post, a marca e o resultado (ex.: "120 mil views"). Se colocar o link, a marca pode abrir o post. É o que mais convence uma marca nova. No Ouro cabem 3 trabalhos; no Diamante, 8.'],
   computador: ['Página no computador', 'Quando alguém abre seu link num computador, a página fica larga, com cara de site. Em "Duas colunas" seu perfil fica fixo à esquerda e os links aparecem em grade ao lado. Em "Central larga" o perfil fica em cima. "Igual ao celular" mantém uma coluna no meio. Vale para todos os temas, inclusive os criados por você. No celular nada muda.'],
   criadorfundo: ['Foto de fundo', 'Use uma foto do seu celular como fundo da página. Ajuste o escurecer para o texto ficar fácil de ler e ligue o desfoque se a foto tiver muitos detalhes. A foto aparece no celular e no computador.'],
   criadorlayout: ['Posição das informações', 'Escolha onde ficam sua foto, nome e descrição: no centro, à esquerda ou com a foto ao lado do nome. Você também pode colocar o perfil embaixo dos links, mostrar os links em duas colunas, esconder o @ e alinhar o texto dos botões.'],
@@ -41,7 +42,7 @@ window.WL_HELP = {
   autoordem: ['Ordem pelos cliques', 'Os links mais clicados nos últimos 30 dias sobem sozinhos. Os links fixados e destacados continuam no topo. Plano Diamante.'],
   campanha: ['Links de campanha', 'Crie um endereço curto para cada divulgação (ex.: /seunome/blackfriday para um anúncio e /seunome/grupo para o WhatsApp) e veja quantos cliques cada um trouxe. Plano Diamante.'],
   // Outros
-  midiakit: ['Mídia kit', 'Uma página profissional para mandar às marcas, com suas redes, seguidores, público e preços. A marca envia a proposta por ela e a proposta chega em Clientes. No Diamante mostra seus números reais e baixa em PDF.'],
+  midiakit: ['Mídia kit', 'Uma página profissional para fechar publis: seus números, público, trabalhos anteriores, formatos e valores, com botão para a marca chamar no WhatsApp ou mandar proposta. Mande o link para as marcas (botão Enviar no WhatsApp) ou deixe o botão na sua página. As propostas aparecem aqui em Propostas recebidas e em Clientes.'],
   relatorio: ['Relatório para marcas', 'Um link com os números dos últimos 30 dias (visitas, cliques, origem, cidades) para mostrar a uma marca depois da campanha. Plano Agência.'],
   parceiros: ['Parceiros (afiliados)', 'Cada parceiro ganha um link seu com o código dele. Quem entra pelo link fica marcado por 30 dias, e você vê visitas, contatos, vendas e comissão de cada parceiro. O parceiro acompanha os próprios números. Plano Diamante.'],
   avisos: ['Avisos no celular', 'Instale o WhiteLink como app no celular e receba um aviso na hora de cada venda, agendamento, apoio ou contato. Ouro recebe avisos de contatos. Diamante recebe de tudo.'],
