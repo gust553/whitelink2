@@ -17,6 +17,8 @@
   ],
   // Os endereços (whitelink.site, www e a rota */* dos domínios dos clientes) ficam no painel da Cloudflare,
   // assim a publicação automática não mexe neles.
+  // mantém as variáveis criadas no painel da Cloudflare (META_PIXEL_ID, META_CAPI_TOKEN, SMS_MODE…) a cada publicação
+  "keep_vars": true,
   "workers_dev": false,
   // assistente de IA (Cloudflare Workers AI)
   "ai": { "binding": "AI" },

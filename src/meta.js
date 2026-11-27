@@ -45,10 +45,13 @@ async function send(env, events) {
   try {
     const body = { data: events };
     if (env.META_TEST_CODE) body.test_event_code = env.META_TEST_CODE;
-    await fetch(GRAPH + env.META_PIXEL_ID + '/events?access_token=' + encodeURIComponent(env.META_CAPI_TOKEN), {
+    const r = await fetch(GRAPH + env.META_PIXEL_ID + '/events?access_token=' + encodeURIComponent(env.META_CAPI_TOKEN), {
       method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal: ctl.signal
     });
-  } catch (e) { /* falha de rede não pode quebrar o site */ }
+    // aparece em Cloudflare → whitelink → Observability → Logs
+    const txt = (await r.text()).slice(0, 300);
+    console.log('[meta-capi]', r.status, events.map((e) => e.event_name + ':' + e.event_id).join(','), r.ok ? txt : 'ERRO ' + txt);
+  } catch (e) { console.log('[meta-capi] falhou', String(e && e.message || e)); /* falha de rede não pode quebrar o site */ }
   clearTimeout(t);
 }
 
